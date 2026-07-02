@@ -201,16 +201,33 @@ function SettingsBanner({ onConfigure }) {
     );
 }
 
-function StatCard({ icon, label, value, accent = "text-primary", footnote }) {
+function StatCard({ icon, label, value, accentColor, subtitle }) {
     return (
-        <div className="bg-surface-container-lowest rounded-xl border border-outline-variant/10 p-4 flex items-start gap-3 shadow-sm">
-            <div className={`w-9 h-9 rounded-lg flex items-center justify-center bg-surface-container-high/60 shrink-0`}>
-                <span className={`material-symbols-outlined text-lg ${accent}`}>{icon}</span>
+        <div
+            className="relative overflow-hidden rounded-xl p-4 flex flex-col justify-between transition-all duration-200"
+            style={{
+                background: "var(--color-surface-container-lowest)",
+                border: "1px solid color-mix(in srgb, var(--color-outline-variant) 12%, transparent)",
+                borderLeft: `3px solid ${accentColor}`,
+                minHeight: "72px",
+            }}
+            onMouseEnter={e => { e.currentTarget.style.boxShadow = `0 4px 16px color-mix(in srgb, ${accentColor} 12%, transparent)`; }}
+            onMouseLeave={e => { e.currentTarget.style.boxShadow = "none"; }}
+        >
+            <div className="absolute -top-4 -right-4 w-14 h-14 rounded-full opacity-[0.04] pointer-events-none"
+                style={{ background: accentColor }} />
+            <div className="flex items-start justify-between">
+                <div className="w-7 h-7 rounded-md flex items-center justify-center"
+                    style={{ background: `color-mix(in srgb, ${accentColor} 12%, transparent)` }}>
+                    <span className="material-symbols-outlined" style={{ color: accentColor, fontSize: "16px" }}>{icon}</span>
+                </div>
             </div>
-            <div className="min-w-0">
-                <p className="text-xl font-headline font-extrabold text-on-surface leading-tight">{value}</p>
-                <p className="text-2xs font-bold uppercase tracking-wide text-on-surface-variant mt-0.5">{label}</p>
-                {footnote && <p className="text-2xs text-outline mt-0.5 truncate">{footnote}</p>}
+            <div>
+                <p className="text-[10px] font-bold uppercase tracking-wider mb-0.5"
+                    style={{ color: "var(--color-on-surface-variant)" }}>{label}</p>
+                <p className="text-xl font-headline font-black leading-none"
+                    style={{ color: "var(--color-on-surface)" }}>{value}</p>
+                {subtitle && <p className="text-[9px] font-medium text-on-surface-variant mt-0.5">{subtitle}</p>}
             </div>
         </div>
     );
@@ -273,6 +290,7 @@ function SettingsModal({ onClose, onSaved, isEdit = false, initialValues = null 
     const isOverBudget = availableMinutes < requiredMinutes;
     const surplusMinutes = availableMinutes - requiredMinutes;
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(() => {
         if (endTimeManuallyEdited) return;
         const startMins = toMinutes(form.school_start_time);
@@ -1392,7 +1410,7 @@ export default function TimetableManagement() {
                     <button
                         onClick={handleSaveTimetable}
                         disabled={!academicYearId || !sectionId || deploying}
-                        className="px-4 py-2 bg-emerald-600 text-white rounded-lg text-sm font-bold hover:bg-emerald-700 disabled:opacity-50 flex items-center gap-2 transition-colors"
+                        className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-bold hover:bg-blue-700 disabled:opacity-50 flex items-center gap-2 transition-colors"
                     >
                         {deploying ? (
                             <span className="w-3.5 h-3.5 border-2 border-white/40 border-t-white rounded-full animate-spin" />
@@ -1405,10 +1423,10 @@ export default function TimetableManagement() {
 
                 {academicYearId && sectionId && timeSlots.length > 0 && (
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                        <StatCard icon="grid_view" label="Total Slots" value={stats.totalSlots} />
-                        <StatCard icon="event_available" label="Filled" value={stats.filled} accent="text-emerald-600" />
-                        <StatCard icon="event_busy" label="Free" value={stats.free} accent="text-amber-600" />
-                        <StatCard icon="diversity_3" label="Teachers Involved" value={stats.uniqueTeachers} accent="text-violet-600" />
+                        <StatCard icon="grid_view" label="Total Slots" value={stats.totalSlots} accentColor="#2563eb" />
+                        <StatCard icon="event_available" label="Filled" value={stats.filled} accentColor="#059669" />
+                        <StatCard icon="event_busy" label="Free" value={stats.free} accentColor="#d97706" />
+                        <StatCard icon="diversity_3" label="Teachers Involved" value={stats.uniqueTeachers} accentColor="#7c3aed" />
                     </div>
                 )}
 
@@ -1488,8 +1506,12 @@ export default function TimetableManagement() {
                                 </thead>
                                 <tbody className="divide-y divide-outline-variant/10">
                                     {periodNumbers.map((p) => {
-                                        const repSlot = activeDays.map((d) => slotMap[`${d}__${p}`]).find(Boolean);
-                                        if (repSlot?.is_break) {
+                                        const slotsForPeriod = activeDays.map((d) => slotMap[`${d}__${p}`]);
+                                        const presentSlots = slotsForPeriod.filter(Boolean);
+                                        const allBreak = presentSlots.length > 0 && presentSlots.every((s) => s.is_break);
+
+                                        if (allBreak) {
+                                            const repSlot = presentSlots[0];
                                             return (
                                                 <tr key={p} className="bg-surface-container-high/20">
                                                     <td
@@ -1501,6 +1523,9 @@ export default function TimetableManagement() {
                                                 </tr>
                                             );
                                         }
+
+                                        const repSlot = presentSlots.find((s) => !s.is_break) || presentSlots[0];
+
                                         return (
                                             <tr key={p}>
                                                 <td className="px-3 py-2 text-xs font-bold text-on-surface-variant sticky left-0 z-10 bg-surface-container-lowest">
@@ -1513,6 +1538,7 @@ export default function TimetableManagement() {
                                                 </td>
                                                 {activeDays.map((day) => {
                                                     const slot = slotMap[`${day}__${p}`];
+
                                                     if (!slot) {
                                                         return (
                                                             <td key={day} className="px-2 py-2 align-top bg-surface-container-high/10">
@@ -1526,10 +1552,40 @@ export default function TimetableManagement() {
                                                             </td>
                                                         );
                                                     }
+
+                                                    const isDeletingThis = deletingSlotId === slot.id;
+
+                                                    if (slot.is_break) {
+                                                        return (
+                                                            <td key={day} className="relative group px-2 py-2 align-top">
+                                                                <div className="w-full rounded-lg p-2 text-2xs font-bold uppercase tracking-wide text-center text-on-surface-variant bg-surface-container-high/40 border border-outline-variant/20">
+                                                                    {slot.break_name || "Break"}
+                                                                    <div className="text-outline font-normal normal-case mt-0.5">
+                                                                        {fmtTime(slot.start_time)}–{fmtTime(slot.end_time)}
+                                                                    </div>
+                                                                </div>
+                                                                <button
+                                                                    onClick={(e) => {
+                                                                        e.stopPropagation();
+                                                                        handleDeleteSlot(slot, false);
+                                                                    }}
+                                                                    disabled={isDeletingThis}
+                                                                    title="Delete this break slot"
+                                                                    className="absolute top-1 right-1 w-5 h-5 rounded-md bg-surface-container-lowest border border-outline-variant/20 opacity-0 group-hover:opacity-100 flex items-center justify-center hover:bg-red-50 hover:border-red-200 transition-opacity"
+                                                                >
+                                                                    {isDeletingThis ? (
+                                                                        <span className="w-2.5 h-2.5 border-2 border-red-300 border-t-red-600 rounded-full animate-spin" />
+                                                                    ) : (
+                                                                        <span className="material-symbols-outlined text-[13px] text-red-500">close</span>
+                                                                    )}
+                                                                </button>
+                                                            </td>
+                                                        );
+                                                    }
+
                                                     const entry = entryMap[slot.id];
                                                     const dimmed = entry && !matchesTeacherFilter(entry);
                                                     const accent = entry ? subjectColor(entry.subject_name) : null;
-                                                    const isDeletingThis = deletingSlotId === slot.id;
                                                     return (
                                                         <td key={day} className={`relative group px-2 py-2 align-top ${day === TODAY_NAME ? "bg-primary/[0.03]" : ""}`}>
                                                             <button

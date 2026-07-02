@@ -57,6 +57,7 @@ function StudentsSkeleton() {
         <div className="flex gap-2 w-full sm:w-auto">
           <Skeleton style={{ flex: 1, height: 40, borderRadius: 8 }} className="sm:w-28 sm:flex-none" />
           <Skeleton style={{ flex: 1, height: 40, borderRadius: 8 }} className="sm:w-32 sm:flex-none" />
+          <Skeleton style={{ flex: 1, height: 40, borderRadius: 8 }} className="sm:w-32 sm:flex-none" />
         </div>
         <Skeleton style={{ width: 80, height: 16 }} className="self-end sm:self-auto" />
       </div>
@@ -153,7 +154,7 @@ const PAGE_SIZE_OPTIONS = [10, 25];
 
 export default function Students() {
   const navigate = useNavigate();
-  const { classLevels } = useSchoolAdmin();
+  const { classLevels, fetchSectionsByClass } = useSchoolAdmin();
   const [allStudents, setAllStudents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -165,6 +166,11 @@ export default function Students() {
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("ALL");
   const [classFilter, setClassFilter] = useState("");
+  const [sectionFilter, setSectionFilter] = useState("");
+
+  // Sections available for the currently selected class filter.
+  const [sections, setSections] = useState([]);
+  const [sectionsLoading, setSectionsLoading] = useState(false);
 
   // Debounce search
   useEffect(() => {
@@ -176,7 +182,24 @@ export default function Students() {
   // don't land on an empty page after narrowing a search/filter.
   useEffect(() => {
     setCurrentPage(1);
-  }, [debouncedSearch, statusFilter, classFilter, pageSize]);
+  }, [debouncedSearch, statusFilter, classFilter, sectionFilter, pageSize]);
+
+  // When the class filter changes, load that class's sections and reset
+  // any previously selected section (it may not exist under the new class).
+  useEffect(() => {
+    setSectionFilter("");
+    if (!classFilter) {
+      setSections([]);
+      return;
+    }
+    let cancelled = false;
+    setSectionsLoading(true);
+    fetchSectionsByClass(classFilter)
+      .then((data) => { if (!cancelled) setSections(data || []); })
+      .catch(() => { if (!cancelled) setSections([]); })
+      .finally(() => { if (!cancelled) setSectionsLoading(false); });
+    return () => { cancelled = true; };
+  }, [classFilter, fetchSectionsByClass]);
 
   // Fetch the full student directory once on mount. Search and filters are
   // applied client-side below so typing in the search box never re-triggers a fetch or flashes the
@@ -218,9 +241,18 @@ export default function Students() {
       if (statusFilter === "ACTIVE" && s.is_archived) return false;
       if (statusFilter === "ARCHIVED" && !s.is_archived) return false;
 
+      // Class/section assignment lives on the student's current enrollment
+      // (StudentEnrollment), bulk-fetched by the backend and nested as
+      // `current_class`. Students with no active enrollment simply won't
+      // match any specific class/section filter — which is correct behavior.
       if (classFilter) {
-        const classId = String(s.class_level?.id ?? s.class_level ?? s.class_level_id ?? "");
+        const classId = String(s.current_class?.class_level_id ?? "");
         if (classId !== String(classFilter)) return false;
+      }
+
+      if (sectionFilter) {
+        const sectionId = String(s.current_class?.section_id ?? "");
+        if (sectionId !== String(sectionFilter)) return false;
       }
 
       if (debouncedSearch) {
@@ -236,7 +268,7 @@ export default function Students() {
 
       return true;
     });
-  }, [allStudents, statusFilter, classFilter, debouncedSearch]);
+  }, [allStudents, statusFilter, classFilter, sectionFilter, debouncedSearch]);
 
   const filteredCount = filteredStudents.length;
 
@@ -315,11 +347,11 @@ export default function Students() {
             />
           </div>
 
-          <div className="flex flex-row gap-2">
+          <div className="grid grid-cols-2 gap-2 w-full sm:flex sm:flex-row sm:w-auto">
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="flex-1 sm:flex-none px-3 py-2 rounded-lg text-sm bg-surface-container-high/50 border border-outline-variant/10 focus:border-primary focus:ring-1 focus:ring-primary outline-none"
+              className="px-3 py-2 rounded-lg text-sm bg-surface-container-high/50 border border-outline-variant/10 focus:border-primary focus:ring-1 focus:ring-primary outline-none sm:flex-none"
               style={{ color: "var(--color-on-surface)" }}
             >
               <option value="ALL">All Statuses</option>
@@ -330,11 +362,24 @@ export default function Students() {
             <select
               value={classFilter}
               onChange={(e) => setClassFilter(e.target.value)}
-              className="flex-1 sm:flex-none px-3 py-2 rounded-lg text-sm bg-surface-container-high/50 border border-outline-variant/10 focus:border-primary focus:ring-1 focus:ring-primary outline-none"
+              className="px-3 py-2 rounded-lg text-sm bg-surface-container-high/50 border border-outline-variant/10 focus:border-primary focus:ring-1 focus:ring-primary outline-none sm:flex-none"
               style={{ color: "var(--color-on-surface)" }}
             >
               <option value="">All Classes</option>
               {classLevels.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
+            </select>
+
+            <select
+              value={sectionFilter}
+              onChange={(e) => setSectionFilter(e.target.value)}
+              disabled={!classFilter || sectionsLoading}
+              className="col-span-2 sm:col-auto px-3 py-2 rounded-lg text-sm bg-surface-container-high/50 border border-outline-variant/10 focus:border-primary focus:ring-1 focus:ring-primary outline-none disabled:opacity-50 disabled:cursor-not-allowed sm:flex-none"
+              style={{ color: "var(--color-on-surface)" }}
+            >
+              <option value="">
+                {!classFilter ? "All Sections" : sectionsLoading ? "Loading..." : sections.length ? "All Sections" : "No sections"}
+              </option>
+              {sections.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
             </select>
           </div>
 

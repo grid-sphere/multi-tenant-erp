@@ -21,6 +21,22 @@ const PRIORITY = {
     "Urgent": { label: "Urgent", dot: "bg-purple-500", cls: "text-purple-700 bg-purple-50" },
 };
 
+// ── Submitter role config ──
+// The API doesn't return an explicit "who filed this" role, so we derive it:
+// if the submitter's name matches the student's name, the student filed it
+// themselves; otherwise a parent/guardian filed it on the student's behalf.
+const SUBMITTER = {
+    student: { label: "Student", cls: "text-teal-700 bg-teal-50 border border-teal-200", icon: "school" },
+    parent: { label: "Parent", cls: "text-violet-700 bg-violet-50 border border-violet-200", icon: "family_restroom" },
+};
+
+function getSubmitterRole(g) {
+    const submitter = (g.submitted_by_name || "").trim().toLowerCase();
+    const student = (g.student_name || "").trim().toLowerCase();
+    if (submitter && student && submitter === student) return "student";
+    return "parent";
+}
+
 // ── Skeleton component (unchanged) ──
 function Skeleton({ className = "", style = {} }) {
     return (
@@ -68,19 +84,46 @@ function GrievanceSkeleton() {
 }
 
 // ── Stat Card ──
-function StatCard({ label, value, color, icon }) {
+function StatCard({ icon, label, value, accentColor, subtitle }) {
     return (
-        <div className="bg-surface-container-lowest rounded-xl p-4 border border-outline-variant/10">
-            <div className="flex items-center gap-3">
-                <div className={`w-9 h-9 rounded-lg flex items-center justify-center ${color}`}>
-                    <span className="material-symbols-outlined text-lg">{icon}</span>
-                </div>
-                <div>
-                    <p className="text-2xs text-on-surface-variant font-bold uppercase">{label}</p>
-                    <p className="text-2xl font-extrabold text-on-surface">{value}</p>
+        <div
+            className="relative overflow-hidden rounded-xl p-4 flex flex-col justify-between transition-all duration-200"
+            style={{
+                background: "var(--color-surface-container-lowest)",
+                border: "1px solid color-mix(in srgb, var(--color-outline-variant) 12%, transparent)",
+                borderLeft: `3px solid ${accentColor}`,
+                minHeight: "72px",
+            }}
+            onMouseEnter={e => { e.currentTarget.style.boxShadow = `0 4px 16px color-mix(in srgb, ${accentColor} 12%, transparent)`; }}
+            onMouseLeave={e => { e.currentTarget.style.boxShadow = "none"; }}
+        >
+            <div className="absolute -top-4 -right-4 w-14 h-14 rounded-full opacity-[0.04] pointer-events-none"
+                style={{ background: accentColor }} />
+            <div className="flex items-start justify-between">
+                <div className="w-7 h-7 rounded-md flex items-center justify-center"
+                    style={{ background: `color-mix(in srgb, ${accentColor} 12%, transparent)` }}>
+                    <span className="material-symbols-outlined" style={{ color: accentColor, fontSize: "16px" }}>{icon}</span>
                 </div>
             </div>
+            <div>
+                <p className="text-[10px] font-bold uppercase tracking-wider mb-0.5"
+                    style={{ color: "var(--color-on-surface-variant)" }}>{label}</p>
+                <p className="text-xl font-headline font-black leading-none"
+                    style={{ color: "var(--color-on-surface)" }}>{value}</p>
+                {subtitle && <p className="text-[9px] font-medium text-on-surface-variant mt-0.5">{subtitle}</p>}
+            </div>
         </div>
+    );
+}
+
+// ── Submitter Badge (small pill used in row + modal) ──
+function SubmitterBadge({ role }) {
+    const cfg = SUBMITTER[role] || SUBMITTER.parent;
+    return (
+        <span className={`inline-flex items-center gap-1 text-2xs font-bold px-2 py-0.5 rounded-full ${cfg.cls}`}>
+            <span className="material-symbols-outlined text-[13px] leading-none">{cfg.icon}</span>
+            {cfg.label}
+        </span>
     );
 }
 
@@ -88,6 +131,7 @@ function StatCard({ label, value, color, icon }) {
 function GrievanceRow({ grievance, onClick }) {
     const status = STATUS[grievance.status] || STATUS["Pending"];
     const priority = PRIORITY[grievance.priority] || PRIORITY["Low"];
+    const role = getSubmitterRole(grievance);
 
     return (
         <tr
@@ -99,7 +143,9 @@ function GrievanceRow({ grievance, onClick }) {
                     <span className="text-sm font-bold text-on-surface">{grievance.title}</span>
                     <span className="text-2xs text-outline">#{grievance.id?.slice(0, 8)}</span>
                 </div>
-                <div className="flex items-center gap-2 text-xs text-on-surface-variant">
+                <div className="flex items-center gap-2 text-xs text-on-surface-variant mt-0.5">
+                    <SubmitterBadge role={role} />
+                    <span className="text-outline">•</span>
                     <span>{grievance.submitted_by_name || "Unknown"}</span>
                     <span className="text-outline">•</span>
                     <span className="capitalize">{grievance.category}</span>
@@ -273,6 +319,8 @@ function GrievanceDetailModal({ grievanceId, onClose, onUpdate }) {
         }
     };
 
+    const role = grievance ? getSubmitterRole(grievance) : null;
+
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm animate-in fade-in duration-200 p-4">
             <div className="bg-surface-container-lowest rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6 shadow-2xl border border-outline-variant/10 animate-in zoom-in-95 duration-200">
@@ -306,22 +354,40 @@ function GrievanceDetailModal({ grievanceId, onClose, onUpdate }) {
                 ) : (
                     <>
                         <div className="flex justify-between items-start mb-4">
-                            <h3 className="text-xl font-headline font-bold text-on-surface">{grievance.title}</h3>
+                            <div>
+                                <h3 className="text-xl font-headline font-bold text-on-surface break-words [overflow-wrap:anywhere]">{grievance.title}</h3>
+                                <div className="mt-1"><SubmitterBadge role={role} /></div>
+                            </div>
                             <button onClick={onClose} className="p-1 hover:bg-surface-container-high rounded-lg">
                                 <span className="material-symbols-outlined text-on-surface-variant">close</span>
                             </button>
                         </div>
 
                         <div className="space-y-4">
+                            {/*
+                                Filed-by / student info. When a parent files on behalf of a
+                                student, both names are shown. When the student files for
+                                themselves, we only show one line to avoid the confusing
+                                "Milo murphy / Milo murphy" repetition.
+                            */}
                             <div className="grid grid-cols-2 gap-4 text-sm">
-                                <div>
-                                    <span className="text-on-surface-variant">Submitted by:</span>{" "}
-                                    <span className="font-semibold text-on-surface">{grievance.submitted_by_name}</span>
-                                </div>
-                                <div>
-                                    <span className="text-on-surface-variant">Student:</span>{" "}
-                                    <span className="font-semibold text-on-surface">{grievance.student_name || "—"}</span>
-                                </div>
+                                {role === "student" ? (
+                                    <div className="col-span-2">
+                                        <span className="text-on-surface-variant">Filed by student:</span>{" "}
+                                        <span className="font-semibold text-on-surface">{grievance.submitted_by_name}</span>
+                                    </div>
+                                ) : (
+                                    <>
+                                        <div>
+                                            <span className="text-on-surface-variant">Filed by parent:</span>{" "}
+                                            <span className="font-semibold text-on-surface">{grievance.submitted_by_name}</span>
+                                        </div>
+                                        <div>
+                                            <span className="text-on-surface-variant">On behalf of student:</span>{" "}
+                                            <span className="font-semibold text-on-surface">{grievance.student_name || "—"}</span>
+                                        </div>
+                                    </>
+                                )}
                                 <div>
                                     <span className="text-on-surface-variant">Category:</span>{" "}
                                     <span className="font-semibold text-on-surface capitalize">{grievance.category}</span>
@@ -336,7 +402,7 @@ function GrievanceDetailModal({ grievanceId, onClose, onUpdate }) {
 
                             <div>
                                 <p className="text-on-surface-variant text-xs uppercase font-bold tracking-wider">Description</p>
-                                <p className="text-sm text-on-surface mt-1 bg-surface-container-high p-3 rounded-lg whitespace-pre-wrap leading-relaxed">
+                                <p className="text-sm text-on-surface mt-1 bg-surface-container-high p-3 rounded-lg whitespace-pre-wrap break-words [overflow-wrap:anywhere] leading-relaxed">
                                     {grievance.description?.trim() ? grievance.description : "No description provided."}
                                 </p>
                             </div>
@@ -442,6 +508,7 @@ export default function GrievanceManagement() {
     const [loading, setLoading] = useState(true);
     const [selectedId, setSelectedId] = useState(null);
     const [statusFilter, setStatusFilter] = useState("all");
+    const [submitterFilter, setSubmitterFilter] = useState("all"); // all | student | parent
     const [searchQuery, setSearchQuery] = useState("");
     const [debouncedSearch, setDebouncedSearch] = useState("");
     const [page, setPage] = useState(1);
@@ -454,7 +521,7 @@ export default function GrievanceManagement() {
     // Reset to page 1 whenever the filter/search changes the result set
     useEffect(() => {
         setPage(1);
-    }, [statusFilter, debouncedSearch]);
+    }, [statusFilter, submitterFilter, debouncedSearch]);
 
     const fetchData = async () => {
         setLoading(true);
@@ -481,6 +548,9 @@ export default function GrievanceManagement() {
         if (statusFilter !== "all") {
             items = items.filter((g) => g.status === statusFilter);
         }
+        if (submitterFilter !== "all") {
+            items = items.filter((g) => getSubmitterRole(g) === submitterFilter);
+        }
         if (debouncedSearch) {
             const q = debouncedSearch.toLowerCase();
             items = items.filter(
@@ -492,7 +562,7 @@ export default function GrievanceManagement() {
             );
         }
         return items;
-    }, [grievances, statusFilter, debouncedSearch]);
+    }, [grievances, statusFilter, submitterFilter, debouncedSearch]);
 
     const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
     const safePage = Math.min(page, totalPages);
@@ -500,6 +570,28 @@ export default function GrievanceManagement() {
         const startIdx = (safePage - 1) * PAGE_SIZE;
         return filtered.slice(startIdx, startIdx + PAGE_SIZE);
     }, [filtered, safePage]);
+
+    // Counts for the submitter filter, computed off the status+search-filtered
+    // set (but before the submitter filter itself) so the numbers stay
+    // meaningful as the person narrows down other filters.
+    const submitterCounts = useMemo(() => {
+        let base = grievances;
+        if (statusFilter !== "all") base = base.filter((g) => g.status === statusFilter);
+        if (debouncedSearch) {
+            const q = debouncedSearch.toLowerCase();
+            base = base.filter(
+                (g) =>
+                    g.title?.toLowerCase().includes(q) ||
+                    g.submitted_by_name?.toLowerCase().includes(q) ||
+                    g.student_name?.toLowerCase().includes(q) ||
+                    g.category?.toLowerCase().includes(q)
+            );
+        }
+        return {
+            student: base.filter((g) => getSubmitterRole(g) === "student").length,
+            parent: base.filter((g) => getSubmitterRole(g) === "parent").length,
+        };
+    }, [grievances, statusFilter, debouncedSearch]);
 
     if (loading) {
         return (
@@ -523,10 +615,10 @@ export default function GrievanceManagement() {
 
                 {/* Stats */}
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    <StatCard label="Total" value={stats.total || 0} color="bg-blue-50 text-blue-600" icon="folder_open" />
-                    <StatCard label="Pending" value={stats.pending || 0} color="bg-amber-50 text-amber-600" icon="pending" />
-                    <StatCard label="In Progress" value={stats.in_progress || 0} color="bg-indigo-50 text-indigo-600" icon="sync" />
-                    <StatCard label="Resolved" value={stats.resolved || 0} color="bg-green-50 text-green-600" icon="check_circle" />
+                    <StatCard label="Total" value={stats.total || 0} accentColor="#2563eb" icon="folder_open" />
+                    <StatCard label="Pending" value={stats.pending || 0} accentColor="#d97706" icon="pending" />
+                    <StatCard label="In Progress" value={stats.in_progress || 0} accentColor="#4f46e5" icon="sync" />
+                    <StatCard label="Resolved" value={stats.resolved || 0} accentColor="#16a34a" icon="check_circle" />
                 </div>
 
                 {/* Filter Bar */}
@@ -543,6 +635,17 @@ export default function GrievanceManagement() {
                             className="w-full pl-9 pr-3 py-2 rounded-lg text-sm bg-surface-container-high/50 border border-outline-variant/10 focus:border-primary focus:ring-1 focus:ring-primary outline-none text-on-surface"
                         />
                     </div>
+
+                    <select
+                        value={submitterFilter}
+                        onChange={(e) => setSubmitterFilter(e.target.value)}
+                        className="px-3 py-2 rounded-lg text-sm bg-surface-container-high/50 border border-outline-variant/10 focus:border-primary outline-none text-on-surface"
+                    >
+                        <option value="all">All Submitters</option>
+                        <option value="student">Filed by Student ({submitterCounts.student})</option>
+                        <option value="parent">Filed by Parent ({submitterCounts.parent})</option>
+                    </select>
+
                     <select
                         value={statusFilter}
                         onChange={(e) => setStatusFilter(e.target.value)}
@@ -555,6 +658,7 @@ export default function GrievanceManagement() {
                             </option>
                         ))}
                     </select>
+
                     <span className="text-xs font-semibold text-on-surface-variant">{filtered.length} grievances</span>
                 </div>
 
