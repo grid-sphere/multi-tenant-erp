@@ -2,7 +2,6 @@ import React, { useState, useMemo } from "react";
 import MainLayout from "../../layouts/MainLayout";
 import { useStudent } from "../../context/StudentProvider";
 import {
-  calculateAttendance,
   getMonthName,
 } from "../../utils/calculations";
 
@@ -54,7 +53,7 @@ function AttendanceSkeleton() {
 }
 
 export default function Attendance() {
-  const { attendanceRecords: records, academic, loading } = useStudent();
+  const { attendanceRecords: records, academic, dashboard, loading } = useStudent();
 
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedYear, setSelectedYear] = useState("");
@@ -97,7 +96,10 @@ export default function Attendance() {
     new Map((academic?.subs || []).map((s) => [s.name, s])).values()
   );
 
-  const attendance = calculateAttendance(filteredRecords);
+  // Use the same backend-calculated attendance percentage shown on the
+  // Dashboard ("Attendance Rate"), instead of client-side calculating it
+  // from filteredRecords — keeps both pages consistent.
+  const attendance = Number(dashboard?.attendanceSummary?.attendance_percentage ?? 0);
   const minRequirement = 75;
   const attendanceDifference = attendance - minRequirement;
   const requirementMet = attendance >= minRequirement;
@@ -163,14 +165,14 @@ export default function Attendance() {
         <section className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           {/* LEFT: 3 stat cards - Equal height with calendar */}
           <div className="lg:col-span-4 flex flex-col gap-4 h-full">
-            {/* Card 1: Overall Attendance - Flexible height */}
+            {/* Card 1: Attendance Rate - Flexible height */}
             <div className="bg-surface-container-lowest px-4 py-3 rounded-xl shadow-sm border border-outline-variant/10 flex items-center justify-between gap-3 flex-1">
               <div className="flex items-center gap-3">
                 <span className="p-2 bg-blue-50 text-blue-600 rounded-lg flex-shrink-0">
                   <span className="material-symbols-outlined text-xl">analytics</span>
                 </span>
                 <div>
-                  <p className="text-xs font-medium text-on-surface-variant">Overall Attendance</p>
+                  <p className="text-xs font-medium text-on-surface-variant">Attendance Rate</p>
                   <p className="text-2xl font-bold font-headline text-on-surface leading-tight">
                     {attendance}<span className="text-sm font-semibold">%</span>
                   </p>
