@@ -24,91 +24,142 @@ function IDCardVisual({ student, enroll, avatarSrc, cardRef }) {
   const rollNo = enroll?.roll_number ?? "—";
   const enrollNo = student?.enrollment_number ?? "—";
   const email = student?.email ?? "—";
-  const year = enroll?.academic_year_name ?? new Date().getFullYear();
+  const dob = student?.date_of_birth ? new Date(student.date_of_birth).toLocaleDateString("en-IN", { 
+    day: "numeric", 
+    month: "short", 
+    year: "numeric" 
+  }) : "—";
+  
+  // Get academic year
+  const academicYear = enroll?.academic_year_name || "2026-27";
+  const yearDisplay = academicYear.replace(/\s/g, '');
 
   return (
     <div
       ref={cardRef}
       style={{
         width: "340px",
-        background: "linear-gradient(145deg, #0f172a 0%, #1e3a5f 60%, #1e40af 100%)",
-        borderRadius: "18px",
+        height: "500px",
+        background: "linear-gradient(145deg, #0f172a 0%, #1a3a6a 50%, #1e40af 100%)",
+        borderRadius: "16px",
         overflow: "hidden",
         fontFamily: "'Segoe UI', system-ui, sans-serif",
         position: "relative",
         boxShadow: "0 20px 60px rgba(0,0,0,0.5)",
         flexShrink: 0,
+        display: "flex",
+        flexDirection: "column",
+        padding: "24px 26px 20px",
+        boxSizing: "border-box",
       }}
     >
-      {/* Decorative circles */}
+      {/* Decorative background elements */}
       <div style={{
-        position: "absolute", top: "-40px", right: "-40px",
-        width: "140px", height: "140px",
+        position: "absolute", top: "-80px", right: "-80px",
+        width: "200px", height: "200px",
         borderRadius: "50%",
-        background: "rgba(255,255,255,0.05)",
+        background: "rgba(255,255,255,0.03)",
         pointerEvents: "none",
       }} />
       <div style={{
-        position: "absolute", bottom: "60px", left: "-30px",
+        position: "absolute", bottom: "80px", left: "-60px",
+        width: "150px", height: "150px",
+        borderRadius: "50%",
+        background: "rgba(255,255,255,0.02)",
+        pointerEvents: "none",
+      }} />
+      <div style={{
+        position: "absolute", top: "200px", right: "-40px",
         width: "100px", height: "100px",
         borderRadius: "50%",
-        background: "rgba(255,255,255,0.04)",
+        background: "rgba(255,255,255,0.02)",
         pointerEvents: "none",
       }} />
 
-      {/* Header */}
+      {/* ─── HEADER ─── */}
       <div style={{
-        padding: "20px 22px 16px",
-        borderBottom: "1px solid rgba(255,255,255,0.12)",
         display: "flex",
         alignItems: "center",
-        gap: "12px",
+        gap: "14px",
+        borderBottom: "1px solid rgba(255,255,255,0.08)",
+        paddingBottom: "16px",
+        flexShrink: 0,
+        position: "relative",
+        zIndex: 1,
       }}>
-        {/* School logo placeholder */}
         <div style={{
-          width: "44px", height: "44px",
+          width: "48px", height: "48px",
           borderRadius: "10px",
-          background: "rgba(255,255,255,0.15)",
+          background: "rgba(255,255,255,0.08)",
           display: "flex", alignItems: "center", justifyContent: "center",
           flexShrink: 0,
+          border: "1px solid rgba(255,255,255,0.06)",
         }}>
           <span style={{ fontSize: "22px" }}>🏫</span>
         </div>
-        <div>
-          <div style={{ color: "#fff", fontWeight: 800, fontSize: "13px", letterSpacing: "0.03em", lineHeight: 1.2 }}>
+        <div style={{ flex: 1 }}>
+          <div style={{ 
+            color: "#ffffff", 
+            fontWeight: 800, 
+            fontSize: "16px", 
+            letterSpacing: "0.3px",
+            lineHeight: 1.2,
+          }}>
             Academic Architect
           </div>
-          <div style={{ color: "rgba(255,255,255,0.55)", fontSize: "10px", marginTop: "2px", letterSpacing: "0.05em" }}>
+          <div style={{ 
+            color: "rgba(255,255,255,0.35)", 
+            fontSize: "9px", 
+            letterSpacing: "3px",
+            fontWeight: 600,
+            marginTop: "2px",
+          }}>
             STUDENT IDENTITY CARD
           </div>
         </div>
         <div style={{
-          marginLeft: "auto",
-          background: "rgba(255,255,255,0.12)",
+          background: "rgba(255,255,255,0.06)",
           borderRadius: "6px",
-          padding: "3px 8px",
-          color: "rgba(255,255,255,0.7)",
+          padding: "4px 10px",
+          color: "rgba(255,255,255,0.4)",
           fontSize: "9px",
           fontWeight: 700,
-          letterSpacing: "0.1em",
+          letterSpacing: "0.5px",
+          border: "1px solid rgba(255,255,255,0.05)",
+          whiteSpace: "nowrap",
         }}>
-          {year}
+          {yearDisplay}
         </div>
       </div>
 
-      {/* Body */}
-      <div style={{ padding: "20px 22px" }}>
-        <div style={{ display: "flex", gap: "16px", alignItems: "flex-start" }}>
-
-          {/* Avatar */}
+      {/* ─── BODY ─── */}
+      <div style={{
+        flex: 1,
+        display: "flex",
+        flexDirection: "column",
+        paddingTop: "20px",
+        position: "relative",
+        zIndex: 1,
+        gap: "14px",
+      }}>
+        {/* Photo + Name section */}
+        <div style={{ 
+          display: "flex", 
+          gap: "18px",
+          alignItems: "flex-start",
+        }}>
+          {/* Photo */}
           <div style={{
-            width: "80px", height: "96px",
+            width: "84px",
+            height: "104px",
             borderRadius: "12px",
             overflow: "hidden",
-            background: "rgba(255,255,255,0.1)",
+            background: "rgba(255,255,255,0.06)",
             flexShrink: 0,
-            border: "2px solid rgba(255,255,255,0.2)",
-            display: "flex", alignItems: "center", justifyContent: "center",
+            border: "2px solid rgba(255,255,255,0.1)",
+            display: "flex", 
+            alignItems: "center", 
+            justifyContent: "center",
           }}>
             {avatarSrc ? (
               <img
@@ -118,93 +169,172 @@ function IDCardVisual({ student, enroll, avatarSrc, cardRef }) {
                 crossOrigin="anonymous"
               />
             ) : (
-              <span style={{ fontSize: "40px", color: "rgba(255,255,255,0.4)" }}>👤</span>
+              <span style={{ fontSize: "38px", color: "rgba(255,255,255,0.2)" }}>👤</span>
             )}
           </div>
 
           {/* Info */}
-          <div style={{ flex: 1, minWidth: 0 }}>
+          <div style={{ 
+            flex: 1, 
+            display: "flex", 
+            flexDirection: "column",
+            paddingTop: "2px",
+          }}>
+            {/* ─── NAME ─── */}
             <div style={{
-              color: "#fff",
-              fontWeight: 800,
-              fontSize: "15px",
-              lineHeight: 1.25,
-              marginBottom: "6px",
-              wordBreak: "break-word",
+              color: "#ffffff",
+              fontWeight: 700,
+              fontSize: "20px",
+              lineHeight: 1.3,
+              marginBottom: "8px",
+              letterSpacing: "0.5px",
             }}>
               {fullName}
             </div>
+
+            {/* ─── GRADE ─── */}
             <div style={{
               display: "inline-flex",
               alignItems: "center",
-              background: "rgba(99,179,237,0.2)",
+              background: "rgba(99,179,237,0.12)",
               borderRadius: "6px",
-              padding: "2px 8px",
+              padding: "4px 14px",
               color: "#93c5fd",
-              fontSize: "10px",
-              fontWeight: 700,
-              letterSpacing: "0.05em",
-              marginBottom: "12px",
+              fontSize: "12px",
+              fontWeight: 600,
+              letterSpacing: "0.5px",
+              marginBottom: "16px",
+              alignSelf: "flex-start",
             }}>
               {classInfo}
             </div>
 
-            {/* Fields */}
-            {[
-              { label: "ROLL NO", value: rollNo },
-              { label: "ENROLL ID", value: enrollNo },
-            ].map(({ label, value }) => (
-              <div key={label} style={{ marginBottom: "6px" }}>
-                <div style={{ color: "rgba(255,255,255,0.45)", fontSize: "8.5px", fontWeight: 700, letterSpacing: "0.1em" }}>
-                  {label}
+            {/* ─── DETAILS GRID ─── */}
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "4px 20px" }}>
+              <div>
+                <div style={{ 
+                  color: "rgba(255,255,255,0.3)", 
+                  fontSize: "8px", 
+                  fontWeight: 700, 
+                  letterSpacing: "1.5px", 
+                  textTransform: "uppercase",
+                  marginBottom: "3px",
+                }}>
+                  Roll No
                 </div>
-                <div style={{ color: "rgba(255,255,255,0.9)", fontSize: "11px", fontWeight: 600 }}>
-                  {value}
+                <div style={{ color: "rgba(255,255,255,0.9)", fontSize: "14px", fontWeight: 600 }}>
+                  {rollNo}
                 </div>
               </div>
-            ))}
+              <div>
+                <div style={{ 
+                  color: "rgba(255,255,255,0.3)", 
+                  fontSize: "8px", 
+                  fontWeight: 700, 
+                  letterSpacing: "1.5px", 
+                  textTransform: "uppercase",
+                  marginBottom: "3px",
+                }}>
+                  Enroll ID
+                </div>
+                <div style={{ color: "rgba(255,255,255,0.9)", fontSize: "14px", fontWeight: 600 }}>
+                  {enrollNo}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
-        {/* Email row */}
+        {/* ─── EMAIL & DOB ─── */}
         <div style={{
-          marginTop: "14px",
-          padding: "8px 12px",
-          background: "rgba(255,255,255,0.06)",
-          borderRadius: "8px",
-          display: "flex",
-          alignItems: "center",
-          gap: "8px",
+          padding: "14px 18px",
+          background: "rgba(255,255,255,0.04)",
+          borderRadius: "10px",
+          border: "1px solid rgba(255,255,255,0.04)",
+          display: "grid",
+          gridTemplateColumns: "1fr 1fr",
+          gap: "12px",
+          marginTop: "auto",
         }}>
-          <span style={{ fontSize: "12px" }}>✉️</span>
-          <div style={{ color: "rgba(255,255,255,0.7)", fontSize: "10px", wordBreak: "break-all" }}>
-            {email}
+          <div>
+            <div style={{ 
+              color: "rgba(255,255,255,0.3)", 
+              fontSize: "7px", 
+              fontWeight: 700, 
+              letterSpacing: "1.5px", 
+              textTransform: "uppercase",
+              marginBottom: "3px",
+            }}>
+              Email
+            </div>
+            <div style={{ 
+              color: "rgba(255,255,255,0.7)", 
+              fontSize: "11px",
+              wordBreak: "break-all",
+              lineHeight: 1.3,
+            }}>
+              {email}
+            </div>
+          </div>
+          <div>
+            <div style={{ 
+              color: "rgba(255,255,255,0.3)", 
+              fontSize: "7px", 
+              fontWeight: 700, 
+              letterSpacing: "1.5px", 
+              textTransform: "uppercase",
+              marginBottom: "3px",
+            }}>
+              DOB
+            </div>
+            <div style={{ color: "rgba(255,255,255,0.7)", fontSize: "11px", fontWeight: 500 }}>
+              {dob}
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Footer strip */}
+      {/* ─── FOOTER ─── */}
       <div style={{
-        background: "rgba(255,255,255,0.07)",
-        borderTop: "1px solid rgba(255,255,255,0.1)",
-        padding: "10px 22px",
+        borderTop: "1px solid rgba(255,255,255,0.06)",
+        paddingTop: "14px",
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
+        flexShrink: 0,
+        position: "relative",
+        zIndex: 1,
+        marginTop: "4px",
       }}>
-        <div style={{ color: "rgba(255,255,255,0.4)", fontSize: "8px", letterSpacing: "0.08em" }}>
-          VALID FOR ACADEMIC YEAR {year}
+        <div style={{ 
+          color: "rgba(255,255,255,0.2)", 
+          fontSize: "8px", 
+          letterSpacing: "0.8px",
+          fontWeight: 500,
+        }}>
+          VALID {yearDisplay}
         </div>
-        {/* Barcode-style decoration */}
-        <div style={{ display: "flex", gap: "2px", alignItems: "flex-end" }}>
-          {[6, 10, 7, 12, 8, 5, 11, 9, 6, 10, 8, 7].map((h, i) => (
+        
+        {/* Barcode decoration */}
+        <div style={{ display: "flex", gap: "1.5px", alignItems: "flex-end" }}>
+          {[8, 12, 6, 14, 10, 7, 16, 9, 11, 5, 13, 8, 10, 12, 7, 9, 14, 6, 11, 10].map((h, i) => (
             <div key={i} style={{
               width: "2px",
               height: `${h}px`,
-              background: "rgba(255,255,255,0.3)",
+              background: "rgba(255,255,255,0.12)",
               borderRadius: "1px",
             }} />
           ))}
+        </div>
+        
+        <div style={{ 
+          color: "rgba(255,255,255,0.15)", 
+          fontSize: "9px", 
+          fontWeight: 600,
+          letterSpacing: "0.5px",
+          fontFamily: "'Courier New', monospace",
+        }}>
+          #{String(Math.floor(Math.random() * 10000)).padStart(4, '0')}
         </div>
       </div>
     </div>
@@ -218,116 +348,94 @@ function SkeletonIDCardVisual() {
     <div
       style={{
         width: "340px",
-        background: "linear-gradient(145deg, #0f172a 0%, #1e3a5f 60%, #1e40af 100%)",
-        borderRadius: "18px",
+        height: "500px",
+        background: "linear-gradient(145deg, #0f172a 0%, #1a3a6a 50%, #1e40af 100%)",
+        borderRadius: "16px",
         overflow: "hidden",
         fontFamily: "'Segoe UI', system-ui, sans-serif",
         position: "relative",
         boxShadow: "0 20px 60px rgba(0,0,0,0.5)",
         flexShrink: 0,
+        display: "flex",
+        flexDirection: "column",
+        padding: "24px 26px 20px",
+        boxSizing: "border-box",
       }}
     >
-      {/* Decorative circles - same as real card */}
-      <div style={{
-        position: "absolute", top: "-40px", right: "-40px",
-        width: "140px", height: "140px",
-        borderRadius: "50%",
-        background: "rgba(255,255,255,0.05)",
-        pointerEvents: "none",
-      }} />
-      <div style={{
-        position: "absolute", bottom: "60px", left: "-30px",
-        width: "100px", height: "100px",
-        borderRadius: "50%",
-        background: "rgba(255,255,255,0.04)",
-        pointerEvents: "none",
-      }} />
-
+      <div style={{ position: "absolute", inset: 0, background: "rgba(255,255,255,0.02)" }} />
+      
       {/* Header skeleton */}
       <div style={{
-        padding: "20px 22px 16px",
-        borderBottom: "1px solid rgba(255,255,255,0.12)",
         display: "flex",
         alignItems: "center",
-        gap: "12px",
+        gap: "14px",
+        borderBottom: "1px solid rgba(255,255,255,0.06)",
+        paddingBottom: "16px",
+        flexShrink: 0,
       }}>
-        <div style={{
-          width: "44px", height: "44px",
-          borderRadius: "10px",
-          background: "rgba(255,255,255,0.1)",
-          flexShrink: 0,
-        }} className="animate-pulse" />
+        <div style={{ width: "48px", height: "48px", borderRadius: "10px", background: "rgba(255,255,255,0.05)" }} className="animate-pulse" />
         <div style={{ flex: 1 }}>
-          <div style={{ width: "60%", height: "12px", background: "rgba(255,255,255,0.15)", borderRadius: "4px" }} className="animate-pulse" />
-          <div style={{ width: "40%", height: "8px", marginTop: "6px", background: "rgba(255,255,255,0.1)", borderRadius: "4px" }} className="animate-pulse" />
+          <div style={{ width: "60%", height: "16px", background: "rgba(255,255,255,0.07)", borderRadius: "4px" }} className="animate-pulse" />
+          <div style={{ width: "40%", height: "8px", marginTop: "4px", background: "rgba(255,255,255,0.04)", borderRadius: "4px" }} className="animate-pulse" />
         </div>
-        <div style={{
-          width: "40px", height: "18px",
-          background: "rgba(255,255,255,0.1)",
-          borderRadius: "6px",
-        }} className="animate-pulse" />
+        <div style={{ width: "50px", height: "20px", background: "rgba(255,255,255,0.04)", borderRadius: "6px" }} className="animate-pulse" />
       </div>
 
       {/* Body skeleton */}
-      <div style={{ padding: "20px 22px" }}>
-        <div style={{ display: "flex", gap: "16px", alignItems: "flex-start" }}>
-          {/* Avatar placeholder */}
-          <div style={{
-            width: "80px", height: "96px",
-            borderRadius: "12px",
-            background: "rgba(255,255,255,0.1)",
-            flexShrink: 0,
-            border: "2px solid rgba(255,255,255,0.15)",
-          }} className="animate-pulse" />
-          {/* Info placeholders */}
+      <div style={{ flex: 1, paddingTop: "20px", display: "flex", flexDirection: "column", gap: "14px" }}>
+        <div style={{ display: "flex", gap: "18px" }}>
+          <div style={{ width: "84px", height: "104px", borderRadius: "12px", background: "rgba(255,255,255,0.04)", border: "2px solid rgba(255,255,255,0.05)" }} className="animate-pulse" />
           <div style={{ flex: 1 }}>
-            <div style={{ width: "70%", height: "16px", background: "rgba(255,255,255,0.15)", borderRadius: "4px", marginBottom: "6px" }} className="animate-pulse" />
-            <div style={{ width: "40%", height: "14px", background: "rgba(255,255,255,0.1)", borderRadius: "6px", marginBottom: "12px" }} className="animate-pulse" />
-            <div style={{ marginBottom: "6px" }}>
-              <div style={{ width: "30%", height: "8px", background: "rgba(255,255,255,0.08)", borderRadius: "4px", marginBottom: "4px" }} className="animate-pulse" />
-              <div style={{ width: "50%", height: "10px", background: "rgba(255,255,255,0.12)", borderRadius: "4px" }} className="animate-pulse" />
-            </div>
-            <div>
-              <div style={{ width: "30%", height: "8px", background: "rgba(255,255,255,0.08)", borderRadius: "4px", marginBottom: "4px" }} className="animate-pulse" />
-              <div style={{ width: "60%", height: "10px", background: "rgba(255,255,255,0.12)", borderRadius: "4px" }} className="animate-pulse" />
+            <div style={{ width: "70%", height: "20px", background: "rgba(255,255,255,0.07)", borderRadius: "4px", marginBottom: "8px" }} className="animate-pulse" />
+            <div style={{ width: "50%", height: "12px", background: "rgba(255,255,255,0.04)", borderRadius: "6px", marginBottom: "16px" }} className="animate-pulse" />
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "4px 20px" }}>
+              <div>
+                <div style={{ width: "40%", height: "7px", background: "rgba(255,255,255,0.03)", borderRadius: "4px", marginBottom: "3px" }} className="animate-pulse" />
+                <div style={{ width: "60%", height: "14px", background: "rgba(255,255,255,0.05)", borderRadius: "4px" }} className="animate-pulse" />
+              </div>
+              <div>
+                <div style={{ width: "40%", height: "7px", background: "rgba(255,255,255,0.03)", borderRadius: "4px", marginBottom: "3px" }} className="animate-pulse" />
+                <div style={{ width: "70%", height: "14px", background: "rgba(255,255,255,0.05)", borderRadius: "4px" }} className="animate-pulse" />
+              </div>
             </div>
           </div>
         </div>
-        {/* Email row placeholder */}
         <div style={{
-          marginTop: "14px",
-          padding: "8px 12px",
-          background: "rgba(255,255,255,0.05)",
-          borderRadius: "8px",
-          display: "flex",
-          alignItems: "center",
-          gap: "8px",
+          padding: "14px 18px",
+          background: "rgba(255,255,255,0.02)",
+          borderRadius: "10px",
+          display: "grid",
+          gridTemplateColumns: "1fr 1fr",
+          gap: "12px",
+          marginTop: "auto",
         }}>
-          <span style={{ fontSize: "12px" }}>✉️</span>
-          <div style={{ width: "70%", height: "10px", background: "rgba(255,255,255,0.1)", borderRadius: "4px" }} className="animate-pulse" />
+          <div>
+            <div style={{ width: "30%", height: "6px", background: "rgba(255,255,255,0.03)", borderRadius: "4px", marginBottom: "3px" }} className="animate-pulse" />
+            <div style={{ width: "80%", height: "10px", background: "rgba(255,255,255,0.04)", borderRadius: "4px" }} className="animate-pulse" />
+          </div>
+          <div>
+            <div style={{ width: "30%", height: "6px", background: "rgba(255,255,255,0.03)", borderRadius: "4px", marginBottom: "3px" }} className="animate-pulse" />
+            <div style={{ width: "60%", height: "10px", background: "rgba(255,255,255,0.04)", borderRadius: "4px" }} className="animate-pulse" />
+          </div>
         </div>
       </div>
 
       {/* Footer skeleton */}
       <div style={{
-        background: "rgba(255,255,255,0.05)",
-        borderTop: "1px solid rgba(255,255,255,0.08)",
-        padding: "10px 22px",
+        borderTop: "1px solid rgba(255,255,255,0.04)",
+        paddingTop: "14px",
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
+        marginTop: "4px",
       }}>
-        <div style={{ width: "40%", height: "8px", background: "rgba(255,255,255,0.08)", borderRadius: "4px" }} className="animate-pulse" />
-        <div style={{ display: "flex", gap: "2px", alignItems: "flex-end" }}>
-          {[6, 10, 7, 12, 8, 5, 11, 9, 6, 10, 8, 7].map((h, i) => (
-            <div key={i} style={{
-              width: "2px",
-              height: `${h}px`,
-              background: "rgba(255,255,255,0.15)",
-              borderRadius: "1px",
-            }} className="animate-pulse" />
+        <div style={{ width: "30%", height: "7px", background: "rgba(255,255,255,0.03)", borderRadius: "4px" }} className="animate-pulse" />
+        <div style={{ display: "flex", gap: "1.5px", alignItems: "flex-end" }}>
+          {[8, 12, 6, 14, 10, 7, 16, 9, 11, 5, 13, 8, 10, 12, 7, 9, 14, 6, 11, 10].map((h, i) => (
+            <div key={i} style={{ width: "2px", height: `${h}px`, background: "rgba(255,255,255,0.04)", borderRadius: "1px" }} className="animate-pulse" />
           ))}
         </div>
+        <div style={{ width: "20%", height: "7px", background: "rgba(255,255,255,0.03)", borderRadius: "4px" }} className="animate-pulse" />
       </div>
     </div>
   );
@@ -381,13 +489,15 @@ export default function IDCardModal({ onClose }) {
         useCORS: true,
         backgroundColor: null,
         logging: false,
+        width: 340,
+        height: 500,
       });
       const link = document.createElement("a");
       const name = student?.name || `${student?.first_name ?? "student"}`.trim();
       link.download = `ID_Card_${name.replace(/\s+/g, "_")}.png`;
-      link.href = canvas.toDataURL("image/png");
+      link.href = canvas.toDataURL("image/png", 1.0);
       link.click();
-      setMsg({ type: "success", text: "ID card downloaded!" });
+      setMsg({ type: "success", text: "ID card downloaded successfully!" });
     } catch (err) {
       console.error("ID card download failed:", err);
       setMsg({ type: "error", text: "Download failed. Please try again." });
@@ -403,8 +513,8 @@ export default function IDCardModal({ onClose }) {
         onClick={onClose}
         style={{
           position: "fixed", inset: 0,
-          background: "rgba(0,0,0,0.65)",
-          backdropFilter: "blur(4px)",
+          background: "rgba(0,0,0,0.7)",
+          backdropFilter: "blur(6px)",
           zIndex: 1000,
           display: "flex", alignItems: "center", justifyContent: "center",
           padding: "16px",
@@ -415,7 +525,7 @@ export default function IDCardModal({ onClose }) {
           onClick={(e) => e.stopPropagation()}
           className="bg-surface-container-lowest rounded-2xl shadow-2xl"
           style={{
-            maxWidth: "420px",
+            maxWidth: "480px",
             width: "100%",
             overflow: "hidden",
             animation: "idcard-in 0.22s cubic-bezier(.22,1,.36,1)",
@@ -436,7 +546,13 @@ export default function IDCardModal({ onClose }) {
           </div>
 
           {/* Card Preview */}
-          <div className="p-6 flex justify-center" style={{ background: "var(--md-sys-color-surface-container-low, #f3f4f6)" }}>
+          <div 
+            className="p-6 flex justify-center items-center" 
+            style={{ 
+              background: "#f0f2f5",
+              minHeight: "540px",
+            }}
+          >
             {loading ? (
               <SkeletonIDCardVisual />
             ) : (
@@ -454,7 +570,7 @@ export default function IDCardModal({ onClose }) {
             <button
               onClick={handleDownload}
               disabled={downloading || loading}
-              className="flex-1 flex items-center justify-center gap-2 bg-primary text-white px-4 py-2.5 rounded-xl text-sm font-bold hover:opacity-90 transition-all disabled:opacity-60"
+              className="flex-1 flex items-center justify-center gap-2 bg-primary text-white px-4 py-2.5 rounded-xl text-sm font-bold hover:opacity-90 transition-all disabled:opacity-60 shadow-lg shadow-primary/20"
             >
               <span className="material-symbols-outlined text-base">
                 {downloading ? "hourglass_empty" : "download"}
@@ -471,8 +587,7 @@ export default function IDCardModal({ onClose }) {
 
           {/* Status */}
           {msg && (
-            <div className={`mx-5 mb-4 text-xs font-semibold flex items-center gap-1.5 ${msg.type === "success" ? "text-green-600" : "text-red-500"
-              }`}>
+            <div className={`mx-5 mb-4 text-xs font-semibold flex items-center gap-1.5 ${msg.type === "success" ? "text-green-600" : "text-red-500"}`}>
               <span className="material-symbols-outlined text-sm">
                 {msg.type === "success" ? "check_circle" : "error"}
               </span>
@@ -491,8 +606,8 @@ export default function IDCardModal({ onClose }) {
           animation: pulse 1.5s ease-in-out infinite;
         }
         @keyframes pulse {
-          0%, 100% { opacity: 0.5; }
-          50% { opacity: 1; }
+          0%, 100% { opacity: 0.4; }
+          50% { opacity: 0.8; }
         }
       `}</style>
     </>
