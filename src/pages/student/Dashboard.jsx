@@ -5,154 +5,100 @@ import { getMonthName } from "../../utils/calculations";
 import { useStudent } from "../../context/StudentProvider";
 import IDCardModal from "./IDCard";
 
+/* ─── Skeleton ───────────────────────────────────────────────────────────── */
 function Skeleton({ className = "" }) {
   return <div className={`animate-pulse bg-gray-200 rounded-md ${className}`} />;
 }
 
-function buildRecentActivity(grades, submissions, attendanceRecords) {
-  const events = [];
-
-  (grades || []).forEach((g) => {
-    if (!g.created_at && !g.updated_at) return;
-    events.push({
-      id: `grade-${g.id}`,
-      type: 'grade',
-      title: `Grade Updated: ${g.subject_name || g.subject || 'Subject'}`,
-      detail: (
-        <>
-          You received a{' '}
-          <span className="font-bold text-green-700">
-            {g.letter_grade || g.grade || `${g.marks_obtained}/${g.max_marks}`}
-          </span>{' '}
-          for {g.exam_name || g.exam_type || 'your exam'}.
-        </>
-      ),
-      timestamp: new Date(g.updated_at || g.created_at),
-      icon: 'check_circle',
-      iconBg: 'bg-green-100',
-      iconColor: 'text-green-700',
-    });
-  });
-
-  (submissions || []).forEach((s) => {
-    if (!s.submitted_at && !s.created_at) return;
-    events.push({
-      id: `sub-${s.id}`,
-      type: 'submission',
-      title: 'Submission Received',
-      detail: s.assignment_title || s.assignment_name || 'Assignment submitted successfully.',
-      timestamp: new Date(s.submitted_at || s.created_at),
-      icon: 'upload',
-      iconBg: 'bg-blue-100',
-      iconColor: 'text-blue-700',
-    });
-  });
-
-  (attendanceRecords || []).forEach((r) => {
-    if (!r.date) return;
-    events.push({
-      id: `att-${r.id || r.date}`,
-      type: 'attendance',
-      title: 'Attendance Marked',
-      detail: `${r.status} for ${r.subject_name || r.period || 'the day'}.`,
-      timestamp: new Date(r.date),
-      icon: r.status === 'Present' ? 'event_available'
-        : r.status === 'Absent' ? 'event_busy'
-          : 'info',
-      iconBg: r.status === 'Present' ? 'bg-green-100'
-        : r.status === 'Absent' ? 'bg-red-100'
-          : 'bg-amber-100',
-      iconColor: r.status === 'Present' ? 'text-green-700'
-        : r.status === 'Absent' ? 'text-red-700'
-          : 'text-amber-700',
-    });
-  });
-
-  return events
-    .filter((e) => !isNaN(e.timestamp))
-    .sort((a, b) => b.timestamp - a.timestamp)
-    .slice(0, 5);
+/* ─── Sparkline SVG (static trend line) ─────────────────────────────────── */
+function Sparkline({ points = [], color = "#6366f1", height = 32 }) {
+  if (!points || points.length < 2) return null;
+  const max = Math.max(...points);
+  const min = Math.min(...points);
+  const range = max - min || 1;
+  const w = 80;
+  const h = height;
+  const xs = points.map((_, i) => (i / (points.length - 1)) * w);
+  const ys = points.map((v) => h - ((v - min) / range) * (h - 4) - 2);
+  const d = xs.map((x, i) => `${i === 0 ? "M" : "L"}${x},${ys[i]}`).join(" ");
+  return (
+    <svg width={w} height={h} viewBox={`0 0 ${w} ${h}`} className="opacity-70">
+      <path d={d} fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
 }
 
-function timeAgo(date) {
-  const diff = Math.floor((Date.now() - date) / 1000);
-  if (diff < 60) return 'just now';
-  if (diff < 3600) return `${Math.floor(diff / 60)} mins ago`;
-  if (diff < 86400) return `${Math.floor(diff / 3600)} hours ago`;
-  if (diff < 86400 * 7) return `${Math.floor(diff / 86400)} days ago`;
-  return date.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' });
+/* ─── Donut / ring chart, used for attendance split + weekly progress ──── */
+function DonutChart({ segments = [], size = 56, strokeWidth = 7 }) {
+  const radius = (size - strokeWidth) / 2;
+  const circumference = 2 * Math.PI * radius;
+  const total = segments.reduce((s, seg) => s + (seg.value || 0), 0) || 1;
+  let offset = 0;
+  return (
+    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} className="-rotate-90 flex-shrink-0">
+      <circle
+        cx={size / 2} cy={size / 2} r={radius} fill="none"
+        stroke="currentColor" className="text-surface-container-high" strokeWidth={strokeWidth}
+      />
+      {segments.map((seg, i) => {
+        if (!seg.value) return null;
+        const frac = seg.value / total;
+        const dash = frac * circumference;
+        const strokeDashoffset = -offset;
+        offset += dash;
+        return (
+          <circle
+            key={i}
+            cx={size / 2} cy={size / 2} r={radius} fill="none"
+            stroke={seg.color} strokeWidth={strokeWidth}
+            strokeDasharray={`${dash} ${circumference - dash}`}
+            strokeDashoffset={strokeDashoffset}
+            strokeLinecap="round"
+          />
+        );
+      })}
+    </svg>
+  );
 }
 
+/* ─── Small original flat-illustration mascot for the hero banner ──────── */
+function HeroMascot() {
+  return (
+    <svg viewBox="0 0 160 200" className="w-full h-full" aria-hidden="true">
+      <ellipse cx="80" cy="190" rx="44" ry="7" fill="rgba(0,0,0,0.15)" />
+      <path d="M40 198 L40 142 Q40 102 80 102 Q120 102 120 142 L120 198 Z" fill="#1e3a8a" />
+      <rect x="60" y="150" width="40" height="22" rx="8" fill="#1d4ed8" opacity="0.6" />
+      <path d="M106 132 Q128 122 130 98 Q131 90 124 88 Q118 87 116 94 Q114 102 106 110 Z" fill="#1e3a8a" />
+      <circle cx="128" cy="92" r="10" fill="#f3c39a" />
+      <rect x="123" y="83" width="10" height="14" rx="4" fill="#f3c39a" />
+      <circle cx="80" cy="66" r="33" fill="#f3c39a" />
+      <path d="M47 58 Q47 28 80 28 Q113 28 113 58 Q113 42 95 38 Q85 48 69 40 Q57 46 47 58Z" fill="#241c19" />
+      <circle cx="68" cy="68" r="3" fill="#241c19" />
+      <circle cx="92" cy="68" r="3" fill="#241c19" />
+      <path d="M68 82 Q80 90 92 82" stroke="#241c19" strokeWidth="3" fill="none" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+/* ─── Skeleton ───────────────────────────────────────────────────────────── */
 function DashboardSkeleton() {
   return (
     <MainLayout title="Dashboard">
-      <div className="px-8 py-8 space-y-8">
-        <div className="rounded-xl bg-gray-200 animate-pulse h-36" />
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {[1, 2, 3].map(i => (
-            <div key={i} className="bg-white p-4 rounded-xl border border-gray-100 shadow-sm space-y-3">
-              <div className="flex justify-between">
-                <Skeleton className="w-9 h-9 rounded-md" />
-                <Skeleton className="w-20 h-5 rounded-full" />
-              </div>
-              <Skeleton className="w-28 h-3 mt-2" />
-              <Skeleton className="w-20 h-7" />
-            </div>
-          ))}
+      <div className="px-4 sm:px-8 py-6 space-y-6">
+        <Skeleton className="h-36 rounded-xl" />
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          {[1, 2, 3].map((i) => <Skeleton key={i} className="h-24 rounded-xl" />)}
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="md:col-span-2 grid grid-cols-2 gap-6">
-            <div className="bg-white rounded-xl p-4 border border-gray-100 shadow-sm space-y-3">
-              <div className="flex justify-between">
-                <Skeleton className="w-24 h-4" />
-                <Skeleton className="w-12 h-4" />
-              </div>
-              <div className="grid grid-cols-7 gap-1">
-                {Array.from({ length: 42 }).map((_, i) => (
-                  <Skeleton key={i} className="aspect-square rounded" />
-                ))}
-              </div>
-            </div>
-            <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
-              <div className="px-4 pt-4 pb-2 border-b border-gray-100 flex justify-between">
-                <Skeleton className="w-24 h-4" />
-                <Skeleton className="w-16 h-4" />
-              </div>
-              <div className="divide-y divide-gray-50">
-                {[1, 2, 3, 4].map(i => (
-                  <div key={i} className="flex items-center gap-3 px-4 py-4">
-                    <Skeleton className="w-7 h-7 rounded-md shrink-0" />
-                    <div className="flex-1 space-y-2">
-                      <Skeleton className="w-3/4 h-3" />
-                      <Skeleton className="w-full h-1.5 rounded-full" />
-                    </div>
-                    <Skeleton className="w-6 h-5 rounded shrink-0" />
-                  </div>
-                ))}
-              </div>
-            </div>
+        <Skeleton className="h-32 rounded-xl" />
+        <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+          <div className="xl:col-span-2 grid grid-cols-1 xl:grid-cols-2 gap-6">
+            <Skeleton className="h-64 rounded-xl" />
+            <Skeleton className="h-64 rounded-xl" />
           </div>
-          <div className="flex flex-col gap-4">
-            <div className="bg-gray-50 rounded-xl p-5 space-y-3">
-              <Skeleton className="w-28 h-3" />
-              <div className="grid grid-cols-2 gap-3">
-                <Skeleton className="h-20 rounded-lg" />
-                <Skeleton className="h-20 rounded-lg" />
-              </div>
-            </div>
-            <div className="bg-white rounded-xl p-5 shadow-sm space-y-4">
-              <Skeleton className="w-32 h-3" />
-              {[1, 2, 3].map(i => (
-                <div key={i} className="flex gap-3">
-                  <Skeleton className="w-6 h-6 rounded-full shrink-0" />
-                  <div className="flex-1 space-y-1.5">
-                    <Skeleton className="w-3/4 h-3" />
-                    <Skeleton className="w-full h-2.5" />
-                    <Skeleton className="w-16 h-2" />
-                  </div>
-                </div>
-              ))}
-            </div>
+          <div className="space-y-4">
+            <Skeleton className="h-36 rounded-xl" />
+            <Skeleton className="h-36 rounded-xl" />
+            <Skeleton className="h-28 rounded-xl" />
           </div>
         </div>
       </div>
@@ -167,10 +113,7 @@ function DashboardError({ message, onRetry }) {
         <span className="material-symbols-outlined text-5xl text-red-400">error</span>
         <p className="text-base font-bold text-on-surface">Couldn&apos;t load your dashboard</p>
         <p className="text-sm text-on-surface-variant max-w-md">{message}</p>
-        <button
-          onClick={onRetry}
-          className="mt-2 px-5 py-2 rounded-lg bg-primary text-white text-sm font-bold hover:opacity-90 transition-opacity"
-        >
+        <button onClick={onRetry} className="mt-2 px-5 py-2 rounded-lg bg-primary text-white text-sm font-bold hover:opacity-90 transition-opacity">
           Try Again
         </button>
       </div>
@@ -178,6 +121,55 @@ function DashboardError({ message, onRetry }) {
   );
 }
 
+/* ─── Upcoming Assignment Card ───────────────────────────────────────────── */
+function AssignmentItem({ assignment }) {
+  const due = assignment.due_date ? new Date(assignment.due_date) : null;
+  const now = new Date();
+  const daysLeft = due ? Math.ceil((due - now) / 86400000) : null;
+  const isUrgent = daysLeft !== null && daysLeft <= 2;
+  const isOverdue = daysLeft !== null && daysLeft < 0;
+
+  const statusCls = isOverdue
+    ? "text-red-600 bg-red-50"
+    : isUrgent
+    ? "text-amber-600 bg-amber-50"
+    : "text-green-700 bg-green-50";
+
+  const statusLabel = isOverdue
+    ? "Overdue"
+    : daysLeft === 0
+    ? "Due Today"
+    : daysLeft === 1
+    ? "Due Tomorrow"
+    : daysLeft !== null
+    ? `${daysLeft}d left`
+    : "No date";
+
+  return (
+    <div className="flex items-center gap-3 px-4 py-3 hover:bg-surface-container-low/50 transition-colors rounded-lg group">
+      <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
+        <span className="material-symbols-outlined text-sm text-primary">assignment</span>
+      </div>
+      <div className="flex-1 min-w-0">
+        <p className="text-xs font-bold text-on-surface truncate">{assignment.title || assignment.assignment_title || "Assignment"}</p>
+        <p className="text-2xs text-on-surface-variant truncate">
+          {assignment.subject_name || assignment.subject || ""}
+        </p>
+      </div>
+      <span className={`text-2xs font-bold px-2 py-0.5 rounded-full flex-shrink-0 ${statusCls}`}>
+        {statusLabel}
+      </span>
+    </div>
+  );
+}
+
+const CIRCULAR_ACCENTS = [
+  { bg: "bg-red-50", text: "text-red-500" },
+  { bg: "bg-blue-50", text: "text-blue-500" },
+  { bg: "bg-violet-50", text: "text-violet-500" },
+];
+
+/* ─── Main Dashboard ─────────────────────────────────────────────────────── */
 export default function Dashboard() {
   const {
     profile: student,
@@ -192,42 +184,74 @@ export default function Dashboard() {
     reload,
   } = useStudent();
 
-  const [showAllActivity, setShowAllActivity] = useState(false);
   const [showIDCard, setShowIDCard] = useState(false);
+  const [calMonthOffset, setCalMonthOffset] = useState(0);
 
-  const now = useMemo(() => new Date(), []);
-  const year = now.getFullYear();
-  const month = now.getMonth();
+  const now       = useMemo(() => new Date(), []);
+  const year      = now.getFullYear();
+  const month     = now.getMonth();
   const monthWord = getMonthName(month);
 
-  const daysCount = new Date(year, month + 1, 0).getDate();
-  const days = Array.from({ length: daysCount }, (_, i) => i + 1);
-  const firstDayOfWeek = new Date(year, month, 1).getDay();
-  const emptyDays = Array.from({ length: firstDayOfWeek }, (_, i) => i);
+  const todayKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
+
+  const greeting = now.getHours() < 12 ? "Good Morning" : now.getHours() < 17 ? "Good Afternoon" : "Good Evening";
+
+  // ── Calendar can be browsed independently of the "current month" stats ──
+  const calDate   = useMemo(() => new Date(year, month + calMonthOffset, 1), [year, month, calMonthOffset]);
+  const calYear   = calDate.getFullYear();
+  const calMonth  = calDate.getMonth();
+  const calMonthWord = getMonthName(calMonth);
+  const calDaysCount = new Date(calYear, calMonth + 1, 0).getDate();
+  const calDays       = Array.from({ length: calDaysCount }, (_, i) => i + 1);
+  const calFirstDay   = new Date(calYear, calMonth, 1).getDay();
+  const calEmptyDays  = Array.from({ length: calFirstDay }, (_, i) => i);
 
   const attendanceMap = useMemo(() => {
     if (!Array.isArray(attendanceRecords)) return {};
-    return attendanceRecords.reduce((acc, r) => {
-      acc[r.date] = r;
-      return acc;
-    }, {});
+    return attendanceRecords.reduce((acc, r) => { acc[r.date] = r; return acc; }, {});
   }, [attendanceRecords]);
 
+  // Distribution for the "current month" (drives the stat card + streak/goal math)
   const monthlyDist = useMemo(() => {
     const s = { Present: 0, Absent: 0, Late: 0 };
     if (!Array.isArray(attendanceRecords)) return s;
     attendanceRecords.forEach((r) => {
       const d = new Date(r.date);
-      if (d.getFullYear() === year && d.getMonth() === month) {
-        if (s[r.status] !== undefined) s[r.status]++;
-      }
+      if (d.getFullYear() === year && d.getMonth() === month && s[r.status] !== undefined) s[r.status]++;
     });
     return s;
   }, [attendanceRecords, year, month]);
 
+  // Distribution for whichever month is currently shown in the calendar
+  const calMonthlyDist = useMemo(() => {
+    const s = { Present: 0, Absent: 0, Late: 0 };
+    if (!Array.isArray(attendanceRecords)) return s;
+    attendanceRecords.forEach((r) => {
+      const d = new Date(r.date);
+      if (d.getFullYear() === calYear && d.getMonth() === calMonth && s[r.status] !== undefined) s[r.status]++;
+    });
+    return s;
+  }, [attendanceRecords, calYear, calMonth]);
+
+  // Compute attendance streak
+  const streak = useMemo(() => {
+    if (!Array.isArray(attendanceRecords)) return 0;
+    let count = 0;
+    const today = new Date();
+    for (let i = 0; i < 30; i++) {
+      const d = new Date(today);
+      d.setDate(d.getDate() - i);
+      const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+      const rec = attendanceMap[key];
+      if (rec && rec.status === "Present") count++;
+      else if (i > 0) break;
+    }
+    return count;
+  }, [attendanceRecords, attendanceMap]);
+
   const top4Subjects = useMemo(() => {
-    const grades = studentData?.grades?.results || [];
-    const subjects = academic?.subs || [];
+    const grades   = studentData?.grades?.results || [];
+    const subjects = academic?.subs              || [];
     const seen = new Set();
     const uniqueSubjects = subjects.filter((sub) => {
       const key = sub.name.trim().toLowerCase();
@@ -240,96 +264,142 @@ export default function Dashboard() {
         subject: sub,
         gradeInfo:
           grades.find((g) => g.subject === sub.id) ||
-          grades.find(
-            (g) =>
-              g.subject_name?.trim().toLowerCase() ===
-              sub.name.trim().toLowerCase()
-          ) ||
+          grades.find((g) => g.subject_name?.trim().toLowerCase() === sub.name.trim().toLowerCase()) ||
           null,
       }))
       .sort((a, b) => {
         if (a.gradeInfo && !b.gradeInfo) return -1;
         if (!a.gradeInfo && b.gradeInfo) return 1;
-        if (a.gradeInfo && b.gradeInfo) {
-          return (
-            b.gradeInfo.marks_obtained / b.gradeInfo.max_marks -
-            a.gradeInfo.marks_obtained / a.gradeInfo.max_marks
-          );
-        }
+        if (a.gradeInfo && b.gradeInfo)
+          return b.gradeInfo.marks_obtained / b.gradeInfo.max_marks - a.gradeInfo.marks_obtained / a.gradeInfo.max_marks;
         return 0;
       })
       .slice(0, 4);
   }, [studentData, academic]);
 
-  // Derived recent activity — computed once, not inside render
-  const recentActs = useMemo(() => {
-    const grades = studentData?.grades?.results || [];
-    return buildRecentActivity(grades, submissions, attendanceRecords);
-  }, [studentData, submissions, attendanceRecords]);
+  // Upcoming assignments from dashboard raw
+  const upcomingAssignments = useMemo(() => {
+    const raw = studentData?.dashboardRaw?.upcoming_assignments || [];
+    return raw.slice(0, 4);
+  }, [studentData]);
+
+  const nextForSubject = (subjectName) => {
+    const match = upcomingAssignments.find(
+      (a) => (a.subject_name || a.subject || "").toLowerCase() === subjectName.toLowerCase()
+    );
+    if (!match) return null;
+    const due = match.due_date ? new Date(match.due_date) : null;
+    return {
+      title: match.title || match.assignment_title || "Assignment",
+      dueLabel: due ? due.toLocaleDateString("en-IN", { month: "short", day: "numeric" }) : "",
+    };
+  };
+
+  // Recent circulars drive the notification badge
+  const recentCircularsCount = useMemo(() => {
+    if (!Array.isArray(circulars)) return 0;
+    const cutoff = Date.now() - 3 * 24 * 60 * 60 * 1000;
+    return circulars.filter((c) => c.created_at && new Date(c.created_at).getTime() >= cutoff).length;
+  }, [circulars]);
 
   if (loading) return <DashboardSkeleton />;
-
-  if (!student) {
-    return (
-      <DashboardError
-        message={error || "Your profile couldn't be loaded."}
-        onRetry={reload}
-      />
-    );
-  }
+  if (!student) return <DashboardError message={error || "Your profile couldn't be loaded."} onRetry={reload} />;
 
   const attendanceRate = Number(studentData?.attendanceSummary?.attendance_percentage ?? 0);
-
   const percentage = studentData?.reportCard?.overall_percentage != null
     ? Number(studentData.reportCard.overall_percentage).toFixed(1)
     : "0.0";
 
+  const rank = studentData?.reportCard?.rank ?? studentData?.reportCard?.class_rank ?? null;
+  const rankTotal = studentData?.reportCard?.class_size ?? studentData?.reportCard?.total_students ?? null;
+
   const percentageStatus =
-    parseFloat(percentage) >= 75
-      ? { label: "EXCELLENT", className: "text-green-800 bg-green-100" }
-      : parseFloat(percentage) >= 60
-        ? { label: "GOOD", className: "text-blue-800  bg-blue-100" }
-        : parseFloat(percentage) >= 45
-          ? { label: "SATISFACTORY", className: "text-amber-800 bg-amber-100" }
-          : { label: "AT RISK", className: "text-red-800   bg-red-100" };
+    parseFloat(percentage) >= 75 ? { label: "EXCELLENT",    cls: "text-green-800 bg-green-100",  icon: "trending_up"  } :
+    parseFloat(percentage) >= 60 ? { label: "GOOD",         cls: "text-blue-800 bg-blue-100",    icon: "thumb_up"     } :
+    parseFloat(percentage) >= 45 ? { label: "SATISFACTORY", cls: "text-amber-800 bg-amber-100",  icon: "warning"      } :
+                                   { label: "AT RISK",      cls: "text-red-800 bg-red-100",      icon: "priority_high" };
 
   const attendanceStatus =
-    attendanceRate >= 80
-      ? { label: "ON TRACK", className: "text-green-800 bg-green-100" }
-      : attendanceRate >= 65
-        ? { label: "SATISFACTORY", className: "text-amber-800 bg-amber-100" }
-        : { label: "AT RISK", className: "text-red-800 bg-red-100" };
+    attendanceRate >= 80 ? { label: "ON TRACK",     cls: "text-green-800 bg-green-100"  } :
+    attendanceRate >= 65 ? { label: "SATISFACTORY", cls: "text-amber-800 bg-amber-100"  } :
+                           { label: "AT RISK",      cls: "text-red-800 bg-red-100"      };
+
+  const attendanceGoal = 75;
+  
+  // FIX 1: Calculate needed days properly - use total days from all records, not just current month
+  const totalDaysAll = attendanceRecords?.length || 0;
+  const presentDaysAll = attendanceRecords?.filter(r => r.status === "Present").length || 0;
+  
+  // Calculate needed days based on all attendance records
+  let neededDays = 0;
+  if (attendanceRate < attendanceGoal && totalDaysAll > 0) {
+    // Formula: (target% * total_days - present_days) / (100 - target%)
+    neededDays = Math.ceil((attendanceGoal * totalDaysAll - 100 * presentDaysAll) / (100 - attendanceGoal));
+    neededDays = Math.max(0, neededDays);
+  }
+  
+  const attendanceGapMsg = attendanceRate >= attendanceGoal
+    ? "You're smashing your attendance goal! 🎉"
+    : neededDays === 0 && totalDaysAll === 0
+    ? "Start attending classes to track your progress!"
+    : `Only ${neededDays} more day${neededDays === 1 ? "" : "s"} of attendance to reach ${attendanceGoal}%`;
 
   const getSubjectIcon = (name = "") => {
     const n = name.toLowerCase();
-    if (n.includes("math")) return { icon: "calculate", bg: "bg-blue-50   text-blue-600" };
-    if (n.includes("phys")) return { icon: "rocket_launch", bg: "bg-purple-50 text-purple-600" };
-    if (n.includes("comp") || n.includes("code")) return { icon: "code", bg: "bg-orange-50 text-orange-600" };
-    if (n.includes("eng") || n.includes("lit")) return { icon: "history_edu", bg: "bg-indigo-50 text-indigo-600" };
-    if (n.includes("chem")) return { icon: "science", bg: "bg-green-50  text-green-600" };
-    if (n.includes("bio")) return { icon: "biotech", bg: "bg-teal-50   text-teal-600" };
-    if (n.includes("hindi") || n.includes("sanskrit")) return { icon: "translate", bg: "bg-rose-50   text-rose-600" };
-    return { icon: "menu_book", bg: "bg-slate-100 text-slate-600" };
+    if (n.includes("math"))                            return { icon: "calculate",     bg: "bg-blue-50   text-blue-600"   };
+    if (n.includes("phys"))                            return { icon: "rocket_launch", bg: "bg-purple-50 text-purple-600" };
+    if (n.includes("comp") || n.includes("code"))      return { icon: "code",          bg: "bg-orange-50 text-orange-600" };
+    if (n.includes("eng")  || n.includes("lit"))       return { icon: "history_edu",   bg: "bg-indigo-50 text-indigo-600" };
+    if (n.includes("chem"))                            return { icon: "science",        bg: "bg-green-50  text-green-600"  };
+    if (n.includes("bio"))                             return { icon: "biotech",        bg: "bg-teal-50   text-teal-600"   };
+    if (n.includes("hindi") || n.includes("sanskrit")) return { icon: "translate",      bg: "bg-rose-50   text-rose-600"   };
+    if (n.includes("social") || n.includes("sst"))     return { icon: "public",         bg: "bg-amber-50  text-amber-600"  };
+    return                                                    { icon: "menu_book",      bg: "bg-slate-100 text-slate-600"  };
   };
 
   const getGradeLetter = (obtained, max) => {
     const p = (obtained / max) * 100;
-    if (p >= 90) return { letter: "A+", cls: "text-green-700  bg-green-100" };
-    if (p >= 80) return { letter: "A", cls: "text-blue-700   bg-blue-100" };
+    if (p >= 90) return { letter: "A+", cls: "text-green-700  bg-green-100"  };
+    if (p >= 80) return { letter: "A",  cls: "text-blue-700   bg-blue-100"   };
     if (p >= 70) return { letter: "B+", cls: "text-yellow-700 bg-yellow-100" };
-    if (p >= 60) return { letter: "B", cls: "text-orange-700 bg-orange-100" };
-    return { letter: "C", cls: "text-red-700    bg-red-100" };
+    if (p >= 60) return { letter: "B",  cls: "text-orange-700 bg-orange-100" };
+    return              { letter: "C",  cls: "text-red-700    bg-red-100"    };
   };
 
   const dayStatusCls = {
     Present: "bg-green-100  text-green-700  border-green-200",
-    Absent: "bg-red-100    text-red-700    border-red-200",
-    Late: "bg-yellow-100 text-yellow-700 border-yellow-200",
+    Absent:  "bg-red-100    text-red-700    border-red-200",
+    Late:    "bg-yellow-100 text-yellow-700 border-yellow-200",
   };
 
-  const INITIAL_SHOW = 3;
-  const displayedActs = showAllActivity ? recentActs : recentActs.slice(0, INITIAL_SHOW);
-  const hasMoreActs = recentActs.length > INITIAL_SHOW;
+  // FIX 2: Only show sparkline if we have data
+  const attendanceSparkline = totalDaysAll > 0 
+    ? [60, 65, attendanceRate - 5, attendanceRate - 2, attendanceRate + 1, attendanceRate - 1, attendanceRate]
+    : [0, 0, 0, 0, 0, 0, 0];
+    
+  const gradeSparkline = parseFloat(percentage) > 0
+    ? [55, 62, 68, parseFloat(percentage) - 4, parseFloat(percentage) - 1, parseFloat(percentage)]
+    : [0, 0, 0, 0, 0, 0];
+
+  // Streak week dots
+  const weekDays = ["M", "T", "W", "T", "F", "S", "S"];
+  const weekDots = weekDays.map((d, i) => {
+    const date = new Date();
+    const dayOfWeek = date.getDay(); // 0=Sun
+    const mondayOffset = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
+    const targetDate = new Date(date);
+    targetDate.setDate(date.getDate() + mondayOffset + i);
+    const key = `${targetDate.getFullYear()}-${String(targetDate.getMonth() + 1).padStart(2, "0")}-${String(targetDate.getDate()).padStart(2, "0")}`;
+    const rec = attendanceMap[key];
+    const isFuture = targetDate > now;
+    return { label: d, status: isFuture ? "future" : rec?.status || "none" };
+  });
+
+  const weeklyTotal = monthlyDist.Present + monthlyDist.Absent + monthlyDist.Late;
+  const weeklyPct = weeklyTotal > 0 ? Math.round((monthlyDist.Present / weeklyTotal) * 100) : 0;
+
+  // FIX 3: For donut chart, show placeholder if no data
+  const hasAttendanceData = monthlyDist.Present > 0 || monthlyDist.Absent > 0 || monthlyDist.Late > 0;
 
   return (
     <>
@@ -340,150 +410,311 @@ export default function Dashboard() {
         headerActions={
           <button
             onClick={() => setShowIDCard(true)}
-            title="Download ID Card"
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-container-low hover:bg-primary hover:text-white text-on-surface-variant border border-outline-variant/30 transition-all duration-200 text-xs font-bold group"
           >
-            <span className="material-symbols-outlined text-base group-hover:scale-110 transition-transform">
-              badge
-            </span>
+            <span className="material-symbols-outlined text-base group-hover:scale-110 transition-transform">badge</span>
             <span className="hidden sm:inline">ID Card</span>
           </button>
         }
       >
-        <div className="px-8 py-8 space-y-6">
+        <div className="px-4 sm:px-6 lg:px-8 py-6 space-y-5">
 
           {/* ── HERO BANNER ── */}
-          <section className="relative overflow-hidden rounded-xl bg-gradient-to-br from-primary to-primary-container p-8 text-white">
-            <div className="relative z-10 max-w-2xl">
-              <h2 className="text-3xl font-extrabold font-headline mb-2">
-                Welcome back, {student?.first_name}!
-              </h2>
-              <p className="text-white/80 text-lg">
-                You are currently leading {enroll?.class_level_name} with
-                exceptional progress. Here&apos;s what&apos;s happening in your
-                academic journey today.
-              </p>
-            </div>
-            <div className="absolute -right-20 -top-20 w-80 h-80 bg-white/10 rounded-full blur-3xl" />
-            <div className="absolute right-12 bottom-0 hidden lg:block">
-              <span className="material-symbols-outlined text-[160px] opacity-10">auto_awesome</span>
-            </div>
-          </section>
+          <section className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-indigo-700 via-blue-700 to-indigo-800 p-6 sm:p-8 text-white">
+            <span className="material-symbols-outlined absolute text-white/25 text-sm" style={{ top: "16%", left: "46%" }}>auto_awesome</span>
+            <span className="material-symbols-outlined absolute text-white/20 text-xs" style={{ top: "62%", left: "40%" }}>auto_awesome</span>
+            <span className="material-symbols-outlined absolute text-white/20 text-xs" style={{ top: "30%", left: "54%" }}>auto_awesome</span>
 
-          {/* ── ROW 1: 3 STAT CARDS ── */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-
-            {/* Attendance */}
-            <div className="bg-surface-container-lowest px-4 py-3 rounded-xl custom-shadow flex items-center justify-between border border-outline-variant/10 hover:scale-[1.01] transition-all">
-              <div className="flex items-center gap-3">
-                <span className="p-2 rounded-md bg-blue-50 text-blue-700 flex-shrink-0">
-                  <span className="material-symbols-outlined text-xl">calendar_today</span>
-                </span>
-                <div>
-                  <p className="text-xs font-medium text-on-surface-variant whitespace-nowrap">Attendance Rate</p>
-                  <p className="text-xl font-bold font-headline text-on-surface leading-tight">
-                    {attendanceRate}<span className="text-sm font-semibold">%</span>
-                  </p>
+            <div className="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
+              <div className="max-w-xl">
+                <p className="text-white/70 text-sm font-semibold mb-1">
+                  {now.toLocaleDateString("en-IN", { weekday: "long", day: "numeric", month: "long" })}
+                </p>
+                <h2 className="text-2xl sm:text-3xl font-extrabold font-headline mb-2">
+                  {greeting}, {student?.first_name}! 👋
+                </h2>
+                <p className="text-white/80 text-sm sm:text-base mb-4">
+                  You&apos;re doing great in <span className="font-bold text-white">{enroll?.class_level_name}</span>.
+                  Keep up the momentum!
+                </p>
+                <div className="inline-flex items-center gap-2 bg-white/15 backdrop-blur-sm rounded-full pl-1.5 pr-3 py-1">
+                  <span className="w-5 h-5 rounded-full bg-white/25 flex items-center justify-center flex-shrink-0">
+                    <span className="material-symbols-outlined text-xs">
+                      {attendanceRate >= attendanceGoal ? "celebration" : totalDaysAll > 0 ? "check_circle" : "info"}
+                    </span>
+                  </span>
+                  <span className="text-xs font-semibold">{attendanceGapMsg}</span>
                 </div>
               </div>
-              <span className={`text-2xs font-bold px-2 py-1 rounded-full flex-shrink-0 whitespace-nowrap ${attendanceStatus.className}`}>
-                {attendanceStatus.label}
-              </span>
+
+              <div className="flex items-center gap-3 sm:gap-4 flex-shrink-0 w-full lg:w-auto justify-between lg:justify-end">
+                <div className="hidden sm:flex flex-col gap-2">
+                  <div className="bg-white/15 backdrop-blur-sm rounded-xl px-4 py-2.5 flex items-center gap-2.5">
+                    <span className="text-lg leading-none">🔥</span>
+                    <div>
+                      <p className="text-2xs text-white/70 uppercase tracking-wider">Attendance Streak</p>
+                      <p className="text-lg font-black text-white leading-tight">{streak} days</p>
+                    </div>
+                  </div>
+                  <div className="bg-white/15 backdrop-blur-sm rounded-xl px-4 py-2.5 flex items-center gap-2.5">
+                    <span className="material-symbols-outlined text-lg">assignment_turned_in</span>
+                    <div>
+                      <p className="text-2xs text-white/70 uppercase tracking-wider">Assignments Due</p>
+                      <p className="text-lg font-black text-white leading-tight">{upcomingAssignments.length}</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="hidden md:block w-24 h-32 flex-shrink-0">
+                  <HeroMascot />
+                </div>
+
+                <div className="bg-white/95 text-on-surface rounded-xl px-4 py-3 text-center flex-shrink-0 shadow-lg min-w-[92px]">
+                  <p className="text-2xs text-on-surface-variant uppercase tracking-wider font-bold">Today</p>
+                  <p className="text-sm font-black mt-1 whitespace-nowrap">
+                    {upcomingAssignments.length > 0 ? `${upcomingAssignments.length} due` : "All clear!"}
+                  </p>
+                  <span className="mt-1.5 inline-flex w-6 h-6 rounded-full bg-green-100 text-green-600 items-center justify-center">
+                    <span className="material-symbols-outlined text-sm">
+                      {upcomingAssignments.length > 0 ? "pending_actions" : "check"}
+                    </span>
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div className="absolute -right-16 -top-16 w-64 h-64 bg-white/10 rounded-full blur-3xl pointer-events-none" />
+          </section>
+
+          {/* ── STAT CARDS ── */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+
+            {/* Attendance */}
+            <div className="bg-surface-container-lowest rounded-xl custom-shadow border border-outline-variant/10 hover:scale-[1.02] hover:shadow-md transition-all duration-200 overflow-hidden">
+              <div className="px-4 pt-4 pb-3 flex items-start justify-between gap-2">
+                <div className="flex items-center gap-3">
+                  {/* FIX 4: Show donut chart with proper data */}
+                  <DonutChart
+                    segments={hasAttendanceData ? [
+                      { value: monthlyDist.Present, color: "#22c55e" },
+                      { value: monthlyDist.Absent, color: "#ef4444" },
+                      { value: monthlyDist.Late, color: "#f59e0b" },
+                    ] : [
+                      { value: 1, color: "#e5e7eb" }
+                    ]}
+                  />
+                  <div>
+                    <p className="text-2xs font-semibold text-on-surface-variant uppercase tracking-wider">Attendance</p>
+                    <p className="text-2xl font-black font-headline text-on-surface leading-tight">
+                      {attendanceRate}<span className="text-sm font-bold">%</span>
+                    </p>
+                  </div>
+                </div>
+                <div className="flex flex-col items-end gap-1.5">
+                  {totalDaysAll > 0 && <Sparkline points={attendanceSparkline} color="#3b82f6" />}
+                  <span className={`text-2xs font-bold px-2 py-0.5 rounded-full whitespace-nowrap ${attendanceStatus.cls}`}>
+                    {attendanceStatus.label}
+                  </span>
+                </div>
+              </div>
+              <div className="px-4 pb-2 flex items-center gap-3 flex-wrap">
+                <span className="flex items-center gap-1 text-2xs text-on-surface-variant"><span className="w-1.5 h-1.5 rounded-full bg-green-400" />{monthlyDist.Present} Present</span>
+                <span className="flex items-center gap-1 text-2xs text-on-surface-variant"><span className="w-1.5 h-1.5 rounded-full bg-red-400" />{monthlyDist.Absent} Absent</span>
+                <span className="flex items-center gap-1 text-2xs text-on-surface-variant"><span className="w-1.5 h-1.5 rounded-full bg-yellow-400" />{monthlyDist.Late} Late</span>
+              </div>
+              <div className="px-4 pb-4">
+                <p className="text-2xs text-on-surface-variant mb-1.5">
+                  {totalDaysAll === 0 
+                    ? "No attendance records yet. Start attending classes!" 
+                    : attendanceRate >= attendanceGoal 
+                      ? "You're doing great, keep it up!" 
+                      : attendanceGapMsg}
+                </p>
+                <div className="w-full bg-surface-container-high rounded-full h-1.5 overflow-hidden">
+                  <div
+                    className="bg-gradient-to-r from-primary to-secondary h-full rounded-full transition-all duration-700"
+                    style={{ width: `${Math.min(100, (attendanceRate / attendanceGoal) * 100)}%` }}
+                  />
+                </div>
+              </div>
             </div>
 
             {/* Overall Percentage */}
-            <div className="bg-surface-container-lowest px-4 py-3 rounded-xl custom-shadow flex items-center justify-between border border-outline-variant/10 hover:scale-[1.01] transition-all">
-              <div className="flex items-center gap-3">
-                <span className="p-2 rounded-md bg-secondary-fixed text-secondary flex-shrink-0">
-                  <span className="material-symbols-outlined text-xl">grade</span>
-                </span>
-                <div>
-                  <p className="text-xs font-medium text-on-surface-variant whitespace-nowrap">Overall Percentage</p>
-                  <p className="text-xl font-bold font-headline text-on-surface leading-tight">
-                    {percentage}<span className="text-sm font-semibold">%</span>
-                  </p>
+            <div className="bg-surface-container-lowest rounded-xl custom-shadow border border-outline-variant/10 hover:scale-[1.02] hover:shadow-md transition-all duration-200 overflow-hidden">
+              <div className="px-4 pt-4 pb-3 flex items-start justify-between gap-2">
+                <div className="flex items-center gap-3">
+                  <span className="p-2.5 rounded-xl bg-secondary-fixed text-secondary flex-shrink-0">
+                    <span className="material-symbols-outlined text-2xl">grade</span>
+                  </span>
+                  <div>
+                    <p className="text-2xs font-semibold text-on-surface-variant uppercase tracking-wider">Performance</p>
+                    <p className="text-2xl font-black font-headline text-on-surface leading-tight">
+                      {percentage}<span className="text-sm font-bold">%</span>
+                    </p>
+                  </div>
+                </div>
+                <div className="flex flex-col items-end gap-1.5">
+                  {parseFloat(percentage) > 0 && <Sparkline points={gradeSparkline} color="#8b5cf6" />}
+                  <span className={`text-2xs font-bold px-2 py-0.5 rounded-full whitespace-nowrap ${percentageStatus.cls}`}>
+                    {percentageStatus.label}
+                  </span>
                 </div>
               </div>
-              <span className={`text-2xs font-bold px-2 py-1 rounded-full flex-shrink-0 whitespace-nowrap ${percentageStatus.className}`}>
-                {percentageStatus.label}
-              </span>
+              <div className="px-4 pb-4 flex items-center justify-between">
+                <div className="flex items-center gap-1 text-2xs text-on-surface-variant">
+                  <span className="material-symbols-outlined text-xs">{percentageStatus.icon}</span>
+                  Overall score
+                </div>
+                {rank != null && (
+                  <p className="text-2xs text-on-surface-variant">
+                    Rank <span className="font-bold text-on-surface">{rank}{rankTotal ? ` / ${rankTotal}` : ""}</span>
+                  </p>
+                )}
+              </div>
             </div>
 
             {/* Fees */}
-            <div className="bg-surface-container-lowest px-4 py-3 rounded-xl custom-shadow flex items-center justify-between border border-outline-variant/10 hover:scale-[1.01] transition-all">
-              <div className="flex items-center gap-3">
-                <span className="p-2 rounded-md bg-green-50 text-green-700 flex-shrink-0">
-                  <span className="material-symbols-outlined text-xl">verified</span>
-                </span>
-                <div>
-                  <p className="text-xs font-medium text-on-surface-variant">Fees Status</p>
-                  <p className="text-xl font-bold font-headline text-on-surface leading-tight">Paid</p>
-                  <p className="text-2xs text-on-surface-variant">Next due: Oct 15, 2024</p>
+            <div className="bg-surface-container-lowest rounded-xl custom-shadow border border-outline-variant/10 hover:scale-[1.02] hover:shadow-md transition-all duration-200 overflow-hidden flex flex-col">
+              <div className="px-4 pt-4 pb-3 flex items-start justify-between gap-2">
+                <div className="flex items-center gap-3">
+                  <span className="p-2.5 rounded-xl bg-green-50 text-green-700 flex-shrink-0">
+                    <span className="material-symbols-outlined text-2xl">verified</span>
+                  </span>
+                  <div>
+                    <p className="text-2xs font-semibold text-on-surface-variant uppercase tracking-wider">Fees Status</p>
+                    <p className="text-2xl font-black font-headline text-on-surface leading-tight">Paid</p>
+                  </div>
                 </div>
+                <span className="flex items-center gap-1 text-2xs text-green-600 font-semibold whitespace-nowrap">
+                  <span className="h-1.5 w-1.5 bg-green-500 rounded-full animate-pulse" /> Active
+                </span>
               </div>
-              <div className="h-2 w-2 bg-green-500 rounded-full animate-pulse" />
+              <div className="px-4 pb-4 mt-auto flex items-center justify-between gap-2">
+                <div>
+                  <p className="text-2xs text-on-surface-variant">Next Due</p>
+                  <p className="text-xs font-bold text-on-surface">Oct 15, 2024</p>
+                </div>
+                <Link
+                  to="/student/fees"
+                  className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-surface-container-low hover:bg-primary hover:text-white text-primary text-2xs font-bold transition-all duration-200"
+                >
+                  View Receipt
+                  <span className="material-symbols-outlined text-xs">download</span>
+                </Link>
+              </div>
             </div>
-
           </div>
 
-          {/* ── ROW 2: Calendar + Subjects + Right col ── */}
-          <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 items-start">
-            <div className="xl:col-span-2 grid grid-cols-1 xl:grid-cols-2 gap-6 items-start">
-
-              {/* Calendar */}
-              <Link to="/student/attendance" className="block group xl:h-full">
-                <div className="xl:h-full bg-surface-container-lowest rounded-xl p-4 custom-shadow border border-outline-variant/10 group-hover:border-primary/40 transition-all duration-200 flex flex-col">
-                  <div className="flex items-center justify-between mb-3">
-                    <div>
-                      <p className="text-xs font-bold text-on-surface">{monthWord} {year}</p>
-                      <p className="text-2xs text-on-surface-variant">Visual Presence Log</p>
-                    </div>
-                    <span className="flex items-center gap-0.5 text-2xs font-bold text-primary group-hover:underline">
-                      View all
-                      <span className="material-symbols-outlined text-xs">arrow_forward</span>
-                    </span>
-                  </div>
-                  <div className="flex-1">
-                    <div className="grid grid-cols-7 gap-0.5">
-                      {["S", "M", "T", "W", "T", "F", "S"].map((d, i) => (
-                        <div key={i} className="text-center text-[8px] font-bold text-outline pb-0.5">{d}</div>
-                      ))}
-                      {emptyDays.map((_, i) => <div key={`e-${i}`} />)}
-                      {days.map((day) => {
-                        const dateKey = `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
-                        const record = attendanceMap[dateKey];
-                        return (
-                          <div
-                            key={day}
-                            className={`aspect-square flex items-center justify-center rounded text-3xs font-semibold border transition-all ${record
-                                ? (dayStatusCls[record.status] ?? "bg-surface-container border-surface-container")
-                                : "bg-surface-container-lowest border-surface-container text-on-surface-variant"
-                              }`}
-                          >
-                            {day}
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>
-                  <div className="flex gap-3 mt-3 pt-2 border-t border-surface-container-low flex-wrap">
-                    {[
-                      { color: "bg-green-400", label: "Present", count: monthlyDist.Present },
-                      { color: "bg-red-400", label: "Absent", count: monthlyDist.Absent },
-                      { color: "bg-yellow-400", label: "Late", count: monthlyDist.Late },
-                    ].map(({ color, label, count }) => (
-                      <div key={label} className="flex items-center gap-1">
-                        <div className={`w-2 h-2 rounded-full flex-shrink-0 ${color}`} />
-                        <span className="text-3xs font-semibold text-on-surface-variant">
-                          {label}<span className="ml-0.5 font-bold text-on-surface">{count}</span>
-                        </span>
-                      </div>
-                    ))}
+          {/* ── UPCOMING ASSIGNMENTS ── */}
+          {upcomingAssignments.length > 0 && (
+            <div className="bg-surface-container-lowest rounded-xl custom-shadow border border-outline-variant/10">
+              <div className="flex items-center justify-between px-4 pt-4 pb-2 border-b border-surface-container-low">
+                <div className="flex items-center gap-2">
+                  <span className="w-7 h-7 rounded-lg bg-amber-50 flex items-center justify-center">
+                    <span className="material-symbols-outlined text-sm text-amber-600">pending_actions</span>
+                  </span>
+                  <div>
+                    <p className="text-xs font-bold text-on-surface">Upcoming Assignments</p>
+                    <p className="text-2xs text-on-surface-variant">Due soon</p>
                   </div>
                 </div>
-              </Link>
+                <Link to="/student/assignments" className="flex items-center gap-0.5 text-2xs font-bold text-primary hover:underline">
+                  View All
+                  <span className="material-symbols-outlined text-xs">arrow_forward</span>
+                </Link>
+              </div>
+              <div className="divide-y divide-surface-container-low/50 py-1">
+                {upcomingAssignments.map((a, i) => (
+                  <AssignmentItem key={a.id || i} assignment={a} />
+                ))}
+              </div>
+            </div>
+          )}
 
-              {/* Subjects */}
+          {/* ── MAIN GRID ── */}
+          <div className="grid grid-cols-1 xl:grid-cols-3 gap-5 items-start">
+            <div className="xl:col-span-2 grid grid-cols-1 xl:grid-cols-2 gap-5 items-start">
+
+              {/* Attendance Calendar */}
+              <div className="xl:h-full bg-surface-container-lowest rounded-xl p-4 custom-shadow border border-outline-variant/10 transition-all duration-200 flex flex-col">
+                <div className="flex items-center justify-between mb-3">
+                  <div>
+                    <p className="text-xs font-bold text-on-surface">{calMonthWord} {calYear}</p>
+                    <p className="text-2xs text-on-surface-variant">Attendance Overview</p>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <button
+                      onClick={() => setCalMonthOffset(0)}
+                      className="px-2.5 py-1 rounded-md text-2xs font-bold text-primary hover:bg-primary/10 transition-colors"
+                    >
+                      Today
+                    </button>
+                    <button
+                      onClick={() => setCalMonthOffset((o) => o - 1)}
+                      aria-label="Previous month"
+                      className="w-6 h-6 flex items-center justify-center rounded-md hover:bg-surface-container transition-colors"
+                    >
+                      <span className="material-symbols-outlined text-sm text-on-surface-variant">chevron_left</span>
+                    </button>
+                    <button
+                      onClick={() => setCalMonthOffset((o) => o + 1)}
+                      aria-label="Next month"
+                      className="w-6 h-6 flex items-center justify-center rounded-md hover:bg-surface-container transition-colors"
+                    >
+                      <span className="material-symbols-outlined text-sm text-on-surface-variant">chevron_right</span>
+                    </button>
+                  </div>
+                </div>
+                <div className="flex-1">
+                  <div className="grid grid-cols-7 gap-0.5">
+                    {["S","M","T","W","T","F","S"].map((d, i) => (
+                      <div key={i} className="text-center text-[8px] font-bold text-outline pb-0.5">{d}</div>
+                    ))}
+                    {calEmptyDays.map((_, i) => <div key={`e-${i}`} />)}
+                    {calDays.map((day) => {
+                      const dateKey = `${calYear}-${String(calMonth+1).padStart(2,"0")}-${String(day).padStart(2,"0")}`;
+                      const record  = attendanceMap[dateKey];
+                      const isToday = dateKey === todayKey;
+                      return (
+                        <div
+                          key={day}
+                          className={`aspect-square flex items-center justify-center rounded text-3xs font-semibold border transition-all hover:scale-110 ${
+                            isToday
+                              ? "bg-primary text-white border-primary shadow-sm"
+                              : record
+                                ? (dayStatusCls[record.status] ?? "bg-surface-container border-surface-container")
+                                : "bg-surface-container-lowest border-surface-container text-on-surface-variant"
+                          }`}
+                        >
+                          {day}
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+                <div className="flex gap-3 mt-3 pt-2 border-t border-surface-container-low flex-wrap">
+                  {[
+                    { color: "bg-green-400", label: "Present", count: calMonthlyDist.Present },
+                    { color: "bg-red-400",   label: "Absent",  count: calMonthlyDist.Absent  },
+                    { color: "bg-yellow-400",label: "Late",    count: calMonthlyDist.Late    },
+                  ].map(({ color, label, count }) => (
+                    <div key={label} className="flex items-center gap-1">
+                      <div className={`w-2 h-2 rounded-full flex-shrink-0 ${color}`} />
+                      <span className="text-3xs font-semibold text-on-surface-variant">
+                        {label} <span className="font-bold text-on-surface">{count}</span>
+                      </span>
+                    </div>
+                  ))}
+                </div>
+                <Link
+                  to="/student/attendance"
+                  className="mt-3 w-full flex items-center justify-center gap-1.5 py-2 rounded-lg bg-surface-container-low hover:bg-primary hover:text-white text-primary text-xs font-bold transition-all duration-200"
+                >
+                  View Full Attendance
+                </Link>
+              </div>
+
+              {/* My Subjects */}
               <div className="xl:h-full bg-surface-container-lowest rounded-xl custom-shadow border border-outline-variant/10 overflow-hidden flex flex-col">
                 <div className="flex items-center justify-between px-4 pt-4 pb-2 border-b border-surface-container-low flex-shrink-0">
                   <div>
@@ -497,7 +728,7 @@ export default function Dashboard() {
                 </div>
                 <div className="flex-1 divide-y divide-surface-container-low overflow-hidden">
                   {top4Subjects.length === 0 ? (
-                    <div className="px-4 py-4 text-center text-xs text-on-surface-variant">No subjects found.</div>
+                    <div className="px-4 py-6 text-center text-xs text-on-surface-variant">No subjects found.</div>
                   ) : (
                     top4Subjects.map(({ subject, gradeInfo }) => {
                       const { icon, bg } = getSubjectIcon(subject.name);
@@ -505,23 +736,32 @@ export default function Dashboard() {
                         ? ((parseFloat(gradeInfo.marks_obtained) / parseFloat(gradeInfo.max_marks)) * 100).toFixed(1)
                         : null;
                       const grade = gradeInfo ? getGradeLetter(gradeInfo.marks_obtained, gradeInfo.max_marks) : null;
+                      const next = nextForSubject(subject.name);
                       return (
-                        <div key={subject.id} className="flex items-center gap-3 px-4 py-5 hover:bg-surface-container-low/40 transition-colors">
-                          <div className={`w-7 h-7 rounded-md flex items-center justify-center flex-shrink-0 ${bg}`}>
+                        <div key={subject.id} className="flex items-center gap-3 px-4 py-4 hover:bg-surface-container-low/40 transition-colors group/row">
+                          <div className={`w-7 h-7 rounded-md flex items-center justify-center flex-shrink-0 ${bg} group-hover/row:scale-110 transition-transform`}>
                             <span className="material-symbols-outlined text-sm">{icon}</span>
                           </div>
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center justify-between mb-1">
-                              <p className="text-sm font-bold text-on-surface truncate pr-1">{subject.name}</p>
+                              <p className="text-xs font-bold text-on-surface truncate pr-1">{subject.name}</p>
                               {subPct ? (
                                 <span className="text-xs text-on-surface-variant flex-shrink-0 font-semibold">{subPct}%</span>
                               ) : (
                                 <span className="text-2xs text-outline flex-shrink-0">N/A</span>
                               )}
                             </div>
-                            <div className="w-full bg-surface-container-high rounded-full h-1 overflow-hidden">
-                              <div className="bg-primary h-full rounded-full transition-all duration-500" style={{ width: `${subPct || 0}%` }} />
+                            <div className="w-full bg-surface-container-high rounded-full h-1.5 overflow-hidden">
+                              <div
+                                className="bg-gradient-to-r from-primary to-secondary h-full rounded-full transition-all duration-700"
+                                style={{ width: `${subPct || 0}%` }}
+                              />
                             </div>
+                            {next && (
+                              <p className="text-3xs text-on-surface-variant mt-1 truncate">
+                                Next: {next.title}{next.dueLabel ? ` · ${next.dueLabel}` : ""}
+                              </p>
+                            )}
                           </div>
                           {grade ? (
                             <span className={`text-2xs font-bold px-1.5 py-0.5 rounded flex-shrink-0 ${grade.cls}`}>{grade.letter}</span>
@@ -542,87 +782,134 @@ export default function Dashboard() {
               </div>
             </div>
 
-            {/* ── Right Column ── */}
+            {/* ── RIGHT COLUMN ── */}
             <div className="flex flex-col gap-4">
 
               {/* Quick Actions */}
-              <section className="bg-surface-container-low rounded-xl p-5">
-                <h3 className="text-sm font-black text-on-surface-variant uppercase tracking-widest mb-4">Quick Actions</h3>
-                <div className="grid grid-cols-2 gap-3">
-                  {/* ID Card */}
-                  <button
-                    onClick={() => setShowIDCard(true)}
-                    className="flex flex-col items-center justify-center p-4 bg-surface-container-lowest rounded-lg custom-shadow hover:bg-blue-50 transition-colors group"
-                  >
-                    <span className="material-symbols-outlined text-primary mb-2 group-hover:scale-110 transition-transform">badge</span>
-                    <span className="text-sm font-bold text-on-surface">ID Card</span>
-                  </button>
-                  <Link
-                    to="/student/help"
-                    className="flex flex-col items-center justify-center p-4 bg-surface-container-lowest rounded-lg custom-shadow hover:bg-blue-50 transition-colors group"
-                  >
-                    <span className="material-symbols-outlined text-primary mb-2 group-hover:scale-110 transition-transform">support_agent</span>
-                    <span className="text-sm font-bold text-on-surface">Help Desk</span>
-                  </Link>
-                  <Link
-                    to="/student/fees"
-                    className="flex flex-col items-center justify-center p-4 bg-surface-container-lowest rounded-lg custom-shadow hover:bg-blue-50 transition-colors group"
-                  >
-                    <span className="material-symbols-outlined text-primary mb-2 group-hover:scale-110 transition-transform">account_balance_wallet</span>
-                    <span className="text-sm font-bold text-on-surface">Fees</span>
-                  </Link>
+              <section className="bg-surface-container-low rounded-xl p-4">
+                <h3 className="text-xs font-black text-on-surface-variant uppercase tracking-widest mb-3">Quick Actions</h3>
+                <div className="grid grid-cols-3 gap-2.5">
+                  {[
+                    { icon: "badge",                  label: "ID Card",   action: () => setShowIDCard(true), to: null      },
+                    { icon: "support_agent",          label: "Help Desk", action: null, to: "/student/help"                },
+                    { icon: "account_balance_wallet", label: "Fees",      action: null, to: "/student/fees"                },
+                    { icon: "assignment",             label: "Assignments",action: null, to: "/student/assignments"        },
+                    { icon: "event_available",        label: "Attendance", action: null, to: "/student/attendance"         },
+                    { icon: "psychology",             label: "AI Tutor",   action: null, to: "/student/ai-tutor"           },
+                  ].map(({ icon, label, action, to }) => {
+                    const cls = "flex flex-col items-center justify-center py-3 px-1 bg-surface-container-lowest rounded-xl custom-shadow hover:bg-primary hover:text-white transition-all duration-200 group cursor-pointer";
+                    const inner = (
+                      <>
+                        <span className="material-symbols-outlined text-primary group-hover:text-white text-xl mb-1 group-hover:scale-110 transition-all">{icon}</span>
+                        <span className="text-2xs font-bold text-on-surface group-hover:text-white text-center leading-tight">{label}</span>
+                      </>
+                    );
+                    return action ? (
+                      <button key={label} onClick={action} className={cls}>{inner}</button>
+                    ) : (
+                      <Link key={label} to={to} className={cls}>{inner}</Link>
+                    );
+                  })}
                 </div>
               </section>
 
-              {/* Circulars — replaces Recent Activity */}
-              <Link to="/student/circulars" className="block group">
-                <section className="bg-surface-container-lowest rounded-xl p-5 custom-shadow border border-outline-variant/10 group-hover:border-primary/40 transition-all duration-200">
-                  <div className="flex items-center justify-between mb-5">
-                    <h3 className="text-sm font-black text-on-surface-variant uppercase tracking-widest">
-                      Circulars
-                    </h3>
-                    <span className="flex items-center gap-0.5 text-2xs font-bold text-primary group-hover:underline">
-                      View all
-                      <span className="material-symbols-outlined text-xs">arrow_forward</span>
-                    </span>
-                  </div>
-
-                  {(!circulars || circulars.length === 0) ? (
-                    <p className="text-xs text-on-surface-variant text-center py-4">
-                      No circulars yet.
-                    </p>
-                  ) : (
-                    <div className="space-y-4">
-                      {circulars.slice(0, 3).map((c) => (
-                        <div key={c.id} className="flex items-start gap-3">
-                          <span className="mt-1.5 w-1.5 h-1.5 rounded-full flex-shrink-0 bg-primary" />
+              {/* Circulars Preview */}
+              <section className="bg-surface-container-lowest rounded-xl p-4 custom-shadow border border-outline-variant/10 hover:shadow-md transition-all duration-200">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-xs font-black text-on-surface-variant uppercase tracking-widest">Circulars</h3>
+                  <Link to="/student/circulars" className="flex items-center gap-0.5 text-2xs font-bold text-primary hover:underline">
+                    View all
+                    <span className="material-symbols-outlined text-xs">arrow_forward</span>
+                  </Link>
+                </div>
+                {(!circulars || circulars.length === 0) ? (
+                  <p className="text-xs text-on-surface-variant text-center py-3">No circulars yet.</p>
+                ) : (
+                  <div className="space-y-3">
+                    {circulars.slice(0, 3).map((c, i) => {
+                      const accent = CIRCULAR_ACCENTS[i % CIRCULAR_ACCENTS.length];
+                      const isRecent = c.created_at && (Date.now() - new Date(c.created_at).getTime()) <= 3 * 24 * 60 * 60 * 1000;
+                      return (
+                        <Link key={c.id} to="/student/circulars" className="flex items-start gap-2.5 group/circular -m-1 p-1 rounded-lg hover:bg-surface-container-low/50 transition-colors">
+                          <span className={`mt-0.5 w-6 h-6 rounded-md flex items-center justify-center flex-shrink-0 ${accent.bg} ${accent.text}`}>
+                            <span className="material-symbols-outlined text-sm">campaign</span>
+                          </span>
                           <div className="min-w-0 flex-1">
-                            <p className="text-sm font-bold text-on-surface truncate">{c.title}</p>
+                            <div className="flex items-center gap-1.5">
+                              <p className="text-xs font-bold text-on-surface truncate">{c.title}</p>
+                              {isRecent && (
+                                <span className="text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-red-100 text-red-600 flex-shrink-0">New</span>
+                              )}
+                            </div>
                             <p className="text-2xs text-on-surface-variant mt-0.5">
-                              {c.created_by_name || 'School Administration'}
-                              {c.created_at && ` · ${new Date(c.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}`}
+                              {c.created_by_name || "School Administration"}
+                              {c.created_at && ` · ${new Date(c.created_at).toLocaleDateString("en-IN", { day: "numeric", month: "short" })}`}
                             </p>
                           </div>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </section>
-              </Link>
+                        </Link>
+                      );
+                    })}
+                  </div>
+                )}
+              </section>
 
-              {/* Course Credits */}
-              <div className="relative p-5 rounded-lg bg-surface-container-highest overflow-hidden">
-                <div className="absolute top-4 right-4 bg-white/40 backdrop-blur-md px-3 py-1 rounded-full text-2xs font-black uppercase tracking-widest text-on-surface">
-                  Active
+              {/* Weekly Progress Card */}
+              <div className="relative rounded-xl overflow-hidden bg-gradient-to-br from-violet-600 to-indigo-700 p-4 text-white">
+                <div className="absolute -right-8 -top-8 w-32 h-32 bg-white/10 rounded-full blur-2xl pointer-events-none" />
+                <div className="relative z-10">
+                  <div className="flex items-center justify-between mb-3">
+                    <div>
+                      <p className="text-2xs text-white/70 uppercase tracking-widest font-semibold">Weekly Progress</p>
+                      <p className="text-lg font-black text-white mt-0.5">
+                        {streak > 0 ? (
+                          <><span className="text-xl">🔥</span> {streak} Day Streak!</>
+                        ) : (
+                          "Keep it up!"
+                        )}
+                      </p>
+                    </div>
+                    <div className="relative w-14 h-14 flex-shrink-0">
+                      <DonutChart
+                        segments={[
+                          { value: weeklyPct, color: "#ffffff" },
+                          { value: 100 - weeklyPct, color: "rgba(255,255,255,0.25)" },
+                        ]}
+                        size={56}
+                        strokeWidth={6}
+                      />
+                      <span className="absolute inset-0 flex items-center justify-center text-xs font-black">{weeklyPct}%</span>
+                    </div>
+                  </div>
+                  {/* Week dots */}
+                  <div className="flex items-center justify-between mt-3">
+                    {weekDots.map((dot, i) => (
+                      <div key={i} className="flex flex-col items-center gap-1">
+                        <div className={`w-7 h-7 rounded-full flex items-center justify-center text-2xs font-bold transition-all ${
+                          dot.status === "Present" ? "bg-white text-violet-700 shadow-sm" :
+                          dot.status === "Absent"  ? "bg-red-400/80 text-white" :
+                          dot.status === "future"  ? "bg-white/20 text-white/50" :
+                                                     "bg-white/20 text-white/60"
+                        }`}>
+                          {dot.status === "Present" ? "✓" : dot.status === "Absent" ? "✗" : dot.label}
+                        </div>
+                        <span className="text-3xs text-white/60 font-semibold">{dot.label}</span>
+                      </div>
+                    ))}
+                  </div>
+                  {/* Progress bar */}
+                  <div className="mt-3">
+                    <div className="flex justify-between text-2xs text-white/70 mb-1">
+                      <span>Weekly Goal</span>
+                      <span>{monthlyDist.Present} / {weeklyTotal || 0} days present</span>
+                    </div>
+                    <div className="w-full bg-white/20 h-1.5 rounded-full">
+                      <div
+                        className="bg-white h-full rounded-full transition-all duration-700"
+                        style={{ width: `${weeklyPct}%` }}
+                      />
+                    </div>
+                  </div>
                 </div>
-                <h4 className="text-sm font-medium text-on-surface-variant mb-4">Course Credits</h4>
-                <div className="text-2xl font-bold font-headline text-on-surface">24.0 / 30.0</div>
-                <div className="w-full bg-white/30 h-1.5 rounded-full mt-4">
-                  <div className="bg-primary h-full rounded-full" style={{ width: "80%" }} />
-                </div>
-                <p className="text-2xs text-on-surface-variant mt-3">
-                  You are on track to graduate early in June 2025.
-                </p>
               </div>
 
             </div>

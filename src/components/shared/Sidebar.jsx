@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink, Link, useNavigate } from 'react-router-dom';
 import { useStudent } from '../../context/StudentProvider';
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
@@ -22,6 +22,64 @@ const bottomItems = [
   { to: '/student/profile', icon: 'person', label: 'Profile' },
   { to: '/student/settings', icon: 'settings', label: 'Settings' },
 ];
+
+/* ── Single nav row: icon badge + label + active rail + collapsed tooltip ── */
+function NavItem({ to, icon, label, isExpanded, onClick, end }) {
+  return (
+    <NavLink to={to} end={end} onClick={onClick} className="sidebar-row block">
+      {({ isActive }) => (
+        <span
+          className={`group relative flex items-center w-full h-full rounded-lg
+            transition-all duration-200 text-sm font-semibold
+            focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40
+            ${isExpanded ? 'gap-3 px-3' : 'justify-center px-2'}
+            ${isActive
+              ? 'text-primary bg-primary/[0.08]'
+              : 'text-on-surface-variant hover:text-primary hover:bg-surface-container/60'
+            }`}
+        >
+          {/* active rail */}
+          <span
+            className={`absolute -left-2 top-1/2 -translate-y-1/2 w-1 rounded-r-full bg-primary
+              transition-all duration-200 ${isActive ? 'h-6 opacity-100' : 'h-0 opacity-0'}`}
+          />
+
+          {/* icon badge */}
+          <span
+            className={`flex items-center justify-center w-9 h-9 rounded-lg flex-shrink-0
+              transition-all duration-200
+              ${isActive
+                ? 'bg-primary text-white shadow-sm'
+                : 'bg-transparent group-hover:bg-primary/10 group-hover:scale-105'
+              }`}
+          >
+            <span className="material-symbols-outlined text-xl">{icon}</span>
+          </span>
+
+          {/* label */}
+          <span
+            className={`whitespace-nowrap overflow-hidden transition-all duration-300
+              ${isExpanded ? 'w-auto opacity-100' : 'w-0 opacity-0'}`}
+          >
+            {label}
+          </span>
+
+          {/* collapsed-state tooltip */}
+          {!isExpanded && (
+            <span
+              className="pointer-events-none absolute left-full ml-3 z-50 whitespace-nowrap
+                         rounded-md bg-surface-container-highest custom-shadow px-2.5 py-1.5
+                         text-xs font-bold text-on-surface opacity-0 scale-95
+                         transition-all duration-150 group-hover:opacity-100 group-hover:scale-100"
+            >
+              {label}
+            </span>
+          )}
+        </span>
+      )}
+    </NavLink>
+  );
+}
 
 export default function Sidebar() {
   const { profile: student, enrollment: enroll } = useStudent();
@@ -108,21 +166,6 @@ export default function Sidebar() {
     navigate('/');
   };
 
-  // ── Each row gets flex:1 so the WHOLE nav block (Dashboard ... Log Out)
-  //    always exactly fills the space between the profile section and the
-  //    bottom of the screen — no leftover blank gap, no scrollbar, and no
-  //    artificially shrunken text. On a tall screen each row simply gets a
-  //    bit more breathing room (content stays centered); on a short screen
-  //    each row compresses toward its natural content height.
-  const navClass = ({ isActive }) =>
-    `sidebar-row flex items-center rounded-lg transition-all duration-200
-     text-sm font-semibold
-     ${isExpanded ? 'gap-3 px-3' : 'justify-center px-2'}
-     ${isActive
-      ? 'text-primary bg-surface-container-lowest shadow-sm'
-      : 'text-on-surface-variant hover:text-primary hover:bg-surface-container/60'
-    }`;
-
   return (
     <>
       <style>{`
@@ -133,7 +176,7 @@ export default function Sidebar() {
           padding-top:    clamp(8px, 1.4vh, 16px);
           padding-bottom: clamp(8px, 1.4vh, 16px);
         }
-        /* Every row (12 nav items + divider + 2 bottom items + logout)
+        /* Every row (11 nav items + divider + 2 bottom items + logout)
            shares the remaining vertical space equally. */
         .sidebar-row {
           flex: 1 1 0;
@@ -144,16 +187,24 @@ export default function Sidebar() {
           display: flex;
           align-items: center;
         }
+        @media (prefers-reduced-motion: reduce) {
+          .sidebar-row, .sidebar-row * { transition: none !important; }
+        }
       `}</style>
 
       {isMobile && isExpanded && (
-        <div className="fixed inset-0 bg-black/50 z-40" onClick={close} aria-hidden="true" />
+        <div
+          className="fixed inset-0 bg-black/40 backdrop-blur-[2px] z-40 transition-opacity duration-300"
+          onClick={close}
+          aria-hidden="true"
+        />
       )}
 
       <aside
         className={`
           fixed top-0 left-0 h-full z-50 flex flex-col
           bg-surface-container-low border-r border-outline-variant/30
+          shadow-[2px_0_16px_-6px_rgba(0,0,0,0.08)]
           transition-all duration-300 ease-in-out overflow-hidden
           ${isMobile
             ? `w-72 ${isExpanded ? 'translate-x-0' : '-translate-x-full'}`
@@ -165,14 +216,17 @@ export default function Sidebar() {
         <div className="sidebar-topbar flex items-center px-3 flex-shrink-0 border-b border-outline-variant/20">
           <button
             onClick={toggle}
-            className="w-10 h-10 flex items-center justify-center rounded-lg hover:bg-surface-container transition-colors flex-shrink-0"
+            className="w-10 h-10 flex items-center justify-center rounded-lg hover:bg-surface-container
+                       active:scale-90 transition-all duration-200 flex-shrink-0
+                       focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
             aria-label="Toggle sidebar"
           >
-            <span className="material-symbols-outlined text-on-surface-variant text-2xl">
+            <span className="material-symbols-outlined text-on-surface-variant text-2xl transition-transform duration-300">
               {isExpanded ? 'menu_open' : 'menu'}
             </span>
           </button>
-          <div className={`overflow-hidden transition-all duration-300 ${isExpanded ? 'w-auto opacity-100 ml-3' : 'w-0 opacity-0 ml-0'}`}>
+          <div className={`flex items-center overflow-hidden transition-all duration-300 ${isExpanded ? 'w-auto opacity-100 ml-3' : 'w-0 opacity-0 ml-0'}`}>
+            <span className="w-1.5 h-1.5 rounded-full bg-gradient-to-br from-primary to-secondary mr-2 flex-shrink-0" />
             <span className="text-lg font-headline font-bold text-primary whitespace-nowrap">
               Academic Architect
             </span>
@@ -180,18 +234,28 @@ export default function Sidebar() {
         </div>
 
         {/* ── PROFILE SECTION ── */}
-        <div className={`sidebar-profile flex items-center border-b border-outline-variant/20 flex-shrink-0
-                         transition-all duration-300
-                         ${isExpanded ? 'gap-3 px-4' : 'justify-center px-3'}`}>
-          <div className="w-9 h-9 rounded-full overflow-hidden bg-surface-container-highest border-2 border-primary-container flex-shrink-0">
-            <img
-              src={avatarUrl || fallbackAvatar}
-              alt="Avatar"
-              className="w-full h-full object-cover"
-              onError={(e) => { e.currentTarget.src = fallbackAvatar; }}
-            />
+        <Link
+          to="/student/profile"
+          onClick={close}
+          className={`sidebar-profile group flex items-center border-b border-outline-variant/20 flex-shrink-0
+                     transition-colors duration-200 hover:bg-surface-container/50
+                     ${isExpanded ? 'gap-3 px-4' : 'justify-center px-3'}`}
+        >
+          <div className="relative flex-shrink-0">
+            <div className="w-9 h-9 rounded-full p-[2px] bg-gradient-to-br from-primary to-secondary
+                            transition-transform duration-200 group-hover:scale-105">
+              <div className="w-full h-full rounded-full overflow-hidden bg-surface-container-highest">
+                <img
+                  src={avatarUrl || fallbackAvatar}
+                  alt="Avatar"
+                  className="w-full h-full object-cover"
+                  onError={(e) => { e.currentTarget.src = fallbackAvatar; }}
+                />
+              </div>
+            </div>
+            <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-green-500 border-2 border-surface-container-low" />
           </div>
-          <div className={`overflow-hidden transition-all duration-300 min-w-0 ${isExpanded ? 'w-auto opacity-100' : 'w-0 opacity-0'}`}>
+          <div className={`overflow-hidden transition-all duration-300 min-w-0 flex-1 ${isExpanded ? 'w-auto opacity-100' : 'w-0 opacity-0'}`}>
             <p className="font-bold text-sm text-on-surface whitespace-nowrap truncate">
               {first_name} {last_name}
             </p>
@@ -202,26 +266,28 @@ export default function Sidebar() {
               ID: {enrollment_number}
             </p>
           </div>
-        </div>
+          {isExpanded && (
+            <span className="material-symbols-outlined text-base text-on-surface-variant opacity-0
+                             group-hover:opacity-100 group-hover:translate-x-0.5 transition-all duration-200 flex-shrink-0">
+              chevron_right
+            </span>
+          )}
+        </Link>
 
         {/* ── NAV ITEMS — single flex column, every row flex-1 so the whole
               block always exactly fills the remaining height, no scroll,
               no leftover blank space, text/icons stay normal size ── */}
         <nav className="flex-1 flex flex-col px-2 min-h-0 overflow-hidden">
           {navItems.map((item) => (
-            <NavLink
+            <NavItem
               key={item.label}
               to={item.path}
               end={item.path === '/student'}
+              icon={item.icon}
+              label={item.label}
+              isExpanded={isExpanded}
               onClick={close}
-              title={!isExpanded ? item.label : undefined}
-              className={navClass}
-            >
-              <span className="material-symbols-outlined text-xl flex-shrink-0">{item.icon}</span>
-              <span className={`whitespace-nowrap overflow-hidden transition-all duration-300 ${isExpanded ? 'w-auto opacity-100' : 'w-0 opacity-0'}`}>
-                {item.label}
-              </span>
-            </NavLink>
+            />
           ))}
 
           <div className="sidebar-divider-row">
@@ -229,32 +295,38 @@ export default function Sidebar() {
           </div>
 
           {bottomItems.map(({ to, icon, label }) => (
-            <NavLink
+            <NavItem
               key={label}
               to={to}
+              icon={icon}
+              label={label}
+              isExpanded={isExpanded}
               onClick={close}
-              title={!isExpanded ? label : undefined}
-              className={navClass}
-            >
-              <span className="material-symbols-outlined text-xl flex-shrink-0">{icon}</span>
-              <span className={`whitespace-nowrap overflow-hidden transition-all duration-300 ${isExpanded ? 'w-auto opacity-100' : 'w-0 opacity-0'}`}>
-                {label}
-              </span>
-            </NavLink>
+            />
           ))}
 
           <button
             onClick={handleLogout}
-            title={!isExpanded ? 'Log Out' : undefined}
-            className={`sidebar-row w-full flex items-center rounded-lg transition-all
-                        duration-200 text-sm font-semibold text-error
-                        hover:bg-surface-container/60
+            className={`sidebar-row group relative flex items-center rounded-lg
+                        transition-all duration-200 text-sm font-semibold text-error
+                        hover:bg-error/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-error/40
                         ${isExpanded ? 'gap-3 px-3' : 'justify-center px-2'}`}
           >
-            <span className="material-symbols-outlined text-xl flex-shrink-0">logout</span>
+            <span className="flex items-center justify-center w-9 h-9 rounded-lg flex-shrink-0
+                             transition-all duration-200 group-hover:bg-error/15 group-hover:scale-105">
+              <span className="material-symbols-outlined text-xl">logout</span>
+            </span>
             <span className={`whitespace-nowrap overflow-hidden transition-all duration-300 ${isExpanded ? 'w-auto opacity-100' : 'w-0 opacity-0'}`}>
               Log Out
             </span>
+            {!isExpanded && (
+              <span className="pointer-events-none absolute left-full ml-3 z-50 whitespace-nowrap
+                               rounded-md bg-surface-container-highest custom-shadow px-2.5 py-1.5
+                               text-xs font-bold text-error opacity-0 scale-95
+                               transition-all duration-150 group-hover:opacity-100 group-hover:scale-100">
+                Log Out
+              </span>
+            )}
           </button>
         </nav>
       </aside>
@@ -263,8 +335,9 @@ export default function Sidebar() {
         <button
           onClick={toggle}
           aria-label="Open menu"
-          className="fixed top-4 left-4 z-50 w-10 h-10 flex items-center justify-center
-                     rounded-lg bg-primary text-white shadow-lg active:scale-95 transition-transform"
+          className="fixed top-4 left-4 z-50 w-11 h-11 flex items-center justify-center
+                     rounded-xl bg-primary text-white shadow-lg custom-shadow
+                     hover:shadow-xl active:scale-90 transition-all duration-200"
         >
           <span className="material-symbols-outlined">menu</span>
         </button>
