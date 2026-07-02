@@ -75,7 +75,8 @@ const Navbar = ({ onOpenSidebar, onToggleSidebar, isMobile }) => {
             onClick={handleHamburgerClick}
             className="md:hidden w-8 h-8 sm:w-9 sm:h-9 -ml-1 flex items-center justify-center rounded-lg
                        text-blue-700 dark:text-blue-300
-                       hover:bg-blue-50 dark:hover:bg-slate-800 transition-colors flex-shrink-0"
+                       hover:bg-blue-50 dark:hover:bg-slate-800 active:scale-90
+                       transition-all flex-shrink-0"
             aria-label="Toggle menu"
           >
             <span className="material-symbols-outlined text-xl sm:text-2xl">menu</span>
@@ -100,9 +101,11 @@ const Navbar = ({ onOpenSidebar, onToggleSidebar, isMobile }) => {
                        border border-slate-200 dark:border-slate-700
                        bg-white dark:bg-slate-800
                        hover:bg-blue-50 dark:hover:bg-slate-700
+                       hover:border-blue-200 dark:hover:border-blue-800
+                       hover:shadow-sm active:scale-95
                        text-slate-600 dark:text-slate-300
                        hover:text-blue-700 dark:hover:text-blue-300
-                       transition-colors text-xs font-bold group"
+                       transition-all text-xs font-bold group"
           >
             <span className="material-symbols-outlined text-base group-hover:scale-110 transition-transform">
               badge
@@ -120,7 +123,9 @@ const Navbar = ({ onOpenSidebar, onToggleSidebar, isMobile }) => {
                            border border-slate-200 dark:border-slate-700
                            bg-white dark:bg-slate-800
                            hover:bg-blue-50 dark:hover:bg-slate-700
-                           transition-colors max-w-[140px] sm:max-w-[200px]"
+                           hover:border-blue-200 dark:hover:border-blue-800
+                           hover:shadow-sm
+                           transition-all max-w-[140px] sm:max-w-[200px]"
               >
                 <span className="material-symbols-outlined text-blue-600 dark:text-blue-300 text-base sm:text-lg flex-shrink-0">
                   face
@@ -138,7 +143,7 @@ const Navbar = ({ onOpenSidebar, onToggleSidebar, isMobile }) => {
               </button>
 
               {childMenuOpen && (
-                <div className="absolute right-0 mt-2 w-56 bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-100 dark:border-slate-700 py-1.5 z-40">
+                <div className="absolute right-0 mt-2 w-56 bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-100 dark:border-slate-700 py-1.5 z-40 animate-[pageFadeIn_0.15s_ease-out]">
                   {students.map((s) => (
                     <button
                       key={s.id}
@@ -181,7 +186,7 @@ const Navbar = ({ onOpenSidebar, onToggleSidebar, isMobile }) => {
           </div>
 
           {/* Search */}
-          <span className="material-symbols-outlined text-blue-700 dark:text-blue-400 cursor-pointer text-lg sm:text-xl hidden sm:block">
+          <span className="material-symbols-outlined text-blue-700 dark:text-blue-400 cursor-pointer text-lg sm:text-xl hidden sm:block hover:scale-110 transition-transform">
             search
           </span>
 
@@ -189,7 +194,9 @@ const Navbar = ({ onOpenSidebar, onToggleSidebar, isMobile }) => {
           <button
             onClick={() => navigate("/parent/notifications")}
             className="relative text-slate-600 dark:text-slate-300
-                       hover:text-blue-600 dark:hover:text-blue-300 transition-colors flex-shrink-0"
+                       hover:text-blue-600 dark:hover:text-blue-300
+                       hover:scale-110 active:scale-95
+                       transition-all flex-shrink-0"
           >
             <span className="material-symbols-outlined text-lg sm:text-xl">notifications</span>
           </button>

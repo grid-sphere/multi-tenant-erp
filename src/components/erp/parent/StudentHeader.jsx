@@ -119,57 +119,84 @@ const StudentHeader = () => {
 
   if (loading) {
     return (
-      <section className="animate-pulse space-y-3">
-        <div className="h-7 sm:h-8 bg-slate-100 dark:bg-slate-700 rounded w-40 sm:w-48" />
+      <section className="animate-pulse rounded-2xl bg-slate-100 dark:bg-slate-800 p-6 sm:p-8 space-y-3">
+        <div className="h-7 sm:h-8 bg-slate-200 dark:bg-slate-700 rounded w-40 sm:w-48" />
         <div className="flex gap-3">
-          <div className="h-4 bg-slate-100 dark:bg-slate-700 rounded w-24" />
-          <div className="h-4 bg-slate-100 dark:bg-slate-700 rounded w-20" />
+          <div className="h-4 bg-slate-200 dark:bg-slate-700 rounded w-24" />
+          <div className="h-4 bg-slate-200 dark:bg-slate-700 rounded w-20" />
         </div>
         <div className="flex flex-wrap gap-2 sm:gap-3 pt-1">
-          <div className="h-10 bg-slate-100 dark:bg-slate-700 rounded w-32 sm:w-36" />
-          <div className="h-10 bg-slate-100 dark:bg-slate-700 rounded w-32 sm:w-36" />
+          <div className="h-10 bg-slate-200 dark:bg-slate-700 rounded w-32 sm:w-36" />
+          <div className="h-10 bg-slate-200 dark:bg-slate-700 rounded w-32 sm:w-36" />
         </div>
       </section>
     );
   }
 
   return (
-    <section className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+    <section
+      className="relative overflow-hidden rounded-2xl
+                 bg-gradient-to-br from-indigo-500 via-blue-600 to-blue-700
+                 shadow-lg shadow-blue-900/10
+                 px-5 sm:px-7 lg:px-8 py-6 sm:py-7 lg:py-8
+                 flex flex-col lg:flex-row lg:items-center justify-between gap-4"
+    >
+      {/* Decorative background layer — purely visual, no data */}
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        <div className="absolute -right-6 top-1/2 -translate-y-1/2 w-56 h-56 rounded-full bg-white/5 blur-2xl" />
+        <div className="absolute right-24 top-1/2 -translate-y-1/2 w-32 h-32 rounded-full bg-white/10" />
+        <span className="material-symbols-outlined absolute right-72 top-8 text-white/20 text-3xl" style={{ fontVariationSettings: "'FILL' 1" }}>
+          auto_awesome
+        </span>
+        <svg className="absolute right-40 top-1/2 -translate-y-1/2 opacity-20" width="130" height="90" viewBox="0 0 130 90" fill="none">
+          {Array.from({ length: 6 }).map((_, row) =>
+            Array.from({ length: 8 }).map((_, col) => (
+              <circle key={`${row}-${col}`} cx={col * 17 + 4} cy={row * 15 + 4} r="2" fill="white" />
+            )),
+          )}
+        </svg>
+        <div className="absolute -right-10 -bottom-16 w-64 h-64 rounded-full border border-white/10" />
+      </div>
 
-      <div className="space-y-1.5 min-w-0">
-        <h2 className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-on-surface dark:text-white font-headline tracking-tight leading-tight">
-          Parent Dashboard
-        </h2>
+      {/* Left accent bar + title block */}
+      <div className="relative flex gap-3 sm:gap-4 min-w-0">
+        <span className="hidden sm:block w-1 rounded-full bg-sky-300/70 flex-shrink-0" />
+        <div className="space-y-1.5 min-w-0">
+          <h2 className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-white font-headline tracking-tight leading-tight">
+            Parent Dashboard
+          </h2>
 
-        <div className="flex flex-wrap items-center gap-x-2 sm:gap-x-3 gap-y-1 text-xs sm:text-sm text-on-surface-variant dark:text-slate-300">
-          <span className="flex items-center gap-1 min-w-0 max-w-full">
-            <span className="material-symbols-outlined text-primary dark:text-blue-300 text-sm sm:text-base flex-shrink-0">person</span>
-            <span className="font-semibold text-on-surface dark:text-white truncate">{displayName}</span>
-          </span>
+          <div className="flex flex-wrap items-center gap-x-2 sm:gap-x-3 gap-y-1 text-xs sm:text-sm text-sky-100">
+            <span className="flex items-center gap-1 min-w-0 max-w-full">
+              <span className="material-symbols-outlined text-sky-200 text-sm sm:text-base flex-shrink-0">person</span>
+              <span className="font-semibold text-white truncate">{displayName}</span>
+            </span>
 
-          <span className="w-1 h-1 rounded-full bg-slate-300 dark:bg-slate-600 flex-shrink-0" />
+            <span className="w-1 h-1 rounded-full bg-white/40 flex-shrink-0" />
 
-          <span className="flex items-center gap-1 min-w-0 max-w-full">
-            <span className="material-symbols-outlined text-primary dark:text-blue-300 text-sm sm:text-base flex-shrink-0">school</span>
-            <span className="truncate">{classSection}</span>
-          </span>
+            <span className="flex items-center gap-1 min-w-0 max-w-full">
+              <span className="material-symbols-outlined text-sky-200 text-sm sm:text-base flex-shrink-0">school</span>
+              <span className="truncate">{classSection}</span>
+            </span>
 
-          <span className="w-1 h-1 rounded-full bg-slate-300 dark:bg-slate-600 flex-shrink-0" />
+            <span className="w-1 h-1 rounded-full bg-white/40 flex-shrink-0" />
 
-          <span className="text-primary dark:text-blue-300 font-medium truncate max-w-full">{schoolName}</span>
+            <span className="text-sky-200 font-medium truncate max-w-full">{schoolName}</span>
+          </div>
         </div>
       </div>
 
-      <div className="grid grid-cols-2 lg:flex gap-2 sm:gap-3 lg:flex-nowrap lg:justify-end flex-shrink-0 w-full lg:w-auto">
+      {/* Actions */}
+      <div className="relative grid grid-cols-2 lg:flex gap-2 sm:gap-3 lg:flex-nowrap lg:justify-end flex-shrink-0 w-full lg:w-auto">
         <button
           onClick={downloadReportCard}
           disabled={downloading || !hasGrades}
           title={!hasGrades ? "No grades available yet for this child" : undefined}
           className="flex items-center justify-center gap-1.5
-                     bg-slate-100 dark:bg-slate-700
-                     text-primary dark:text-blue-300
+                     bg-white/15 backdrop-blur-sm border border-white/25
+                     text-white
                      px-3 sm:px-4 py-2.5 rounded-lg font-semibold text-xs sm:text-sm
-                     hover:bg-slate-200 dark:hover:bg-slate-600
+                     hover:bg-white/25
                      transition-colors active:scale-95 duration-75
                      disabled:opacity-50 whitespace-nowrap min-w-0"
         >
@@ -186,7 +213,7 @@ const StudentHeader = () => {
           disabled
           title="Teacher contact not available yet"
           className="flex items-center justify-center gap-1.5
-                     bg-blue-600 text-white opacity-60 cursor-not-allowed
+                     bg-blue-500/90 border border-white/10 text-white opacity-70 cursor-not-allowed
                      px-3 sm:px-4 py-2.5 rounded-lg font-semibold text-xs sm:text-sm whitespace-nowrap min-w-0"
         >
           <span className="material-symbols-outlined text-base flex-shrink-0">mail</span>
