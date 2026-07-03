@@ -119,15 +119,15 @@ const StudentHeader = () => {
 
   if (loading) {
     return (
-      <section className="animate-pulse rounded-2xl bg-slate-100 dark:bg-slate-800 p-6 sm:p-8 space-y-3">
-        <div className="h-7 sm:h-8 bg-slate-200 dark:bg-slate-700 rounded w-40 sm:w-48" />
-        <div className="flex gap-3">
-          <div className="h-4 bg-slate-200 dark:bg-slate-700 rounded w-24" />
-          <div className="h-4 bg-slate-200 dark:bg-slate-700 rounded w-20" />
+      <section className="animate-pulse rounded-xl bg-slate-100 dark:bg-slate-800 p-4 sm:p-6 space-y-2.5">
+        <div className="h-5 sm:h-6 bg-slate-200 dark:bg-slate-700 rounded w-32 sm:w-40" />
+        <div className="flex gap-2.5">
+          <div className="h-3 bg-slate-200 dark:bg-slate-700 rounded w-20" />
+          <div className="h-3 bg-slate-200 dark:bg-slate-700 rounded w-16" />
         </div>
-        <div className="flex flex-wrap gap-2 sm:gap-3 pt-1">
-          <div className="h-10 bg-slate-200 dark:bg-slate-700 rounded w-32 sm:w-36" />
-          <div className="h-10 bg-slate-200 dark:bg-slate-700 rounded w-32 sm:w-36" />
+        <div className="flex flex-wrap gap-2 pt-1">
+          <div className="h-8 bg-slate-200 dark:bg-slate-700 rounded w-28 sm:w-32" />
+          <div className="h-8 bg-slate-200 dark:bg-slate-700 rounded w-28 sm:w-32" />
         </div>
       </section>
     );
@@ -135,47 +135,47 @@ const StudentHeader = () => {
 
   return (
     <section
-      className="relative overflow-hidden rounded-2xl
+      className="font-body relative overflow-hidden rounded-xl
                  bg-gradient-to-br from-indigo-500 via-blue-600 to-blue-700
-                 shadow-lg shadow-blue-900/10
-                 px-5 sm:px-7 lg:px-8 py-6 sm:py-7 lg:py-8
-                 flex flex-col lg:flex-row lg:items-center justify-between gap-4"
+                 shadow-md shadow-blue-900/10
+                 px-4 sm:px-5 lg:px-6 py-4 sm:py-5 lg:py-6
+                 flex flex-col lg:flex-row lg:items-center justify-between gap-3"
     >
       {/* Decorative background layer — purely visual, no data */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div className="absolute -right-6 top-1/2 -translate-y-1/2 w-56 h-56 rounded-full bg-white/5 blur-2xl" />
-        <div className="absolute right-24 top-1/2 -translate-y-1/2 w-32 h-32 rounded-full bg-white/10" />
-        <span className="material-symbols-outlined absolute right-72 top-8 text-white/20 text-3xl" style={{ fontVariationSettings: "'FILL' 1" }}>
+        <div className="absolute -right-6 top-1/2 -translate-y-1/2 w-44 h-44 rounded-full bg-white/5 blur-2xl" />
+        <div className="absolute right-24 top-1/2 -translate-y-1/2 w-24 h-24 rounded-full bg-white/10" />
+        <span className="material-symbols-outlined absolute right-72 top-6 text-white/20 text-2xl" style={{ fontVariationSettings: "'FILL' 1" }}>
           auto_awesome
         </span>
-        <svg className="absolute right-40 top-1/2 -translate-y-1/2 opacity-20" width="130" height="90" viewBox="0 0 130 90" fill="none">
+        <svg className="absolute right-40 top-1/2 -translate-y-1/2 opacity-20" width="110" height="76" viewBox="0 0 130 90" fill="none">
           {Array.from({ length: 6 }).map((_, row) =>
             Array.from({ length: 8 }).map((_, col) => (
               <circle key={`${row}-${col}`} cx={col * 17 + 4} cy={row * 15 + 4} r="2" fill="white" />
             )),
           )}
         </svg>
-        <div className="absolute -right-10 -bottom-16 w-64 h-64 rounded-full border border-white/10" />
+        <div className="absolute -right-10 -bottom-16 w-52 h-52 rounded-full border border-white/10" />
       </div>
 
       {/* Left accent bar + title block */}
-      <div className="relative flex gap-3 sm:gap-4 min-w-0">
+      <div className="relative flex gap-2.5 sm:gap-3 min-w-0">
         <span className="hidden sm:block w-1 rounded-full bg-sky-300/70 flex-shrink-0" />
-        <div className="space-y-1.5 min-w-0">
-          <h2 className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-white font-headline tracking-tight leading-tight">
+        <div className="space-y-1 min-w-0">
+          <h2 className="font-headline text-lg sm:text-xl lg:text-2xl font-extrabold text-white tracking-tight leading-tight">
             Parent Dashboard
           </h2>
 
-          <div className="flex flex-wrap items-center gap-x-2 sm:gap-x-3 gap-y-1 text-xs sm:text-sm text-sky-100">
+          <div className="flex flex-wrap items-center gap-x-1.5 sm:gap-x-2 gap-y-1 text-3xs sm:text-xs text-sky-100">
             <span className="flex items-center gap-1 min-w-0 max-w-full">
-              <span className="material-symbols-outlined text-sky-200 text-sm sm:text-base flex-shrink-0">person</span>
+              <span className="material-symbols-outlined text-sky-200 text-xs sm:text-sm flex-shrink-0">person</span>
               <span className="font-semibold text-white truncate">{displayName}</span>
             </span>
 
             <span className="w-1 h-1 rounded-full bg-white/40 flex-shrink-0" />
 
             <span className="flex items-center gap-1 min-w-0 max-w-full">
-              <span className="material-symbols-outlined text-sky-200 text-sm sm:text-base flex-shrink-0">school</span>
+              <span className="material-symbols-outlined text-sky-200 text-xs sm:text-sm flex-shrink-0">school</span>
               <span className="truncate">{classSection}</span>
             </span>
 
@@ -187,20 +187,20 @@ const StudentHeader = () => {
       </div>
 
       {/* Actions */}
-      <div className="relative grid grid-cols-2 lg:flex gap-2 sm:gap-3 lg:flex-nowrap lg:justify-end flex-shrink-0 w-full lg:w-auto">
+      <div className="relative grid grid-cols-2 lg:flex gap-2 lg:flex-nowrap lg:justify-end flex-shrink-0 w-full lg:w-auto">
         <button
           onClick={downloadReportCard}
           disabled={downloading || !hasGrades}
           title={!hasGrades ? "No grades available yet for this child" : undefined}
-          className="flex items-center justify-center gap-1.5
+          className="flex items-center justify-center gap-1
                      bg-white/15 backdrop-blur-sm border border-white/25
                      text-white
-                     px-3 sm:px-4 py-2.5 rounded-lg font-semibold text-xs sm:text-sm
+                     px-2.5 sm:px-3 py-2 rounded-md font-semibold text-3xs sm:text-xs
                      hover:bg-white/25
                      transition-colors active:scale-95 duration-75
                      disabled:opacity-50 whitespace-nowrap min-w-0"
         >
-          <span className="material-symbols-outlined text-base flex-shrink-0">
+          <span className="material-symbols-outlined text-sm flex-shrink-0">
             {downloading ? "hourglass_empty" : "picture_as_pdf"}
           </span>
           <span className="truncate">{downloading ? "Preparing..." : "Download Report"}</span>
@@ -212,11 +212,11 @@ const StudentHeader = () => {
         <button
           disabled
           title="Teacher contact not available yet"
-          className="flex items-center justify-center gap-1.5
+          className="flex items-center justify-center gap-1
                      bg-blue-500/90 border border-white/10 text-white opacity-70 cursor-not-allowed
-                     px-3 sm:px-4 py-2.5 rounded-lg font-semibold text-xs sm:text-sm whitespace-nowrap min-w-0"
+                     px-2.5 sm:px-3 py-2 rounded-md font-semibold text-3xs sm:text-xs whitespace-nowrap min-w-0"
         >
-          <span className="material-symbols-outlined text-base flex-shrink-0">mail</span>
+          <span className="material-symbols-outlined text-sm flex-shrink-0">mail</span>
           <span className="truncate">Contact Teacher</span>
         </button>
       </div>

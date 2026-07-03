@@ -114,8 +114,8 @@ export default function DashboardLayout({ children }) {
           isMobile={isMobile}
         />
 
-        {/* Responsive page padding: tighter on very small screens, comfortable on desktop */}
-        <div className="p-3 sm:p-4 md:p-6 lg:p-8 max-w-full overflow-x-hidden min-w-0">
+        {/* Responsive page padding — tightened for a more compact, student-friendly feel */}
+        <div className="p-2.5 sm:p-3 md:p-4 lg:p-5 max-w-full overflow-x-hidden min-w-0">
           {children}
         </div>
       </div>

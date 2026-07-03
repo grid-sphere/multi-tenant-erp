@@ -149,10 +149,10 @@ const PerformanceChart = () => {
 
   if (loading || childDataLoading) {
     return (
-      <div className="perf-chart-card h-full bg-surface-container-lowest dark:bg-slate-800/60 rounded-xl border border-outline-variant/5 dark:border-slate-700/40 animate-pulse flex flex-col gap-3 p-4 sm:p-5">
-        <div className="h-5 w-40 sm:w-48 bg-surface-container-low dark:bg-slate-700 rounded" />
-        <div className="h-4 w-52 sm:w-64 bg-surface-container-low dark:bg-slate-700 rounded" />
-        <div className="flex-1 min-h-[180px] bg-surface-container-low dark:bg-slate-700 rounded" />
+      <div className="perf-chart-card h-full bg-surface-container-lowest dark:bg-slate-800/60 rounded-lg border border-outline-variant/5 dark:border-slate-700/40 animate-pulse flex flex-col gap-2.5 p-3 sm:p-4">
+        <div className="h-4 w-32 sm:w-40 bg-surface-container-low dark:bg-slate-700 rounded" />
+        <div className="h-3 w-44 sm:w-52 bg-surface-container-low dark:bg-slate-700 rounded" />
+        <div className="flex-1 min-h-[150px] bg-surface-container-low dark:bg-slate-700 rounded" />
       </div>
     );
   }
@@ -161,28 +161,28 @@ const PerformanceChart = () => {
   const hoverLabel = hoverIdx != null ? points[hoverIdx] : null;
 
   return (
-    <div className="perf-chart-card h-full min-h-[280px] sm:min-h-[320px] bg-surface-container-lowest dark:bg-slate-800/60 rounded-xl border border-outline-variant/5 dark:border-slate-700/40 flex flex-col transition-shadow hover:shadow-md">
+    <div className="font-body perf-chart-card h-full min-h-[220px] sm:min-h-[260px] bg-surface-container-lowest dark:bg-slate-800/60 rounded-lg border border-outline-variant/5 dark:border-slate-700/40 flex flex-col transition-shadow hover:shadow-md">
       <style>{`
         .perf-chart-card {
           container-type: inline-size;
           container-name: perfcard;
-          padding: 0.75rem;
+          padding: 0.625rem;
         }
-        .perf-chart-card .pc-title { font-size: 0.875rem; }
-        .perf-chart-card .pc-subtitle { font-size: 0.6875rem; }
-        .perf-chart-card .pc-month-label { font-size: 0.5625rem; }
+        .perf-chart-card .pc-title { font-size: 0.8125rem; }
+        .perf-chart-card .pc-subtitle { font-size: 0.625rem; }
+        .perf-chart-card .pc-month-label { font-size: 0.5rem; }
 
         @container perfcard (min-width: 250px) {
-          .perf-chart-card { padding: 1rem; }
-          .perf-chart-card .pc-title { font-size: 1rem; }
-          .perf-chart-card .pc-subtitle { font-size: 0.75rem; }
-          .perf-chart-card .pc-month-label { font-size: 0.625rem; }
+          .perf-chart-card { padding: 0.75rem; }
+          .perf-chart-card .pc-title { font-size: 0.875rem; }
+          .perf-chart-card .pc-subtitle { font-size: 0.6875rem; }
+          .perf-chart-card .pc-month-label { font-size: 0.5625rem; }
         }
 
         @container perfcard (min-width: 320px) {
-          .perf-chart-card { padding: 1.25rem; }
-          .perf-chart-card .pc-title { font-size: 1.125rem; }
-          .perf-chart-card .pc-month-label { font-size: 0.75rem; }
+          .perf-chart-card { padding: 0.875rem; }
+          .perf-chart-card .pc-title { font-size: 0.9375rem; }
+          .perf-chart-card .pc-month-label { font-size: 0.625rem; }
         }
 
         .perf-line-path {
@@ -202,9 +202,9 @@ const PerformanceChart = () => {
       `}</style>
 
       {/* Header */}
-      <div className="flex justify-between items-start mb-3 flex-shrink-0 gap-2 flex-wrap">
+      <div className="flex justify-between items-start mb-2.5 flex-shrink-0 gap-2 flex-wrap">
         <div className="min-w-0">
-          <h3 className="pc-title font-bold font-headline text-on-surface dark:text-white mb-0.5 truncate">
+          <h3 className="font-headline pc-title font-bold text-on-surface dark:text-white mb-0.5 truncate">
             Performance Trend
           </h3>
           <p className="pc-subtitle text-on-surface-variant dark:text-slate-400 truncate">Average score across all subjects</p>
@@ -212,25 +212,25 @@ const PerformanceChart = () => {
       </div>
 
       {!hasData ? (
-        <div className="flex-1 flex items-center justify-center text-sm text-on-surface-variant dark:text-slate-400 text-center px-4">
+        <div className="flex-1 flex items-center justify-center text-xs text-on-surface-variant dark:text-slate-400 text-center px-3">
           Not enough exam data yet to show a trend.
         </div>
       ) : (
-        <div className="flex-1 flex flex-col min-h-0 gap-3">
+        <div className="flex-1 flex flex-col min-h-0 gap-2.5">
           {/* Stat pills */}
           {stats && (
-            <div className="flex flex-wrap gap-2 flex-shrink-0">
-              <div className="pc-stat-pill flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-blue-50 dark:bg-blue-900/20">
+            <div className="flex flex-wrap gap-1.5 flex-shrink-0">
+              <div className="pc-stat-pill flex items-center gap-1 px-2 py-0.5 rounded-md bg-blue-50 dark:bg-blue-900/20">
                 <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
-                <span className="text-[10px] sm:text-xs text-on-surface-variant dark:text-slate-400">Average Score</span>
-                <span className="text-[10px] sm:text-xs font-bold text-blue-600 dark:text-blue-400">{stats.avg}%</span>
+                <span className="text-3xs sm:text-2xs text-on-surface-variant dark:text-slate-400">Average Score</span>
+                <span className="text-3xs sm:text-2xs font-bold text-blue-600 dark:text-blue-400">{stats.avg}%</span>
               </div>
-              <div className="pc-stat-pill flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-purple-50 dark:bg-purple-900/20">
-                <span className="material-symbols-outlined text-purple-500 text-xs">
+              <div className="pc-stat-pill flex items-center gap-1 px-2 py-0.5 rounded-md bg-purple-50 dark:bg-purple-900/20">
+                <span className="material-symbols-outlined text-purple-500 text-2xs">
                   {stats.improvement >= 0 ? "trending_up" : "trending_down"}
                 </span>
-                <span className="text-[10px] sm:text-xs text-on-surface-variant dark:text-slate-400">Improvement</span>
-                <span className={`text-[10px] sm:text-xs font-bold ${stats.improvement >= 0 ? "text-emerald-600 dark:text-emerald-400" : "text-error"}`}>
+                <span className="text-3xs sm:text-2xs text-on-surface-variant dark:text-slate-400">Improvement</span>
+                <span className={`text-3xs sm:text-2xs font-bold ${stats.improvement >= 0 ? "text-emerald-600 dark:text-emerald-400" : "text-error"}`}>
                   {stats.improvement >= 0 ? "+" : ""}{stats.improvement}%
                 </span>
               </div>
@@ -238,7 +238,7 @@ const PerformanceChart = () => {
           )}
 
           {/* Chart */}
-          <div className="flex-1 w-full min-h-[160px] sm:min-h-[200px] relative" ref={svgWrapRef}>
+          <div className="flex-1 w-full min-h-[130px] sm:min-h-[170px] relative" ref={svgWrapRef}>
             <svg
               className="w-full h-full"
               viewBox={`0 0 ${W} ${H}`}
@@ -290,14 +290,14 @@ const PerformanceChart = () => {
             {/* Floating tooltip */}
             {hoverPoint && hoverLabel && (
               <div
-                className="absolute pointer-events-none bg-on-surface dark:bg-slate-100 text-white dark:text-slate-900 text-xs font-semibold rounded-lg px-2.5 py-1.5 shadow-lg whitespace-nowrap -translate-x-1/2"
+                className="absolute pointer-events-none bg-on-surface dark:bg-slate-100 text-white dark:text-slate-900 text-2xs font-semibold rounded-md px-2 py-1 shadow-lg whitespace-nowrap -translate-x-1/2"
                 style={{
                   left: `${(hoverPoint.x / W) * 100}%`,
                   top: `${Math.max(0, (hoverPoint.y / H) * 100 - 18)}%`,
                 }}
               >
                 {MONTH_LABELS_FULL[hoverLabel.month]} {hoverLabel.year}
-                <span className="block text-sm">{hoverLabel.pct}%</span>
+                <span className="block text-xs">{hoverLabel.pct}%</span>
               </div>
             )}
           </div>
@@ -321,18 +321,18 @@ const PerformanceChart = () => {
 
           {/* Subjects view */}
           {subjectStats.length > 0 && (
-            <div className="pt-2 border-t border-outline-variant/10 dark:border-slate-700/40 flex-shrink-0">
-              <p className="text-[10px] sm:text-xs font-semibold text-on-surface-variant dark:text-slate-400 mb-1.5">
+            <div className="pt-1.5 border-t border-outline-variant/10 dark:border-slate-700/40 flex-shrink-0">
+              <p className="text-3xs sm:text-2xs font-semibold text-on-surface-variant dark:text-slate-400 mb-1">
                 Subjects view
               </p>
-              <div className="flex flex-wrap gap-1.5">
+              <div className="flex flex-wrap gap-1">
                 {subjectStats.map((s, i) => {
                   const c = SUBJECT_COLORS[i % SUBJECT_COLORS.length];
                   return (
-                    <div key={s.name} className={`pc-subject-pill flex items-center gap-1.5 px-2 py-1 rounded-lg ${c.bg}`}>
+                    <div key={s.name} className={`pc-subject-pill flex items-center gap-1 px-1.5 py-0.5 rounded-md ${c.bg}`}>
                       <span className={`w-1.5 h-1.5 rounded-full ${c.dot}`} />
-                      <span className="text-[10px] sm:text-xs text-on-surface-variant dark:text-slate-400 truncate max-w-[70px]">{s.name}</span>
-                      <span className={`text-[10px] sm:text-xs font-bold ${c.text}`}>{s.pct}%</span>
+                      <span className="text-3xs sm:text-2xs text-on-surface-variant dark:text-slate-400 truncate max-w-[60px]">{s.name}</span>
+                      <span className={`text-3xs sm:text-2xs font-bold ${c.text}`}>{s.pct}%</span>
                     </div>
                   );
                 })}

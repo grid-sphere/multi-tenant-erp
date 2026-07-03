@@ -111,15 +111,15 @@ function NotifCard({ notif, studentName, isUnread, onRead, onDismiss }) {
   return (
     <div
       onClick={onRead}
-      className={`relative flex gap-3 items-start px-3 sm:px-4 py-3 sm:py-3.5 rounded-xl border transition-all cursor-pointer group
+      className={`relative flex gap-3 items-start px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl border transition-all cursor-pointer group
         ${notif.accent ? `border-l-4 ${notif.accent}` : "border border-outline-variant/10"}
         ${notif.bg || "bg-surface-container-lowest dark:bg-slate-800/60"}
         ${isUnread ? "shadow-sm" : "opacity-80"}
         hover:shadow-md`}
     >
       {/* Icon */}
-      <div className={`w-8 h-8 sm:w-9 sm:h-9 rounded-xl flex items-center justify-center flex-shrink-0 ${notif.iconBg}`}>
-        <span className={`material-symbols-outlined text-sm sm:text-base ${notif.iconColor}`}>{notif.icon}</span>
+      <div className={`w-6 h-6 sm:w-7 sm:h-7 rounded-xl flex items-center justify-center flex-shrink-0 ${notif.iconBg}`}>
+        <span className={`material-symbols-outlined text-xs sm:text-sm ${notif.iconColor}`}>{notif.icon}</span>
       </div>
 
       {/* Content — min-w-0 prevents overflow, pr-7 avoids dismiss button overlap */}
@@ -204,12 +204,12 @@ export default function NotificationsHub() {
 
   return (
     <DashboardLayout>
-      <div className="max-w-3xl mx-auto space-y-4 sm:space-y-5">
+      <div className="max-w-3xl mx-auto space-y-4 sm:space-y-3">
 
         {/* ── Header ── */}
         <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
           <div className="min-w-0">
-            <h1 className="text-lg sm:text-xl font-bold font-headline text-on-surface dark:text-white">
+            <h1 className="text-xs sm:text-sm font-bold font-headline text-on-surface dark:text-white">
               Notifications
             </h1>
             <p className="text-xs text-on-surface-variant dark:text-slate-400 mt-0.5">
@@ -225,7 +225,7 @@ export default function NotificationsHub() {
                          px-3 py-2 rounded-lg transition-colors
                          flex-shrink-0 w-full sm:w-auto"
             >
-              <span className="material-symbols-outlined text-base">done_all</span>
+              <span className="material-symbols-outlined text-xs">done_all</span>
               Mark all as read ({unreadCount})
             </button>
           )}
@@ -266,8 +266,8 @@ export default function NotificationsHub() {
         {/* ── List ── */}
         {visible.length === 0 ? (
           <div className="bg-surface-container-lowest dark:bg-slate-800/60 rounded-xl border border-outline-variant/10
-                          py-14 px-4 flex flex-col items-center gap-3 text-center">
-            <span className="material-symbols-outlined text-4xl text-on-surface-variant dark:text-slate-500">
+                          py-8 px-4 flex flex-col items-center gap-3 text-center">
+            <span className="material-symbols-outlined text-xl text-on-surface-variant dark:text-slate-500">
               notifications_off
             </span>
             <p className="text-sm text-on-surface-variant dark:text-slate-400">No notifications in this category</p>

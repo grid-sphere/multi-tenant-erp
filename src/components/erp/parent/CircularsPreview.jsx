@@ -26,7 +26,7 @@ const CircularsPreview = () => {
   const isEmpty = !isLoading && items.length === 0;
 
   return (
-    <div className="relative overflow-hidden h-full min-h-[280px] sm:min-h-[320px] bg-surface-container-lowest dark:bg-slate-800/60 rounded-xl border border-outline-variant/5 dark:border-slate-700/40 flex flex-col p-4 sm:p-5 transition-shadow hover:shadow-md">
+    <div className="font-body relative overflow-hidden h-full min-h-[220px] sm:min-h-[260px] bg-surface-container-lowest dark:bg-slate-800/60 rounded-lg border border-outline-variant/5 dark:border-slate-700/40 flex flex-col p-3 sm:p-4 transition-shadow hover:shadow-md">
       <style>{`
         @keyframes circFloat {
           0%, 100% { transform: translateY(0); }
@@ -58,22 +58,22 @@ const CircularsPreview = () => {
       </div>
 
       {/* Header */}
-      <div className="relative flex items-start gap-2.5 mb-3 flex-shrink-0">
-        <div className="w-9 h-9 rounded-lg bg-indigo-50 dark:bg-indigo-900/30 flex items-center justify-center flex-shrink-0">
-          <span className="material-symbols-outlined text-primary dark:text-blue-400 text-lg">campaign</span>
+      <div className="relative flex items-start gap-2 mb-2.5 flex-shrink-0">
+        <div className="w-7 h-7 rounded-md bg-indigo-50 dark:bg-indigo-900/30 flex items-center justify-center flex-shrink-0">
+          <span className="material-symbols-outlined text-primary dark:text-blue-400 text-base">campaign</span>
         </div>
         <div className="min-w-0">
-          <h3 className="text-sm sm:text-base lg:text-lg font-bold font-headline text-on-surface dark:text-white mb-0.5 truncate">
+          <h3 className="font-headline text-xs sm:text-sm lg:text-base font-bold text-on-surface dark:text-white mb-0.5 truncate">
             Circulars
           </h3>
-          <p className="text-xs sm:text-sm text-on-surface-variant dark:text-slate-400 truncate">
+          <p className="text-3xs sm:text-2xs text-on-surface-variant dark:text-slate-400 truncate">
             Official announcements and updates
           </p>
         </div>
         {!isLoading && items.length > 0 && (
-          <div className="flex items-center gap-2 flex-shrink-0 ml-auto">
-            <span className="w-2.5 h-2.5 rounded-full bg-orange-500 flex-shrink-0 animate-pulse" />
-            <span className="text-xs sm:text-sm font-medium text-on-surface-variant dark:text-slate-400 whitespace-nowrap">
+          <div className="flex items-center gap-1.5 flex-shrink-0 ml-auto">
+            <span className="w-2 h-2 rounded-full bg-orange-500 flex-shrink-0 animate-pulse" />
+            <span className="text-3xs sm:text-2xs font-medium text-on-surface-variant dark:text-slate-400 whitespace-nowrap">
               {items.length} new
             </span>
           </div>
@@ -83,62 +83,62 @@ const CircularsPreview = () => {
       {/* Content */}
       <div className="relative flex-1 flex flex-col min-h-0">
         {isLoading ? (
-          <div className="space-y-3 animate-pulse">
+          <div className="space-y-2.5 animate-pulse">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="space-y-1.5">
-                <div className="h-3 w-3/4 bg-surface-container-low dark:bg-slate-700 rounded" />
-                <div className="h-2.5 w-1/2 bg-surface-container-low dark:bg-slate-700 rounded" />
+              <div key={i} className="space-y-1">
+                <div className="h-2.5 w-3/4 bg-surface-container-low dark:bg-slate-700 rounded" />
+                <div className="h-2 w-1/2 bg-surface-container-low dark:bg-slate-700 rounded" />
               </div>
             ))}
           </div>
         ) : isEmpty ? (
-          <div className="flex-1 flex flex-col items-center justify-center gap-2 text-center py-4">
-            <div className="relative w-24 h-24 sm:w-28 sm:h-28 flex items-center justify-center mb-1">
+          <div className="flex-1 flex flex-col items-center justify-center gap-1.5 text-center py-3">
+            <div className="relative w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center mb-1">
               <div className="absolute inset-0 rounded-full bg-gradient-to-br from-indigo-50 to-blue-50 dark:from-slate-700/40 dark:to-slate-700/10" />
               <span
-                className="circ-illustration material-symbols-outlined relative text-primary dark:text-blue-400 text-5xl sm:text-6xl"
+                className="circ-illustration material-symbols-outlined relative text-primary dark:text-blue-400 text-4xl sm:text-5xl"
                 style={{ fontVariationSettings: "'FILL' 1" }}
               >
                 campaign
               </span>
-              <span className="circ-sparkle-1 absolute -top-1 right-2 material-symbols-outlined text-purple-400 text-base" style={{ fontVariationSettings: "'FILL' 1" }}>
+              <span className="circ-sparkle-1 absolute -top-1 right-2 material-symbols-outlined text-purple-400 text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>
                 auto_awesome
               </span>
-              <span className="circ-sparkle-2 absolute bottom-3 -left-3 material-symbols-outlined text-purple-300 text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>
+              <span className="circ-sparkle-2 absolute bottom-3 -left-3 material-symbols-outlined text-purple-300 text-xs" style={{ fontVariationSettings: "'FILL' 1" }}>
                 auto_awesome
               </span>
               <span className="circ-sparkle-3 absolute top-2 -left-4 w-1.5 h-1.5 rounded-full bg-indigo-300 dark:bg-slate-500" />
               <span className="circ-sparkle-2 absolute bottom-0 right-0 w-1.5 h-1.5 rounded-full bg-indigo-300 dark:bg-slate-500" />
             </div>
-            <p className="text-sm font-semibold text-on-surface dark:text-slate-200">
+            <p className="text-xs font-semibold text-on-surface dark:text-slate-200">
               No circulars yet
             </p>
-            <p className="text-xs text-on-surface-variant/70 dark:text-slate-500">
+            <p className="text-3xs text-on-surface-variant/70 dark:text-slate-500">
               Check back later for updates
             </p>
           </div>
         ) : (
-          <div className="space-y-2 overflow-y-auto flex-1">
+          <div className="space-y-1.5 overflow-y-auto flex-1">
             {items.map((c) => {
               const meta = AUDIENCE_META[c.target_audience_display] || AUDIENCE_META.All;
               return (
                 <div
                   key={c.id}
-                  className="flex items-start gap-2.5 group hover:bg-surface-container-low dark:hover:bg-slate-700/30 hover:translate-x-0.5 -mx-2 px-2 py-1.5 rounded-lg transition-all cursor-pointer"
+                  className="flex items-start gap-2 group hover:bg-surface-container-low dark:hover:bg-slate-700/30 hover:translate-x-0.5 -mx-1.5 px-1.5 py-1 rounded-md transition-all cursor-pointer"
                 >
-                  <div className={`w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5 ${meta.bg} group-hover:scale-105 transition-transform`}>
-                    <span className={`material-symbols-outlined text-sm ${meta.text}`}>{meta.icon}</span>
+                  <div className={`w-6 h-6 rounded-md flex items-center justify-center flex-shrink-0 mt-0.5 ${meta.bg} group-hover:scale-105 transition-transform`}>
+                    <span className={`material-symbols-outlined text-xs ${meta.text}`}>{meta.icon}</span>
                   </div>
                   <div className="min-w-0 flex-1">
-                    <p className="text-xs sm:text-sm font-medium text-on-surface dark:text-slate-200 leading-snug line-clamp-2 group-hover:text-primary dark:group-hover:text-primary-400 transition-colors">
+                    <p className="text-3xs sm:text-2xs font-medium text-on-surface dark:text-slate-200 leading-snug line-clamp-2 group-hover:text-primary dark:group-hover:text-primary-400 transition-colors">
                       {c.title}
                     </p>
-                    <div className="flex items-center gap-2 mt-0.5">
-                      <p className="text-2xs sm:text-xs text-on-surface-variant/60 dark:text-slate-500">
+                    <div className="flex items-center gap-1.5 mt-0.5">
+                      <p className="text-3xs text-on-surface-variant/60 dark:text-slate-500">
                         {daysAgo(c.created_at)}
                       </p>
                       {c.target_audience_display && (
-                        <span className="text-2xs px-1.5 py-0.5 rounded-full bg-surface-container-low dark:bg-slate-700 text-on-surface-variant/70 dark:text-slate-400">
+                        <span className="text-3xs px-1 py-0.5 rounded-full bg-surface-container-low dark:bg-slate-700 text-on-surface-variant/70 dark:text-slate-400">
                           {c.target_audience_display}
                         </span>
                       )}
@@ -152,26 +152,26 @@ const CircularsPreview = () => {
       </div>
 
       {/* Footer */}
-      <div className="relative flex justify-between items-center mt-4 pt-3 border-t border-outline-variant/10 dark:border-slate-700/40 flex-shrink-0">
+      <div className="relative flex justify-between items-center mt-3 pt-2 border-t border-outline-variant/10 dark:border-slate-700/40 flex-shrink-0">
         <Link
           to="/parent/circulars"
-          className="text-xs sm:text-sm font-semibold text-primary dark:text-primary-400 hover:text-primary/80 dark:hover:text-primary-300 hover:underline transition-colors inline-flex items-center gap-1"
+          className="text-3xs sm:text-2xs font-semibold text-primary dark:text-primary-400 hover:text-primary/80 dark:hover:text-primary-300 hover:underline transition-colors inline-flex items-center gap-1"
         >
           View All Circulars
-          <span className="material-symbols-outlined text-sm">arrow_forward</span>
+          <span className="material-symbols-outlined text-xs">arrow_forward</span>
         </Link>
 
         {!isLoading && items.length > 0 ? (
-          <span className="text-2xs sm:text-xs text-on-surface-variant/50 dark:text-slate-500">
+          <span className="text-3xs text-on-surface-variant/50 dark:text-slate-500">
             {items.length} of {circulars.length}
           </span>
         ) : (
           <Link
             to="/parent/circulars"
-            className="circ-arrow-btn w-8 h-8 rounded-lg bg-indigo-50 dark:bg-indigo-900/30 hover:bg-indigo-100 dark:hover:bg-indigo-900/50 flex items-center justify-center flex-shrink-0"
+            className="circ-arrow-btn w-7 h-7 rounded-md bg-indigo-50 dark:bg-indigo-900/30 hover:bg-indigo-100 dark:hover:bg-indigo-900/50 flex items-center justify-center flex-shrink-0"
             aria-label="View all circulars"
           >
-            <span className="material-symbols-outlined text-primary dark:text-blue-400 text-lg">chevron_right</span>
+            <span className="material-symbols-outlined text-primary dark:text-blue-400 text-base">chevron_right</span>
           </Link>
         )}
       </div>
