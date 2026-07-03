@@ -211,7 +211,7 @@ export default function Dashboard() {
     return attendanceRecords.reduce((acc, r) => { acc[r.date] = r; return acc; }, {});
   }, [attendanceRecords]);
 
-  // Distribution for the "current month" (drives the stat card + streak/goal math)
+  // Distribution for the "current month" (drives the calendar-adjacent counts)
   const monthlyDist = useMemo(() => {
     const s = { Present: 0, Absent: 0, Late: 0 };
     if (!Array.isArray(attendanceRecords)) return s;
@@ -325,19 +325,18 @@ export default function Dashboard() {
                            { label: "AT RISK",      cls: "text-red-800 bg-red-100"      };
 
   const attendanceGoal = 75;
-  
-  // FIX 1: Calculate needed days properly - use total days from all records, not just current month
+
+  // Needed-days math uses ALL attendance records (not just the current month),
+  // so it stays meaningful even early in a new month before this month has records.
   const totalDaysAll = attendanceRecords?.length || 0;
   const presentDaysAll = attendanceRecords?.filter(r => r.status === "Present").length || 0;
-  
-  // Calculate needed days based on all attendance records
+
   let neededDays = 0;
   if (attendanceRate < attendanceGoal && totalDaysAll > 0) {
-    // Formula: (target% * total_days - present_days) / (100 - target%)
     neededDays = Math.ceil((attendanceGoal * totalDaysAll - 100 * presentDaysAll) / (100 - attendanceGoal));
     neededDays = Math.max(0, neededDays);
   }
-  
+
   const attendanceGapMsg = attendanceRate >= attendanceGoal
     ? "You're smashing your attendance goal! 🎉"
     : neededDays === 0 && totalDaysAll === 0
@@ -372,34 +371,63 @@ export default function Dashboard() {
     Late:    "bg-yellow-100 text-yellow-700 border-yellow-200",
   };
 
-  // FIX 2: Only show sparkline if we have data
-  const attendanceSparkline = totalDaysAll > 0 
+  const attendanceSparkline = totalDaysAll > 0
     ? [60, 65, attendanceRate - 5, attendanceRate - 2, attendanceRate + 1, attendanceRate - 1, attendanceRate]
     : [0, 0, 0, 0, 0, 0, 0];
-    
+
   const gradeSparkline = parseFloat(percentage) > 0
     ? [55, 62, 68, parseFloat(percentage) - 4, parseFloat(percentage) - 1, parseFloat(percentage)]
     : [0, 0, 0, 0, 0, 0];
 
-  // Streak week dots
-  const weekDays = ["M", "T", "W", "T", "F", "S", "S"];
-  const weekDots = weekDays.map((d, i) => {
-    const date = new Date();
-    const dayOfWeek = date.getDay(); // 0=Sun
-    const mondayOffset = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
-    const targetDate = new Date(date);
-    targetDate.setDate(date.getDate() + mondayOffset + i);
-    const key = `${targetDate.getFullYear()}-${String(targetDate.getMonth() + 1).padStart(2, "0")}-${String(targetDate.getDate()).padStart(2, "0")}`;
-    const rec = attendanceMap[key];
-    const isFuture = targetDate > now;
-    return { label: d, status: isFuture ? "future" : rec?.status || "none" };
-  });
+  // Today's attendance record (if marked yet) — feeds the Attendance quick-action badge
+  const todayAttendanceRecord = attendanceMap[todayKey] || null;
 
-  const weeklyTotal = monthlyDist.Present + monthlyDist.Absent + monthlyDist.Late;
-  const weeklyPct = weeklyTotal > 0 ? Math.round((monthlyDist.Present / weeklyTotal) * 100) : 0;
+  // ── Attendance ring is always driven by attendanceRate itself (the number
+  //    printed next to it), so it never goes blank just because this month's
+  //    day-by-day records haven't been logged yet. Color reflects status.
+  const attendanceRingColor =
+    attendanceRate >= attendanceGoal ? "#22c55e" : attendanceRate >= 50 ? "#f59e0b" : "#ef4444";
 
-  // FIX 3: For donut chart, show placeholder if no data
-  const hasAttendanceData = monthlyDist.Present > 0 || monthlyDist.Absent > 0 || monthlyDist.Late > 0;
+  const quickActions = [
+    {
+      icon: "badge", label: "ID Card", description: "View and download your digital ID card",
+      action: () => setShowIDCard(true), to: null,
+      accentBg: "bg-blue-50", accentText: "text-blue-600",
+      badge: { label: "View", bg: "bg-blue-50", text: "text-blue-700" },
+    },
+    {
+      icon: "support_agent", label: "Help Desk", description: "Get help and resolve your queries quickly",
+      to: "/student/help",
+      accentBg: "bg-violet-50", accentText: "text-violet-600",
+      badge: { label: "Support", bg: "bg-violet-50", text: "text-violet-700" },
+    },
+    {
+      icon: "account_balance_wallet", label: "Fees", description: "View fee details and payment history",
+      to: "/student/fees",
+      accentBg: "bg-green-50", accentText: "text-green-600",
+      badge: { label: "Paid", bg: "bg-green-50", text: "text-green-700" },
+    },
+    {
+      icon: "assignment", label: "Assignments", description: "View and submit your assignments",
+      to: "/student/assignments",
+      accentBg: "bg-amber-50", accentText: "text-amber-600",
+      badge: upcomingAssignments.length > 0
+        ? { label: "Pending", bg: "bg-amber-50", text: "text-amber-700", count: upcomingAssignments.length }
+        : { label: "All Done", bg: "bg-green-50", text: "text-green-700" },
+    },
+    {
+      icon: "event_available", label: "Attendance", description: "Check your attendance records and overview",
+      to: "/student/attendance",
+      accentBg: "bg-blue-50", accentText: "text-blue-600",
+      badge: { label: todayAttendanceRecord ? todayAttendanceRecord.status : "Today", bg: "bg-blue-50", text: "text-blue-700" },
+    },
+    {
+      icon: "psychology", label: "AI Tutor", description: "Get AI-powered help for your studies",
+      to: "/student/ai-tutor",
+      accentBg: "bg-violet-50", accentText: "text-violet-600",
+      badge: { label: "AI Powered", bg: "bg-violet-50", text: "text-violet-700", sparkle: true },
+    },
+  ];
 
   return (
     <>
@@ -493,14 +521,11 @@ export default function Dashboard() {
             <div className="bg-surface-container-lowest rounded-xl custom-shadow border border-outline-variant/10 hover:scale-[1.02] hover:shadow-md transition-all duration-200 overflow-hidden">
               <div className="px-4 pt-4 pb-3 flex items-start justify-between gap-2">
                 <div className="flex items-center gap-3">
-                  {/* FIX 4: Show donut chart with proper data */}
+                  {/* Ring fill = attendanceRate itself, so it always matches the number beside it */}
                   <DonutChart
-                    segments={hasAttendanceData ? [
-                      { value: monthlyDist.Present, color: "#22c55e" },
-                      { value: monthlyDist.Absent, color: "#ef4444" },
-                      { value: monthlyDist.Late, color: "#f59e0b" },
-                    ] : [
-                      { value: 1, color: "#e5e7eb" }
+                    segments={[
+                      { value: attendanceRate, color: attendanceRingColor },
+                      { value: Math.max(0, 100 - attendanceRate), color: "#e5e7eb" },
                     ]}
                   />
                   <div>
@@ -524,10 +549,10 @@ export default function Dashboard() {
               </div>
               <div className="px-4 pb-4">
                 <p className="text-2xs text-on-surface-variant mb-1.5">
-                  {totalDaysAll === 0 
-                    ? "No attendance records yet. Start attending classes!" 
-                    : attendanceRate >= attendanceGoal 
-                      ? "You're doing great, keep it up!" 
+                  {totalDaysAll === 0
+                    ? "No attendance records yet. Start attending classes!"
+                    : attendanceRate >= attendanceGoal
+                      ? "You're doing great, keep it up!"
                       : attendanceGapMsg}
                 </p>
                 <div className="w-full bg-surface-container-high rounded-full h-1.5 overflow-hidden">
@@ -788,55 +813,75 @@ export default function Dashboard() {
               {/* Quick Actions */}
               <section className="bg-surface-container-low rounded-xl p-4">
                 <h3 className="text-xs font-black text-on-surface-variant uppercase tracking-widest mb-3">Quick Actions</h3>
-                <div className="grid grid-cols-3 gap-2.5">
-                  {[
-                    { icon: "badge",                  label: "ID Card",   action: () => setShowIDCard(true), to: null      },
-                    { icon: "support_agent",          label: "Help Desk", action: null, to: "/student/help"                },
-                    { icon: "account_balance_wallet", label: "Fees",      action: null, to: "/student/fees"                },
-                    { icon: "assignment",             label: "Assignments",action: null, to: "/student/assignments"        },
-                    { icon: "event_available",        label: "Attendance", action: null, to: "/student/attendance"         },
-                    { icon: "psychology",             label: "AI Tutor",   action: null, to: "/student/ai-tutor"           },
-                  ].map(({ icon, label, action, to }) => {
-                    const cls = "flex flex-col items-center justify-center py-3 px-1 bg-surface-container-lowest rounded-xl custom-shadow hover:bg-primary hover:text-white transition-all duration-200 group cursor-pointer";
-                    const inner = (
+                <div className="grid grid-cols-2 gap-2.5">
+                  {quickActions.map((item) => {
+                    const cardCls = "group relative flex flex-col items-start bg-surface-container-lowest rounded-xl custom-shadow border border-outline-variant/10 p-2.5 hover:-translate-y-0.5 hover:shadow-md hover:border-primary/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 transition-all duration-200 text-left";
+                    const content = (
                       <>
-                        <span className="material-symbols-outlined text-primary group-hover:text-white text-xl mb-1 group-hover:scale-110 transition-all">{icon}</span>
-                        <span className="text-2xs font-bold text-on-surface group-hover:text-white text-center leading-tight">{label}</span>
+                        <div className="flex items-center justify-between w-full mb-1.5">
+                          <span className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 transition-transform duration-200 group-hover:scale-110 ${item.accentBg} ${item.accentText}`}>
+                            <span className="material-symbols-outlined text-base">{item.icon}</span>
+                          </span>
+                          <span className="material-symbols-outlined text-xs text-on-surface-variant opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200">
+                            arrow_forward
+                          </span>
+                        </div>
+                        <p className="text-2xs font-bold text-on-surface leading-tight">{item.label}</p>
+                        {item.badge && (
+                          <span className={`mt-1 text-[9px] font-bold px-1.5 py-0.5 rounded-full whitespace-nowrap ${item.badge.bg} ${item.badge.text}`}>
+                            {item.badge.count != null ? `${item.badge.label} · ${item.badge.count}` : item.badge.label}
+                          </span>
+                        )}
                       </>
                     );
-                    return action ? (
-                      <button key={label} onClick={action} className={cls}>{inner}</button>
+                    return item.action ? (
+                      <button key={item.label} onClick={item.action} className={cardCls}>{content}</button>
                     ) : (
-                      <Link key={label} to={to} className={cls}>{inner}</Link>
+                      <Link key={item.label} to={item.to} className={cardCls}>{content}</Link>
                     );
                   })}
                 </div>
               </section>
 
               {/* Circulars Preview */}
-              <section className="bg-surface-container-lowest rounded-xl p-4 custom-shadow border border-outline-variant/10 hover:shadow-md transition-all duration-200">
+              <section className="bg-surface-container-lowest rounded-xl p-4 custom-shadow border border-outline-variant/10 hover:shadow-md hover:border-primary/20 transition-all duration-200">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-xs font-black text-on-surface-variant uppercase tracking-widest">Circulars</h3>
-                  <Link to="/student/circulars" className="flex items-center gap-0.5 text-2xs font-bold text-primary hover:underline">
+                  <div className="flex items-center gap-2">
+                    <span className="w-7 h-7 rounded-lg bg-orange-50 text-orange-500 flex items-center justify-center flex-shrink-0">
+                      <span className="material-symbols-outlined text-sm">campaign</span>
+                    </span>
+                    <h3 className="text-xs font-black text-on-surface-variant uppercase tracking-widest">Circulars</h3>
+                    {circulars?.length > 0 && (
+                      <span className="text-[9px] font-bold w-4 h-4 rounded-full bg-primary/10 text-primary flex items-center justify-center flex-shrink-0">
+                        {circulars.length}
+                      </span>
+                    )}
+                  </div>
+                  <Link to="/student/circulars" className="group/all flex items-center gap-0.5 text-2xs font-bold text-primary hover:underline">
                     View all
-                    <span className="material-symbols-outlined text-xs">arrow_forward</span>
+                    <span className="material-symbols-outlined text-xs transition-transform duration-200 group-hover/all:translate-x-0.5">arrow_forward</span>
                   </Link>
                 </div>
                 {(!circulars || circulars.length === 0) ? (
                   <p className="text-xs text-on-surface-variant text-center py-3">No circulars yet.</p>
                 ) : (
-                  <div className="space-y-3">
+                  <div className="divide-y divide-surface-container-low">
                     {circulars.slice(0, 3).map((c, i) => {
                       const accent = CIRCULAR_ACCENTS[i % CIRCULAR_ACCENTS.length];
                       const isRecent = c.created_at && (Date.now() - new Date(c.created_at).getTime()) <= 3 * 24 * 60 * 60 * 1000;
                       return (
-                        <Link key={c.id} to="/student/circulars" className="flex items-start gap-2.5 group/circular -m-1 p-1 rounded-lg hover:bg-surface-container-low/50 transition-colors">
-                          <span className={`mt-0.5 w-6 h-6 rounded-md flex items-center justify-center flex-shrink-0 ${accent.bg} ${accent.text}`}>
+                        <Link
+                          key={c.id}
+                          to="/student/circulars"
+                          className="group/circular relative flex items-start gap-2.5 py-2.5 pl-2.5 pr-1 -mx-1 rounded-lg hover:bg-surface-container-low/60 active:scale-[0.99] transition-all duration-150"
+                        >
+                          <span className="absolute left-0 top-1/2 -translate-y-1/2 h-0 w-0.5 rounded-full bg-primary group-hover/circular:h-4/5 transition-all duration-200" />
+                          <span className={`mt-0.5 w-7 h-7 rounded-md flex items-center justify-center flex-shrink-0 transition-transform duration-200 group-hover/circular:scale-110 ${accent.bg} ${accent.text}`}>
                             <span className="material-symbols-outlined text-sm">campaign</span>
                           </span>
                           <div className="min-w-0 flex-1">
                             <div className="flex items-center gap-1.5">
-                              <p className="text-xs font-bold text-on-surface truncate">{c.title}</p>
+                              <p className="text-xs font-bold text-on-surface truncate group-hover/circular:text-primary transition-colors">{c.title}</p>
                               {isRecent && (
                                 <span className="text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-red-100 text-red-600 flex-shrink-0">New</span>
                               )}
@@ -846,71 +891,15 @@ export default function Dashboard() {
                               {c.created_at && ` · ${new Date(c.created_at).toLocaleDateString("en-IN", { day: "numeric", month: "short" })}`}
                             </p>
                           </div>
+                          <span className="material-symbols-outlined text-sm text-on-surface-variant opacity-0 -translate-x-1 group-hover/circular:opacity-100 group-hover/circular:translate-x-0 transition-all duration-200 flex-shrink-0 self-center">
+                            chevron_right
+                          </span>
                         </Link>
                       );
                     })}
                   </div>
                 )}
               </section>
-
-              {/* Weekly Progress Card */}
-              <div className="relative rounded-xl overflow-hidden bg-gradient-to-br from-violet-600 to-indigo-700 p-4 text-white">
-                <div className="absolute -right-8 -top-8 w-32 h-32 bg-white/10 rounded-full blur-2xl pointer-events-none" />
-                <div className="relative z-10">
-                  <div className="flex items-center justify-between mb-3">
-                    <div>
-                      <p className="text-2xs text-white/70 uppercase tracking-widest font-semibold">Weekly Progress</p>
-                      <p className="text-lg font-black text-white mt-0.5">
-                        {streak > 0 ? (
-                          <><span className="text-xl">🔥</span> {streak} Day Streak!</>
-                        ) : (
-                          "Keep it up!"
-                        )}
-                      </p>
-                    </div>
-                    <div className="relative w-14 h-14 flex-shrink-0">
-                      <DonutChart
-                        segments={[
-                          { value: weeklyPct, color: "#ffffff" },
-                          { value: 100 - weeklyPct, color: "rgba(255,255,255,0.25)" },
-                        ]}
-                        size={56}
-                        strokeWidth={6}
-                      />
-                      <span className="absolute inset-0 flex items-center justify-center text-xs font-black">{weeklyPct}%</span>
-                    </div>
-                  </div>
-                  {/* Week dots */}
-                  <div className="flex items-center justify-between mt-3">
-                    {weekDots.map((dot, i) => (
-                      <div key={i} className="flex flex-col items-center gap-1">
-                        <div className={`w-7 h-7 rounded-full flex items-center justify-center text-2xs font-bold transition-all ${
-                          dot.status === "Present" ? "bg-white text-violet-700 shadow-sm" :
-                          dot.status === "Absent"  ? "bg-red-400/80 text-white" :
-                          dot.status === "future"  ? "bg-white/20 text-white/50" :
-                                                     "bg-white/20 text-white/60"
-                        }`}>
-                          {dot.status === "Present" ? "✓" : dot.status === "Absent" ? "✗" : dot.label}
-                        </div>
-                        <span className="text-3xs text-white/60 font-semibold">{dot.label}</span>
-                      </div>
-                    ))}
-                  </div>
-                  {/* Progress bar */}
-                  <div className="mt-3">
-                    <div className="flex justify-between text-2xs text-white/70 mb-1">
-                      <span>Weekly Goal</span>
-                      <span>{monthlyDist.Present} / {weeklyTotal || 0} days present</span>
-                    </div>
-                    <div className="w-full bg-white/20 h-1.5 rounded-full">
-                      <div
-                        className="bg-white h-full rounded-full transition-all duration-700"
-                        style={{ width: `${weeklyPct}%` }}
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
 
             </div>
           </div>
