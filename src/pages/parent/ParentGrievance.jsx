@@ -69,24 +69,24 @@ function Skeleton({ className = "" }) {
 function HomeSkeleton() {
     return (
         <DashboardLayout>
-            <div className="px-8 py-8 space-y-8 max-w-6xl mx-auto">
-                <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#1a237e] to-[#283593] p-8">
+            <div className="px-4 py-4 space-y-4 max-w-6xl mx-auto">
+                <div className="relative overflow-hidden rounded-xl bg-gradient-to-br from-[#1a237e] to-[#283593] p-4">
                     <div className="relative z-10 max-w-2xl space-y-4">
                         <Skeleton className="w-48 h-4 bg-white/20" />
-                        <Skeleton className="w-64 h-8 bg-white/20" />
+                        <Skeleton className="w-64 h-6 bg-white/20" />
                         <Skeleton className="w-3/4 h-4 bg-white/20" />
                         <div className="flex gap-3">
-                            <Skeleton className="w-40 h-10 rounded-xl bg-white/30" />
-                            <Skeleton className="w-40 h-10 rounded-xl bg-white/20" />
+                            <Skeleton className="w-40 h-8 rounded-xl bg-white/30" />
+                            <Skeleton className="w-40 h-8 rounded-xl bg-white/20" />
                         </div>
                     </div>
                 </div>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
                     {[1, 2, 3, 4].map(i => (
                         <div key={i} className="bg-surface-container-lowest rounded-xl p-4 border border-outline-variant/10">
-                            <Skeleton className="w-9 h-9 rounded-lg mb-3" />
-                            <Skeleton className="w-16 h-7 mb-1" />
-                            <Skeleton className="w-20 h-3" />
+                            <Skeleton className="w-7 h-7 rounded-lg mb-3" />
+                            <Skeleton className="w-11 h-7 mb-1" />
+                            <Skeleton className="w-14 h-3" />
                         </div>
                     ))}
                 </div>
@@ -95,8 +95,8 @@ function HomeSkeleton() {
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                         {[1, 2, 3, 4, 5, 6, 7].map(i => (
                             <div key={i} className="flex flex-col items-center gap-2 p-5 rounded-xl bg-surface-container-lowest border border-outline-variant/10">
-                                <Skeleton className="w-12 h-12 rounded-xl" />
-                                <Skeleton className="w-16 h-3" />
+                                <Skeleton className="w-8 h-8 rounded-xl" />
+                                <Skeleton className="w-11 h-3" />
                             </div>
                         ))}
                     </div>
@@ -109,12 +109,12 @@ function HomeSkeleton() {
 function TrackSkeleton() {
     return (
         <DashboardLayout>
-            <div className="px-8 py-8 max-w-6xl mx-auto">
-                <div className="flex items-center gap-3 mb-6">
-                    <Skeleton className="w-8 h-8 rounded-lg" />
+            <div className="px-4 py-4 max-w-6xl mx-auto">
+                <div className="flex items-center gap-3 mb-3">
+                    <Skeleton className="w-6 h-6 rounded-lg" />
                     <div><Skeleton className="w-40 h-6" /><Skeleton className="w-56 h-3 mt-1" /></div>
                 </div>
-                <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
+                <div className="grid grid-cols-1 lg:grid-cols-5 gap-3">
                     <div className="lg:col-span-2 space-y-3">
                         {[1, 2, 3].map(i => (
                             <div key={i} className="p-4 rounded-xl bg-surface-container-lowest border border-outline-variant/10 space-y-3">
@@ -124,7 +124,7 @@ function TrackSkeleton() {
                         ))}
                     </div>
                     <div className="lg:col-span-3">
-                        <Skeleton className="w-full h-64 rounded-2xl" />
+                        <Skeleton className="w-full h-64 rounded-xl" />
                     </div>
                 </div>
             </div>
@@ -135,10 +135,10 @@ function TrackSkeleton() {
 function NewSkeleton() {
     return (
         <DashboardLayout>
-            <div className="px-8 py-8 max-w-5xl mx-auto">
-                <Skeleton className="w-40 h-6 mb-6" />
-                <div className="bg-surface-container-lowest rounded-2xl border border-outline-variant/15 p-10">
-                    <Skeleton className="w-full h-8 mb-6" />
+            <div className="px-4 py-4 max-w-5xl mx-auto">
+                <Skeleton className="w-40 h-6 mb-3" />
+                <div className="bg-surface-container-lowest rounded-xl border border-outline-variant/15 p-5">
+                    <Skeleton className="w-full h-6 mb-3" />
                     <Skeleton className="w-full h-40" />
                 </div>
             </div>
@@ -419,11 +419,11 @@ export default function ParentGrievance() {
     };
 
     const StepBar = () => (
-        <div className="flex items-center gap-2 mb-8">
+        <div className="flex items-center gap-2 mb-4">
             {[1, 2, 3].map(s => (
                 <React.Fragment key={s}>
                     <div className={`flex items-center gap-2 ${s < step ? "text-green-600" : s === step ? "text-primary" : "text-on-surface-variant"}`}>
-                        <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold border-2 transition-all
+                        <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold border-2 transition-all
               ${s < step ? "bg-green-500 border-green-500 text-white"
                                 : s === step ? "border-primary text-primary bg-primary/5"
                                     : "border-outline-variant text-outline-variant bg-surface-container"}`}>
@@ -449,19 +449,19 @@ export default function ParentGrievance() {
     if (view === "home") {
         return (
             <DashboardLayout>
-                <div className="px-8 py-8 space-y-8 max-w-6xl mx-auto">
+                <div className="px-4 py-4 space-y-4 max-w-6xl mx-auto">
 
-                    <section className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#1a237e] to-[#283593] p-8 text-white">
+                    <section className="relative overflow-hidden rounded-xl bg-gradient-to-br from-[#1a237e] to-[#283593] p-4 text-white">
                         <div className="relative z-10 max-w-2xl">
                             <div className="flex items-center gap-2 mb-3">
-                                <span className="material-symbols-outlined text-white/80 text-base">shield</span>
+                                <span className="material-symbols-outlined text-white/80 text-xs">shield</span>
                                 <span className="text-white/80 text-xs font-semibold tracking-wide uppercase">Parent Grievance Portal</span>
                             </div>
-                            <h2 className="text-2xl font-extrabold font-headline mb-2">Raise a Grievance</h2>
+                            <h2 className="text-base font-extrabold font-headline mb-2">Raise a Grievance</h2>
                             <p className="text-white/75 text-sm leading-relaxed">
                                 Your voice matters. File complaints, track resolutions, and get fair outcomes — confidentially and efficiently.
                             </p>
-                            <div className="flex flex-wrap gap-3 mt-6">
+                            <div className="flex flex-wrap gap-3 mt-3">
                                 <button
                                     onClick={() => switchView("new")}
                                     className="flex items-center gap-2 px-5 py-2.5 bg-white text-[#1a237e] rounded-xl font-bold text-xs hover:bg-white/90 transition-colors shadow-lg"
@@ -480,12 +480,12 @@ export default function ParentGrievance() {
                         </div>
                         <div className="absolute -right-16 -top-16 w-64 h-64 bg-white/5 rounded-full" />
                         <div className="absolute right-8 bottom-0 hidden lg:block">
-                            <span className="material-symbols-outlined text-[140px] opacity-[0.07]">gavel</span>
+                            <span className="material-symbols-outlined text-[72px] opacity-[0.07]">gavel</span>
                         </div>
                     </section>
 
                     {/* Stats row — from GET /grievances/me/stats/ */}
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
                         {[
                             { label: "Total Filed", val: stats?.total ?? "—", icon: "folder_open", color: "bg-blue-50 text-blue-600" },
                             { label: "In Progress", val: stats?.in_progress ?? "—", icon: "pending", color: "bg-amber-50 text-amber-600" },
@@ -493,10 +493,10 @@ export default function ParentGrievance() {
                             { label: "Resolution Rate", val: stats ? `${stats.resolution_rate}%` : "—", icon: "schedule", color: "bg-purple-50 text-purple-600" },
                         ].map(s => (
                             <div key={s.label} className="bg-surface-container-lowest rounded-xl p-4 border border-outline-variant/10 custom-shadow">
-                                <div className={`w-9 h-9 rounded-lg flex items-center justify-center mb-3 ${s.color}`}>
-                                    <span className="material-symbols-outlined text-base">{s.icon}</span>
+                                <div className={`w-7 h-7 rounded-lg flex items-center justify-center mb-3 ${s.color}`}>
+                                    <span className="material-symbols-outlined text-xs">{s.icon}</span>
                                 </div>
-                                <p className="text-xl font-extrabold font-headline text-on-surface">{s.val}</p>
+                                <p className="text-sm font-extrabold font-headline text-on-surface">{s.val}</p>
                                 <p className="text-2xs text-on-surface-variant font-medium mt-0.5">{s.label}</p>
                             </div>
                         ))}
@@ -519,8 +519,8 @@ export default function ParentGrievance() {
                                         onClick={() => openNewGrievanceWithCategory(cat.value)}
                                         className="group flex flex-col items-center gap-2 p-5 rounded-xl bg-surface-container-lowest border border-outline-variant/10 hover:border-primary/40 hover:shadow-md transition-all duration-200 custom-shadow"
                                     >
-                                        <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${style.color} group-hover:scale-110 transition-transform`}>
-                                            <span className="material-symbols-outlined text-lg">{style.icon}</span>
+                                        <div className={`w-8 h-8 rounded-xl flex items-center justify-center ${style.color} group-hover:scale-110 transition-transform`}>
+                                            <span className="material-symbols-outlined text-xs">{style.icon}</span>
                                         </div>
                                         <span className="text-2xs font-bold text-on-surface text-center leading-tight">{cat.label}</span>
                                     </button>
@@ -553,14 +553,14 @@ export default function ParentGrievance() {
 
                     <section className="bg-surface-container-low rounded-xl p-6 border border-outline-variant/10">
                         <h3 className="text-xs font-black text-on-surface-variant uppercase tracking-widest mb-4">Know Your Rights</h3>
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
                             {[
                                 { icon: "lock", title: "Confidential", desc: "Your grievance is only visible to you and school administration." },
                                 { icon: "timer", title: "Tracked Resolution", desc: "Every grievance is logged with a status you can follow in real time." },
                                 { icon: "no_accounts", title: "Zero Retaliation", desc: "Filing a grievance will never affect your child's academic standing." },
                             ].map(r => (
                                 <div key={r.title} className="flex gap-3">
-                                    <div className="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
+                                    <div className="w-6 h-6 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
                                         <span className="material-symbols-outlined text-primary text-sm">{r.icon}</span>
                                     </div>
                                     <div>
@@ -581,19 +581,19 @@ export default function ParentGrievance() {
     if (view === "track") {
         return (
             <DashboardLayout>
-                <div className="px-8 py-8 max-w-6xl mx-auto">
+                <div className="px-4 py-4 max-w-6xl mx-auto">
 
-                    <div className="flex items-center gap-3 mb-6">
-                        <button onClick={() => switchView("home")} className="w-8 h-8 rounded-lg bg-surface-container flex items-center justify-center hover:bg-surface-container-high transition-colors">
+                    <div className="flex items-center gap-3 mb-3">
+                        <button onClick={() => switchView("home")} className="w-6 h-6 rounded-lg bg-surface-container flex items-center justify-center hover:bg-surface-container-high transition-colors">
                             <span className="material-symbols-outlined text-sm text-on-surface-variant">arrow_back</span>
                         </button>
                         <div>
-                            <h2 className="text-lg font-extrabold font-headline text-on-surface">My Grievances</h2>
+                            <h2 className="text-xs font-extrabold font-headline text-on-surface">My Grievances</h2>
                             <p className="text-2xs text-on-surface-variant">Track the status of your filed complaints</p>
                         </div>
                     </div>
 
-                    <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
+                    <div className="grid grid-cols-1 lg:grid-cols-5 gap-3">
 
                         <div className="lg:col-span-2 space-y-3">
 
@@ -635,8 +635,8 @@ export default function ParentGrievance() {
                             </div>
 
                             {filteredGrievances.length === 0 ? (
-                                <div className="text-center py-12 bg-surface-container-lowest rounded-xl border border-outline-variant/10">
-                                    <span className="material-symbols-outlined text-4xl text-outline mb-2 block">inbox</span>
+                                <div className="text-center py-7 bg-surface-container-lowest rounded-xl border border-outline-variant/10">
+                                    <span className="material-symbols-outlined text-xl text-outline mb-2 block">inbox</span>
                                     <p className="text-xs font-bold text-on-surface">No grievances found</p>
                                     <p className="text-2xs text-on-surface-variant mt-1">Try a different filter or file a new one</p>
                                 </div>
@@ -653,7 +653,7 @@ export default function ParentGrievance() {
 
                             <button
                                 onClick={() => switchView("new")}
-                                className="w-full py-3 rounded-xl border-2 border-dashed border-primary/30 text-primary text-xs font-bold hover:border-primary hover:bg-primary/5 transition-all flex items-center justify-center gap-2"
+                                className="w-full py-2 rounded-xl border-2 border-dashed border-primary/30 text-primary text-xs font-bold hover:border-primary hover:bg-primary/5 transition-all flex items-center justify-center gap-2"
                             >
                                 <span className="material-symbols-outlined text-sm">add</span>
                                 File New Grievance
@@ -662,14 +662,14 @@ export default function ParentGrievance() {
 
                         <div className="lg:col-span-3">
                             {selectedGrievance ? (
-                                <div className="bg-surface-container-lowest rounded-2xl border border-outline-variant/15 overflow-hidden custom-shadow">
+                                <div className="bg-surface-container-lowest rounded-xl border border-outline-variant/15 overflow-hidden custom-shadow">
                                     <div className="p-6 border-b border-surface-container-low">
                                         <div className="flex items-start justify-between gap-3 mb-3">
                                             <div className="flex items-center gap-2">
                                                 {(() => {
                                                     const cat = categoryStyle(selectedGrievance.category);
                                                     return (
-                                                        <span className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 ${cat.color}`}>
+                                                        <span className={`w-6 h-6 rounded-lg flex items-center justify-center flex-shrink-0 ${cat.color}`}>
                                                             <span className="material-symbols-outlined text-xs">{cat.icon}</span>
                                                         </span>
                                                     );
@@ -680,8 +680,8 @@ export default function ParentGrievance() {
                                                 {statusBadge(selectedGrievance.status).label}
                                             </span>
                                         </div>
-                                        <h3 className="text-base font-extrabold text-on-surface font-headline">{selectedGrievance.title}</h3>
-                                        <div className="flex items-center gap-4 mt-2 flex-wrap">
+                                        <h3 className="text-xs font-extrabold text-on-surface font-headline">{selectedGrievance.title}</h3>
+                                        <div className="flex items-center gap-2 mt-2 flex-wrap">
                                             <span className="text-2xs text-outline flex items-center gap-1">
                                                 <span className="material-symbols-outlined text-[13px]">
                                                     {isFiledByParent(selectedGrievance) ? "person" : "school"}
@@ -743,8 +743,8 @@ export default function ParentGrievance() {
                                     )}
                                 </div>
                             ) : (
-                                <div className="h-full min-h-[300px] flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-outline-variant/30 text-center p-10">
-                                    <span className="material-symbols-outlined text-5xl text-outline mb-3">folder_open</span>
+                                <div className="h-full min-h-[300px] flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-outline-variant/30 text-center p-5">
+                                    <span className="material-symbols-outlined text-2xl text-outline mb-3">folder_open</span>
                                     <p className="text-xs font-bold text-on-surface">Select a grievance</p>
                                     <p className="text-2xs text-on-surface-variant mt-1">Click on any grievance to see full details</p>
                                 </div>
@@ -759,57 +759,57 @@ export default function ParentGrievance() {
     // ── NEW GRIEVANCE VIEW ────────────────────────────────────────────────
     return (
         <DashboardLayout>
-            <div className="px-8 py-8 max-w-5xl mx-auto">
+            <div className="px-4 py-4 max-w-5xl mx-auto">
 
-                <div className="flex items-center gap-3 mb-6">
-                    <button onClick={() => { resetForm(); switchView("home"); }} className="w-8 h-8 rounded-lg bg-surface-container flex items-center justify-center hover:bg-surface-container-high transition-colors">
+                <div className="flex items-center gap-3 mb-3">
+                    <button onClick={() => { resetForm(); switchView("home"); }} className="w-6 h-6 rounded-lg bg-surface-container flex items-center justify-center hover:bg-surface-container-high transition-colors">
                         <span className="material-symbols-outlined text-sm text-on-surface-variant">arrow_back</span>
                     </button>
                     <div>
-                        <h2 className="text-lg font-extrabold font-headline text-on-surface">File a Grievance</h2>
+                        <h2 className="text-xs font-extrabold font-headline text-on-surface">File a Grievance</h2>
                         <p className="text-2xs text-on-surface-variant">Takes less than 3 minutes</p>
                     </div>
                 </div>
 
                 {submitted ? (
-                    <div className="bg-surface-container-lowest rounded-2xl border border-outline-variant/15 p-12 text-center custom-shadow">
-                        <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-5">
-                            <span className="material-symbols-outlined text-green-600 text-4xl">check_circle</span>
+                    <div className="bg-surface-container-lowest rounded-xl border border-outline-variant/15 p-5 text-center custom-shadow">
+                        <div className="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-2.5">
+                            <span className="material-symbols-outlined text-green-600 text-xl">check_circle</span>
                         </div>
-                        <h3 className="text-xl font-extrabold font-headline text-on-surface mb-2">Grievance Submitted!</h3>
+                        <h3 className="text-sm font-extrabold font-headline text-on-surface mb-2">Grievance Submitted!</h3>
                         {submittedGrievance?.title && (
                             <p className="text-on-surface-variant text-xs mb-1">"{submittedGrievance.title}" has been filed.</p>
                         )}
-                        <p className="text-xs text-on-surface-variant max-w-xs mx-auto mb-8 leading-relaxed mt-3">
+                        <p className="text-xs text-on-surface-variant max-w-xs mx-auto mb-4 leading-relaxed mt-3">
                             You can track its status anytime from "Track My Grievances."
                         </p>
                         <div className="flex flex-col sm:flex-row gap-3 justify-center">
                             <button
                                 onClick={() => switchView("track")}
-                                className="px-6 py-2.5 rounded-xl bg-primary text-white text-xs font-bold hover:opacity-90 transition-opacity"
+                                className="px-3.5 py-2.5 rounded-xl bg-primary text-white text-xs font-bold hover:opacity-90 transition-opacity"
                             >
                                 Track My Grievance
                             </button>
                             <button
                                 onClick={resetForm}
-                                className="px-6 py-2.5 rounded-xl border border-outline-variant text-on-surface text-xs font-bold hover:bg-surface-container-low transition-colors"
+                                className="px-3.5 py-2.5 rounded-xl border border-outline-variant text-on-surface text-xs font-bold hover:bg-surface-container-low transition-colors"
                             >
                                 Back to Home
                             </button>
                         </div>
                     </div>
                 ) : (
-                    <div className="bg-surface-container-lowest rounded-2xl border border-outline-variant/15 p-10 custom-shadow">
+                    <div className="bg-surface-container-lowest rounded-xl border border-outline-variant/15 p-5 custom-shadow">
                         <StepBar />
 
                         {/* ── STEP 1: Category + Child + Priority ── */}
                         {step === 1 && (
-                            <div className="space-y-6">
+                            <div className="space-y-3">
                                 <div>
-                                    <h3 className="text-lg font-bold font-headline text-on-surface mb-1">Select a Category</h3>
+                                    <h3 className="text-xs font-bold font-headline text-on-surface mb-1">Select a Category</h3>
                                     <p className="text-sm text-on-surface-variant">Choose the category that best describes your issue</p>
                                 </div>
-                                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                                     {categories.map(cat => {
                                         const style = categoryStyle(cat.value);
                                         return (
@@ -819,8 +819,8 @@ export default function ParentGrievance() {
                                                 className={`group flex flex-col items-center gap-2 p-5 rounded-xl border-2 transition-all duration-200
                           ${form.category === cat.value ? "border-primary bg-primary/5" : "border-outline-variant/20 hover:border-primary/30 bg-surface-container-low"}`}
                                             >
-                                                <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${style.color} transition-transform group-hover:scale-110`}>
-                                                    <span className="material-symbols-outlined text-lg">{style.icon}</span>
+                                                <div className={`w-8 h-8 rounded-xl flex items-center justify-center ${style.color} transition-transform group-hover:scale-110`}>
+                                                    <span className="material-symbols-outlined text-xs">{style.icon}</span>
                                                 </div>
                                                 <span className="text-xs font-bold text-on-surface text-center leading-tight">{cat.label}</span>
                                             </button>
@@ -833,14 +833,14 @@ export default function ParentGrievance() {
                                 <div className="space-y-2 pt-2">
                                     <label className="text-sm font-semibold text-on-surface-variant">Which child is this regarding?</label>
                                     {children.length === 0 ? (
-                                        <p className="text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded-lg px-4 py-3">
+                                        <p className="text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded-lg px-4 py-2">
                                             No children found on your account. Please contact the school office.
                                         </p>
                                     ) : (
                                         <select
                                             value={form.student}
                                             onChange={e => { setField("student", e.target.value); setErrors(er => ({ ...er, student: undefined })); }}
-                                            className="w-full bg-surface-container-low border-none rounded-xl py-3.5 px-4 text-sm text-on-surface focus:ring-2 focus:ring-primary/30 focus:bg-white transition-all"
+                                            className="w-full bg-surface-container-low border-none rounded-xl py-2.5 px-4 text-sm text-on-surface focus:ring-2 focus:ring-primary/30 focus:bg-white transition-all"
                                         >
                                             <option value="">Select a child...</option>
                                             {children.map(child => (
@@ -862,7 +862,7 @@ export default function ParentGrievance() {
                                                 key={p.value}
                                                 onClick={() => setField("priority", p.value)}
                                                 title={p.description}
-                                                className={`flex-1 min-w-[110px] flex items-center justify-center gap-2 py-3 rounded-lg border-2 text-sm font-bold transition-all
+                                                className={`flex-1 min-w-[110px] flex items-center justify-center gap-2 py-2 rounded-lg border-2 text-sm font-bold transition-all
                           ${form.priority === p.value
                                                         ? "border-primary bg-primary/5 text-primary"
                                                         : "border-outline-variant/20 text-on-surface-variant hover:border-primary/30"
@@ -879,9 +879,9 @@ export default function ParentGrievance() {
 
                         {/* ── STEP 2: Details ── */}
                         {step === 2 && (
-                            <div className="space-y-6">
+                            <div className="space-y-3">
                                 <div>
-                                    <h3 className="text-lg font-bold font-headline text-on-surface mb-1">Describe Your Issue</h3>
+                                    <h3 className="text-xs font-bold font-headline text-on-surface mb-1">Describe Your Issue</h3>
                                     <p className="text-sm text-on-surface-variant">Be specific — it helps us resolve faster</p>
                                 </div>
 
@@ -891,8 +891,8 @@ export default function ParentGrievance() {
                                 {skipCategoryStep && form.category && (
                                     <div className="flex items-center justify-between gap-3 p-4 rounded-xl bg-primary/5 border border-primary/20">
                                         <div className="flex items-center gap-3">
-                                            <span className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${categoryStyle(form.category).color}`}>
-                                                <span className="material-symbols-outlined text-base">{categoryStyle(form.category).icon}</span>
+                                            <span className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 ${categoryStyle(form.category).color}`}>
+                                                <span className="material-symbols-outlined text-xs">{categoryStyle(form.category).icon}</span>
                                             </span>
                                             <div>
                                                 <p className="text-2xs text-on-surface-variant font-semibold">Category</p>
@@ -917,14 +917,14 @@ export default function ParentGrievance() {
                                     <div className="space-y-2">
                                         <label className="text-sm font-semibold text-on-surface-variant">Which child is this regarding?</label>
                                         {children.length === 0 ? (
-                                            <p className="text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded-lg px-4 py-3">
+                                            <p className="text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded-lg px-4 py-2">
                                                 No children found on your account. Please contact the school office.
                                             </p>
                                         ) : (
                                             <select
                                                 value={form.student}
                                                 onChange={e => setField("student", e.target.value)}
-                                                className="w-full bg-surface-container-low border-none rounded-xl py-3.5 px-4 text-sm text-on-surface focus:ring-2 focus:ring-primary/30 focus:bg-white transition-all"
+                                                className="w-full bg-surface-container-low border-none rounded-xl py-2.5 px-4 text-sm text-on-surface focus:ring-2 focus:ring-primary/30 focus:bg-white transition-all"
                                             >
                                                 <option value="">Select a child...</option>
                                                 {children.map(child => (
@@ -944,7 +944,7 @@ export default function ParentGrievance() {
                                         value={form.title}
                                         onChange={e => setField("title", e.target.value)}
                                         placeholder="Brief summary of your grievance..."
-                                        className="w-full bg-surface-container-low border-none rounded-xl py-3.5 px-4 text-sm text-on-surface focus:ring-2 focus:ring-primary/30 focus:bg-white transition-all"
+                                        className="w-full bg-surface-container-low border-none rounded-xl py-2.5 px-4 text-sm text-on-surface focus:ring-2 focus:ring-primary/30 focus:bg-white transition-all"
                                     />
                                     {errors.title && <p className="text-xs text-red-600 flex items-center gap-1"><span className="material-symbols-outlined text-sm">error</span>{errors.title}</p>}
                                 </div>
@@ -959,7 +959,7 @@ export default function ParentGrievance() {
                                         value={form.description}
                                         onChange={e => setField("description", e.target.value)}
                                         placeholder="Explain the incident clearly — when it happened, who was involved, and what outcome you expect..."
-                                        className="w-full bg-surface-container-low border-none rounded-xl py-3.5 px-4 text-sm text-on-surface focus:ring-2 focus:ring-primary/30 focus:bg-white transition-all resize-none"
+                                        className="w-full bg-surface-container-low border-none rounded-xl py-2.5 px-4 text-sm text-on-surface focus:ring-2 focus:ring-primary/30 focus:bg-white transition-all resize-none"
                                     />
                                     <div className="flex items-center justify-between">
                                         {errors.description
@@ -977,7 +977,7 @@ export default function ParentGrievance() {
                                 <div className="space-y-1.5 opacity-60">
                                     <label className="text-sm font-semibold text-on-surface-variant">Supporting Evidence <span className="text-outline font-normal">(Coming soon)</span></label>
                                     <div className="border-2 border-dashed border-outline-variant/40 rounded-xl p-6 text-center cursor-not-allowed">
-                                        <span className="material-symbols-outlined text-2xl text-outline mb-2 block">cloud_upload</span>
+                                        <span className="material-symbols-outlined text-base text-outline mb-2 block">cloud_upload</span>
                                         <p className="text-sm font-semibold text-on-surface">File attachments aren't supported yet</p>
                                     </div>
                                 </div>
@@ -986,9 +986,9 @@ export default function ParentGrievance() {
 
                         {/* ── STEP 3: Review ── */}
                         {step === 3 && (
-                            <div className="space-y-6">
+                            <div className="space-y-3">
                                 <div>
-                                    <h3 className="text-lg font-bold font-headline text-on-surface mb-1">Review & Submit</h3>
+                                    <h3 className="text-xs font-bold font-headline text-on-surface mb-1">Review & Submit</h3>
                                     <p className="text-sm text-on-surface-variant">Confirm the details before submitting</p>
                                 </div>
 
@@ -1004,8 +1004,8 @@ export default function ParentGrievance() {
                                         { label: "Priority", value: priorities.find(p => p.value === form.priority)?.label || form.priority || "—", icon: "flag" },
                                         { label: "Subject", value: form.title || "—", icon: "title" },
                                     ].map((r, i) => (
-                                        <div key={r.label} className={`flex items-start gap-4 px-5 py-4 ${i > 0 ? "border-t border-surface-container-low" : ""}`}>
-                                            <div className={`w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0 ${r.color || "bg-surface-container text-on-surface-variant"}`}>
+                                        <div key={r.label} className={`flex items-start gap-2 px-5 py-4 ${i > 0 ? "border-t border-surface-container-low" : ""}`}>
+                                            <div className={`w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 ${r.color || "bg-surface-container text-on-surface-variant"}`}>
                                                 <span className="material-symbols-outlined text-sm">{r.icon}</span>
                                             </div>
                                             <div className="min-w-0 flex-1">
@@ -1022,13 +1022,13 @@ export default function ParentGrievance() {
 
                                 {submitError && (
                                     <div className="flex items-start gap-3 p-4 bg-red-50 border border-red-200 rounded-xl">
-                                        <span className="material-symbols-outlined text-red-600 text-base flex-shrink-0">error</span>
+                                        <span className="material-symbols-outlined text-red-600 text-xs flex-shrink-0">error</span>
                                         <p className="text-xs text-red-800 leading-relaxed">{submitError}</p>
                                     </div>
                                 )}
 
                                 <div className="flex items-start gap-3 p-4 bg-amber-50 border border-amber-200 rounded-xl">
-                                    <span className="material-symbols-outlined text-amber-600 text-base flex-shrink-0">info</span>
+                                    <span className="material-symbols-outlined text-amber-600 text-xs flex-shrink-0">info</span>
                                     <p className="text-xs text-amber-800 leading-relaxed">
                                         By submitting, you confirm that all information is accurate and truthful. False grievances may lead to disciplinary action under school policy.
                                     </p>
@@ -1037,7 +1037,7 @@ export default function ParentGrievance() {
                         )}
 
                         {/* Navigation buttons */}
-                        <div className="flex items-center justify-between mt-8 pt-6 border-t border-surface-container-low">
+                        <div className="flex items-center justify-between mt-4 pt-3 border-t border-surface-container-low">
                             <button
                                 onClick={
                                     step === 1
@@ -1046,7 +1046,7 @@ export default function ParentGrievance() {
                                             ? () => { resetForm(); switchView("home"); }
                                             : prevStep
                                 }
-                                className="flex items-center gap-2 px-5 py-3 rounded-xl border border-outline-variant text-on-surface-variant text-sm font-bold hover:bg-surface-container-low transition-colors"
+                                className="flex items-center gap-2 px-5 py-2 rounded-xl border border-outline-variant text-on-surface-variant text-sm font-bold hover:bg-surface-container-low transition-colors"
                             >
                                 <span className="material-symbols-outlined text-sm">
                                     {step === 1 || (step === 2 && skipCategoryStep) ? "close" : "arrow_back"}
@@ -1057,7 +1057,7 @@ export default function ParentGrievance() {
                             {step < 3 ? (
                                 <button
                                     onClick={nextStep}
-                                    className="flex items-center gap-2 px-6 py-3 rounded-xl bg-primary text-white text-sm font-bold hover:opacity-90 transition-opacity"
+                                    className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-primary text-white text-sm font-bold hover:opacity-90 transition-opacity"
                                 >
                                     Continue
                                     <span className="material-symbols-outlined text-sm">arrow_forward</span>
@@ -1066,7 +1066,7 @@ export default function ParentGrievance() {
                                 <button
                                     onClick={handleSubmit}
                                     disabled={submitting}
-                                    className="flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-primary to-primary-container text-white text-sm font-bold hover:opacity-90 transition-opacity shadow-lg shadow-primary/20 active:scale-[0.98] disabled:opacity-60"
+                                    className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-gradient-to-r from-primary to-primary-container text-white text-sm font-bold hover:opacity-90 transition-opacity shadow-lg shadow-primary/20 active:scale-[0.98] disabled:opacity-60"
                                 >
                                     <span className="material-symbols-outlined text-sm">{submitting ? "hourglass_top" : "send"}</span>
                                     {submitting ? "Submitting..." : "Submit Grievance"}

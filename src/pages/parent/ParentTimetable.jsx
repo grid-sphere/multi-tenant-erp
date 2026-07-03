@@ -117,11 +117,11 @@ const HOURS = Array.from({ length: 11 }, (_, i) => i + 8);
 function WeeklyChart({ timetable, today }) {
   return (
     <div className="overflow-x-auto pb-2">
-      <div style={{ minWidth: 640 }}>
-        <div className="flex ml-16 mb-1">
+      <div style={{ minWidth: 560 }}>
+        <div className="flex ml-12 mb-1">
           {HOURS.map(h => (
             <div key={h} style={{ flex: `0 0 ${100 / HOURS.length}%` }}
-              className="text-[10px] font-semibold text-slate-400 dark:text-slate-500">
+              className="text-3xs font-semibold text-slate-400 dark:text-slate-500">
               {h === 12 ? '12 PM' : h > 12 ? `${h - 12} PM` : `${h} AM`}
             </div>
           ))}
@@ -131,12 +131,12 @@ function WeeklyChart({ timetable, today }) {
           const lecs = [...(timetable[day] || [])].sort((a, b) => parseTime(a.start_time) - parseTime(b.start_time));
           const isTday = day === today;
           return (
-            <div key={day} className="flex items-center mb-1.5">
-              <div className={`w-14 shrink-0 text-right pr-2 text-[11px] font-bold ${isTday ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-400 dark:text-slate-500'}`}>
+            <div key={day} className="flex items-center mb-1">
+              <div className={`w-11 shrink-0 text-right pr-1.5 text-3xs font-bold ${isTday ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-400 dark:text-slate-500'}`}>
                 {day.slice(0, 3).toUpperCase()}
-                {isTday && <div className="w-1.5 h-1.5 rounded-full bg-indigo-600 dark:bg-indigo-400 mx-auto mt-0.5" />}
+                {isTday && <div className="w-1 h-1 rounded-full bg-indigo-600 dark:bg-indigo-400 mx-auto mt-0.5" />}
               </div>
-              <div className={`flex-1 relative h-9 rounded-lg border ${isTday ? 'bg-indigo-50 dark:bg-indigo-950/40 border-indigo-200 dark:border-indigo-800' : 'bg-gray-50 dark:bg-slate-800 border-gray-200 dark:border-slate-700'} overflow-hidden`}>
+              <div className={`flex-1 relative h-7 rounded-md border ${isTday ? 'bg-indigo-50 dark:bg-indigo-950/40 border-indigo-200 dark:border-indigo-800' : 'bg-gray-50 dark:bg-slate-800 border-gray-200 dark:border-slate-700'} overflow-hidden`}>
                 {HOURS.map((_, i) => (
                   <div key={i} className="absolute top-0 bottom-0 w-px bg-slate-200 dark:bg-slate-600 opacity-50"
                     style={{ left: `${(i / (HOURS.length - 1)) * 100}%` }} />
@@ -144,7 +144,7 @@ function WeeklyChart({ timetable, today }) {
                 {isTday && nowMins() >= C_START && nowMins() <= C_END && (
                   <div className="absolute top-0 bottom-0 w-0.5 bg-red-500 z-10"
                     style={{ left: `${((nowMins() - C_START) / C_SPAN) * 100}%` }}>
-                    <div className="w-2 h-2 rounded-full bg-red-500 -mt-0.5 -ml-0.5" />
+                    <div className="w-1.5 h-1.5 rounded-full bg-red-500 -mt-0.5 -ml-0.5" />
                   </div>
                 )}
                 {lecs.map(lec => {
@@ -158,11 +158,11 @@ function WeeklyChart({ timetable, today }) {
                     <div key={lec.id}
                       title={`${lec.subject_name} · ${formatTime(lec.start_time)}–${formatTime(lec.end_time)} · ${lec.classroom}`}
                       style={{
-                        position: 'absolute', left: `${left}%`, width: `${width}%`, top: 3, bottom: 3,
-                        background: c.bg, border: `1.5px solid ${c.border}`, borderRadius: 5,
-                        display: 'flex', alignItems: 'center', padding: '0 4px', overflow: 'hidden'
+                        position: 'absolute', left: `${left}%`, width: `${width}%`, top: 2, bottom: 2,
+                        background: c.bg, border: `1px solid ${c.border}`, borderRadius: 4,
+                        display: 'flex', alignItems: 'center', padding: '0 3px', overflow: 'hidden'
                       }}>
-                      <span style={{ fontSize: 9, fontWeight: 700, color: c.text, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '100%' }}>
+                      <span style={{ fontSize: 8, fontWeight: 700, color: c.text, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '100%' }}>
                         {isOngoing(lec) ? '● ' : ''}{lec.subject_name.split(' ').map(w => w[0]).join('')}
                       </span>
                     </div>
@@ -173,16 +173,16 @@ function WeeklyChart({ timetable, today }) {
           );
         })}
 
-        <div className="flex flex-wrap gap-3 ml-16 mt-3 pt-3 border-t border-gray-200 dark:border-slate-700">
+        <div className="flex flex-wrap gap-2.5 ml-12 mt-2.5 pt-2.5 border-t border-gray-200 dark:border-slate-700">
           {Object.keys(colorMap).map(s => (
-            <div key={s} className="flex items-center gap-1.5">
-              <div className="w-2.5 h-2.5 rounded-sm" style={{ background: colorMap[s].dot }} />
-              <span className="text-[11px] font-medium text-slate-600 dark:text-slate-400">{s}</span>
+            <div key={s} className="flex items-center gap-1">
+              <div className="w-2 h-2 rounded-sm" style={{ background: colorMap[s].dot }} />
+              <span className="text-3xs font-medium text-slate-600 dark:text-slate-400">{s}</span>
             </div>
           ))}
-          <div className="flex items-center gap-1.5">
-            <div className="w-2.5 h-2.5 rounded-sm bg-red-500" />
-            <span className="text-[11px] font-medium text-slate-600 dark:text-slate-400">Now</span>
+          <div className="flex items-center gap-1">
+            <div className="w-2 h-2 rounded-sm bg-red-500" />
+            <span className="text-3xs font-medium text-slate-600 dark:text-slate-400">Now</span>
           </div>
         </div>
       </div>
@@ -198,15 +198,15 @@ function Skeleton({ className = '' }) {
 function TimetableSkeleton() {
   return (
     <DashboardLayout>
-      <div className="max-w-7xl mx-auto space-y-6">
-        <div className="flex gap-3">
-          {[1, 2, 3, 4].map(i => <Skeleton key={i} className="flex-1 h-20 rounded-xl" />)}
+      <div className="max-w-7xl mx-auto space-y-4">
+        <div className="flex gap-2.5">
+          {[1, 2, 3, 4].map(i => <Skeleton key={i} className="flex-1 h-16 rounded-lg" />)}
         </div>
-        <div className="flex gap-2">
-          {[1, 2, 3, 4, 5, 6].map(i => <Skeleton key={i} className="flex-1 h-10 rounded-xl" />)}
+        <div className="flex gap-1.5">
+          {[1, 2, 3, 4, 5, 6].map(i => <Skeleton key={i} className="flex-1 h-8 rounded-lg" />)}
         </div>
-        <div className="space-y-3">
-          {[1, 2, 3].map(i => <Skeleton key={i} className="w-full h-20 rounded-xl" />)}
+        <div className="space-y-2.5">
+          {[1, 2, 3].map(i => <Skeleton key={i} className="w-full h-16 rounded-lg" />)}
         </div>
       </div>
     </DashboardLayout>
@@ -217,11 +217,11 @@ function ErrorState({ message, onRetry }) {
   return (
     <DashboardLayout>
       <div className="max-w-7xl mx-auto">
-        <div className="flex flex-col items-center justify-center py-20 text-center bg-white dark:bg-slate-800 rounded-xl border border-gray-100 dark:border-slate-700">
-          <span className="material-symbols-outlined text-4xl text-red-500 mb-2">error</span>
+        <div className="flex flex-col items-center justify-center py-16 text-center bg-white dark:bg-slate-800 rounded-lg border border-gray-100 dark:border-slate-700">
+          <span className="material-symbols-outlined text-3xl text-red-500 mb-2">error</span>
           <p className="text-sm font-bold text-gray-900 dark:text-white">Couldn't load the timetable</p>
           <p className="text-xs text-gray-500 dark:text-slate-400 mt-1 max-w-sm">{message}</p>
-          <button onClick={onRetry} className="mt-4 px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm font-bold hover:bg-indigo-700 transition-colors">
+          <button onClick={onRetry} className="mt-3 px-3.5 py-1.5 bg-indigo-600 text-white rounded-lg text-xs font-bold hover:bg-indigo-700 transition-colors">
             Retry
           </button>
         </div>
@@ -240,33 +240,33 @@ function ChildSelector({ students, activeChild, switchChild }) {
     <div className="relative">
       <button
         onClick={() => setOpen(!open)}
-        className="flex items-center gap-2 px-3 py-2 rounded-xl bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 shadow-sm hover:shadow-md transition-all text-sm font-semibold text-gray-900 dark:text-white"
+        className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 shadow-sm hover:shadow-md transition-all text-xs font-semibold text-gray-900 dark:text-white"
       >
-        <span className="w-7 h-7 rounded-full bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center text-white text-xs font-bold shrink-0">
+        <span className="w-6 h-6 rounded-full bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center text-white text-3xs font-bold shrink-0">
           {(activeChild?.name || 'S')[0].toUpperCase()}
         </span>
-        <span className="truncate max-w-[140px]">{activeChild?.name || 'Select child'}</span>
-        <span className="material-symbols-outlined text-base text-gray-400">{open ? 'expand_less' : 'expand_more'}</span>
+        <span className="truncate max-w-[120px]">{activeChild?.name || 'Select child'}</span>
+        <span className="material-symbols-outlined text-sm text-gray-400">{open ? 'expand_less' : 'expand_more'}</span>
       </button>
 
       {open && (
         <>
           <div className="fixed inset-0 z-30" onClick={() => setOpen(false)} />
-          <div className="absolute top-full right-0 mt-1.5 z-40 w-64 bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700 shadow-xl py-1.5 animate-[fadeIn_0.15s_ease]">
-            <p className="px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-gray-400 dark:text-slate-500">
+          <div className="absolute top-full right-0 mt-1.5 z-40 w-56 bg-white dark:bg-slate-800 rounded-lg border border-gray-200 dark:border-slate-700 shadow-xl py-1.5 animate-[fadeIn_0.15s_ease]">
+            <p className="px-2.5 py-1 text-3xs font-bold uppercase tracking-wider text-gray-400 dark:text-slate-500">
               Select child
             </p>
             {students.map((child) => (
               <button
                 key={child.id}
                 onClick={() => { switchChild(child.id); setOpen(false); }}
-                className={`w-full flex items-center gap-2.5 px-3 py-2 text-left text-sm transition-colors
+                className={`w-full flex items-center gap-2 px-2.5 py-1.5 text-left text-xs transition-colors
                   ${child.id === activeChild?.id
                     ? 'bg-indigo-50 dark:bg-indigo-950/40 text-indigo-700 dark:text-indigo-300 font-semibold'
                     : 'text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-700/50'
                   }`}
               >
-                <span className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold shrink-0
+                <span className={`w-6 h-6 rounded-full flex items-center justify-center text-3xs font-bold shrink-0
                   ${child.id === activeChild?.id
                     ? 'bg-gradient-to-br from-indigo-500 to-purple-500 text-white'
                     : 'bg-gray-100 dark:bg-slate-700 text-gray-500 dark:text-slate-400'
@@ -276,11 +276,11 @@ function ChildSelector({ students, activeChild, switchChild }) {
                 <div className="min-w-0">
                   <p className="truncate font-medium">{child.name}</p>
                   {child.enrollment_number && (
-                    <p className="text-[10px] text-gray-400 dark:text-slate-500 truncate">{child.enrollment_number}</p>
+                    <p className="text-3xs text-gray-400 dark:text-slate-500 truncate">{child.enrollment_number}</p>
                   )}
                 </div>
                 {child.id === activeChild?.id && (
-                  <span className="material-symbols-outlined text-indigo-600 dark:text-indigo-400 text-base ml-auto shrink-0">check_circle</span>
+                  <span className="material-symbols-outlined text-indigo-600 dark:text-indigo-400 text-sm ml-auto shrink-0">check_circle</span>
                 )}
               </button>
             ))}
@@ -408,87 +408,87 @@ export default function ParentTimetable() {
 
   return (
     <DashboardLayout>
-      <div className="max-w-7xl mx-auto space-y-5">
+      <div className="max-w-7xl mx-auto space-y-4">
 
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2.5">
           <div>
-            <h1 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
-              <span className="material-symbols-outlined text-indigo-600 dark:text-indigo-400 text-2xl">calendar_month</span>
+            <h1 className="text-base sm:text-lg font-bold text-gray-900 dark:text-white flex items-center gap-1.5">
+              <span className="material-symbols-outlined text-indigo-600 dark:text-indigo-400 text-lg">calendar_month</span>
               {childName}'s Timetable
             </h1>
             {classInfo && (
-              <p className="text-xs text-gray-500 dark:text-slate-400 mt-0.5 ml-8">{classInfo}</p>
+              <p className="text-2xs text-gray-500 dark:text-slate-400 mt-0.5 ml-6">{classInfo}</p>
             )}
           </div>
         </div>
 
-        <section className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-          <div className="bg-white dark:bg-slate-800 rounded-xl px-4 py-3 shadow-sm border border-gray-100 dark:border-slate-700 flex items-center gap-3">
-            <span className="p-2 bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 rounded-lg shrink-0">
-              <span className="material-symbols-outlined text-xl">calendar_month</span>
+        <section className="grid grid-cols-2 lg:grid-cols-4 gap-2.5">
+          <div className="bg-white dark:bg-slate-800 rounded-lg px-3 py-2.5 shadow-sm border border-gray-100 dark:border-slate-700 flex items-center gap-2.5">
+            <span className="p-1.5 bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 rounded-md shrink-0">
+              <span className="material-symbols-outlined text-base">calendar_month</span>
             </span>
             <div>
-              <p className="text-xs font-medium text-gray-500 dark:text-slate-400">Today's classes</p>
-              <p className="text-xl font-bold text-gray-900 dark:text-white leading-tight">{todayLecs.length}</p>
+              <p className="text-2xs font-medium text-gray-500 dark:text-slate-400">Today's classes</p>
+              <p className="text-base font-bold text-gray-900 dark:text-white leading-tight">{todayLecs.length}</p>
             </div>
           </div>
-          <div className="bg-white dark:bg-slate-800 rounded-xl px-4 py-3 shadow-sm border border-gray-100 dark:border-slate-700 flex items-center gap-3">
-            <span className="p-2 bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400 rounded-lg shrink-0">
-              <span className="material-symbols-outlined text-xl">hourglass_bottom</span>
+          <div className="bg-white dark:bg-slate-800 rounded-lg px-3 py-2.5 shadow-sm border border-gray-100 dark:border-slate-700 flex items-center gap-2.5">
+            <span className="p-1.5 bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400 rounded-md shrink-0">
+              <span className="material-symbols-outlined text-base">hourglass_bottom</span>
             </span>
             <div>
-              <p className="text-xs font-medium text-gray-500 dark:text-slate-400">Remaining</p>
-              <p className="text-xl font-bold text-gray-900 dark:text-white leading-tight">{remainingToday} left</p>
+              <p className="text-2xs font-medium text-gray-500 dark:text-slate-400">Remaining</p>
+              <p className="text-base font-bold text-gray-900 dark:text-white leading-tight">{remainingToday} left</p>
             </div>
           </div>
-          <div className="bg-white dark:bg-slate-800 rounded-xl px-4 py-3 shadow-sm border border-gray-100 dark:border-slate-700 flex items-center gap-3">
-            <span className={`p-2 rounded-lg shrink-0 ${liveClass ? 'bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400' : 'bg-green-50 dark:bg-green-950/40 text-green-600 dark:text-green-400'}`}>
-              <span className="material-symbols-outlined text-xl">{liveClass ? 'wifi' : 'alarm'}</span>
+          <div className="bg-white dark:bg-slate-800 rounded-lg px-3 py-2.5 shadow-sm border border-gray-100 dark:border-slate-700 flex items-center gap-2.5">
+            <span className={`p-1.5 rounded-md shrink-0 ${liveClass ? 'bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400' : 'bg-green-50 dark:bg-green-950/40 text-green-600 dark:text-green-400'}`}>
+              <span className="material-symbols-outlined text-base">{liveClass ? 'wifi' : 'alarm'}</span>
             </span>
             <div className="min-w-0">
-              <p className="text-xs font-medium text-gray-500 dark:text-slate-400">{liveClass ? 'Happening now' : 'Next class'}</p>
-              <p className="text-sm font-bold text-gray-900 dark:text-white leading-tight truncate">
+              <p className="text-2xs font-medium text-gray-500 dark:text-slate-400">{liveClass ? 'Happening now' : 'Next class'}</p>
+              <p className="text-xs font-bold text-gray-900 dark:text-white leading-tight truncate">
                 {liveClass ? liveClass.subject_name : nextClass ? formatTime(nextClass.start_time) : 'All done!'}
               </p>
             </div>
           </div>
-          <div className="bg-white dark:bg-slate-800 rounded-xl px-4 py-3 shadow-sm border border-gray-100 dark:border-slate-700 flex items-center gap-3">
-            <span className="p-2 bg-purple-50 dark:bg-purple-950/40 text-purple-600 dark:text-purple-400 rounded-lg shrink-0">
-              <span className="material-symbols-outlined text-xl">library_books</span>
+          <div className="bg-white dark:bg-slate-800 rounded-lg px-3 py-2.5 shadow-sm border border-gray-100 dark:border-slate-700 flex items-center gap-2.5">
+            <span className="p-1.5 bg-purple-50 dark:bg-purple-950/40 text-purple-600 dark:text-purple-400 rounded-md shrink-0">
+              <span className="material-symbols-outlined text-base">library_books</span>
             </span>
             <div>
-              <p className="text-xs font-medium text-gray-500 dark:text-slate-400">Subjects / week</p>
-              <p className="text-xl font-bold text-gray-900 dark:text-white leading-tight">{weekSubjects}</p>
+              <p className="text-2xs font-medium text-gray-500 dark:text-slate-400">Subjects / week</p>
+              <p className="text-base font-bold text-gray-900 dark:text-white leading-tight">{weekSubjects}</p>
             </div>
           </div>
         </section>
 
         {liveClass && (
-          <div className="flex items-center justify-between flex-wrap gap-3 bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800 rounded-xl px-4 py-3">
+          <div className="flex items-center justify-between flex-wrap gap-2.5 bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800 rounded-lg px-3 py-2.5">
             <div>
-              <p className="text-[10px] font-extrabold uppercase tracking-widest text-blue-600 dark:text-blue-400 mb-0.5">● Live now</p>
+              <p className="text-3xs font-extrabold uppercase tracking-widest text-blue-600 dark:text-blue-400 mb-0.5">● Live now</p>
               <p className="text-sm font-bold text-gray-900 dark:text-white">{liveClass.subject_name}</p>
-              <p className="text-xs text-gray-500 dark:text-slate-400 mt-0.5">{liveClass.faculty_name} · {liveClass.classroom}</p>
+              <p className="text-2xs text-gray-500 dark:text-slate-400 mt-0.5">{liveClass.faculty_name} · {liveClass.classroom}</p>
             </div>
-            <p className="text-2xl font-black text-blue-700 dark:text-blue-300 tracking-tight whitespace-nowrap">
+            <p className="text-lg font-black text-blue-700 dark:text-blue-300 tracking-tight whitespace-nowrap">
               {formatTime(liveClass.start_time)} → {formatTime(liveClass.end_time)}
             </p>
           </div>
         )}
         {!liveClass && activeDay === today && nextClass && (
-          <div className="flex items-center justify-between flex-wrap gap-3 bg-green-50 dark:bg-green-950/30 border border-green-200 dark:border-green-800 rounded-xl px-4 py-3">
+          <div className="flex items-center justify-between flex-wrap gap-2.5 bg-green-50 dark:bg-green-950/30 border border-green-200 dark:border-green-800 rounded-lg px-3 py-2.5">
             <div>
-              <p className="text-[10px] font-extrabold uppercase tracking-widest text-green-700 dark:text-green-400 mb-0.5">↑ Next class</p>
+              <p className="text-3xs font-extrabold uppercase tracking-widest text-green-700 dark:text-green-400 mb-0.5">↑ Next class</p>
               <p className="text-sm font-bold text-gray-900 dark:text-white">{nextClass.subject_name}</p>
-              <p className="text-xs text-gray-500 dark:text-slate-400 mt-0.5">{nextClass.faculty_name} · {nextClass.classroom}</p>
+              <p className="text-2xs text-gray-500 dark:text-slate-400 mt-0.5">{nextClass.faculty_name} · {nextClass.classroom}</p>
             </div>
-            <p className="text-2xl font-black text-green-700 dark:text-green-300 tracking-tight whitespace-nowrap">
+            <p className="text-lg font-black text-green-700 dark:text-green-300 tracking-tight whitespace-nowrap">
               {formatTime(nextClass.start_time)}
             </p>
           </div>
         )}
 
-        <div className="bg-white dark:bg-slate-800 border border-gray-100 dark:border-slate-700 rounded-xl p-1.5 flex gap-1 overflow-x-auto scrollbar-hide"
+        <div className="bg-white dark:bg-slate-800 border border-gray-100 dark:border-slate-700 rounded-lg p-1 flex gap-1 overflow-x-auto scrollbar-hide"
           role="tablist" aria-label="Days of the week">
           {DAYS.map((day, i) => {
             const count = (timetable[day] || []).length;
@@ -499,7 +499,7 @@ export default function ParentTimetable() {
                 tabIndex={active ? 0 : -1}
                 onKeyDown={e => handleTabKey(e, day)}
                 onClick={() => switchDay(day)}
-                className={`flex-1 min-w-[52px] flex flex-col items-center gap-0.5 py-2 px-2 rounded-lg text-xs font-semibold transition-all relative
+                className={`flex-1 min-w-[46px] flex flex-col items-center gap-0.5 py-1.5 px-1.5 rounded-md text-2xs font-semibold transition-all relative
                   ${active
                     ? 'bg-indigo-600 text-white shadow-md'
                     : 'text-gray-500 dark:text-slate-400 hover:bg-gray-50 dark:hover:bg-slate-700/50'
@@ -507,18 +507,18 @@ export default function ParentTimetable() {
               >
                 <span className="hidden sm:inline">{day}</span>
                 <span className="sm:hidden">{SHORT_DAYS[i]}</span>
-                {count > 0 && <span className={`text-[9px] font-extrabold ${active ? 'opacity-80' : 'opacity-60'}`}>{count}</span>}
+                {count > 0 && <span className={`text-3xs font-extrabold ${active ? 'opacity-80' : 'opacity-60'}`}>{count}</span>}
                 {isT && !active && <span className="absolute bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-indigo-600 dark:bg-indigo-400" />}
               </button>
             );
           })}
         </div>
 
-        <div className="flex flex-wrap items-center gap-3">
-          <div className="relative flex-1 min-w-[180px] max-w-xs">
-            <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg pointer-events-none">search</span>
+        <div className="flex flex-wrap items-center gap-2.5">
+          <div className="relative flex-1 min-w-[160px] max-w-xs">
+            <span className="material-symbols-outlined absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400 text-base pointer-events-none">search</span>
             <input type="search"
-              className="w-full h-9 pl-9 pr-3 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500"
+              className="w-full h-8 pl-8 pr-2.5 rounded-md border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500"
               placeholder="Subject, faculty, room…"
               value={search}
               onChange={e => setSearch(e.target.value)}
@@ -526,47 +526,47 @@ export default function ParentTimetable() {
           </div>
           {search && (
             <button onClick={() => setSearch('')}
-              className="h-9 px-3 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-semibold text-gray-500 dark:text-slate-400 hover:bg-gray-50 dark:hover:bg-slate-700/50 transition-colors">
+              className="h-8 px-2.5 rounded-md border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-2xs font-semibold text-gray-500 dark:text-slate-400 hover:bg-gray-50 dark:hover:bg-slate-700/50 transition-colors">
               ✕ Clear
             </button>
           )}
-          <div className="flex gap-1 bg-gray-100 dark:bg-slate-700/50 rounded-lg p-1 ml-auto">
+          <div className="flex gap-1 bg-gray-100 dark:bg-slate-700/50 rounded-md p-1 ml-auto">
             {[['list', '☰ List'], ['chart', '▦ Chart']].map(([mode, label]) => (
               <button key={mode} onClick={() => setViewMode(mode)}
-                className={`h-7 px-3 rounded-md text-xs font-semibold transition-all
+                className={`h-6 px-2.5 rounded-md text-2xs font-semibold transition-all
                   ${viewMode === mode ? 'bg-white dark:bg-slate-800 text-indigo-600 dark:text-indigo-400 shadow-sm' : 'text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:hover:text-slate-300'}`}>
                 {label}
               </button>
             ))}
           </div>
           {viewMode === 'list' && (
-            <span className="text-xs text-gray-500 dark:text-slate-400 font-medium">
+            <span className="text-2xs text-gray-500 dark:text-slate-400 font-medium">
               {lectures.length} lecture{lectures.length !== 1 ? 's' : ''}
             </span>
           )}
         </div>
 
         {viewMode === 'chart' ? (
-          <div className="bg-white dark:bg-slate-800 rounded-xl p-4 sm:p-6 shadow-sm border border-gray-100 dark:border-slate-700">
-            <div className="flex items-center justify-between mb-4">
+          <div className="bg-white dark:bg-slate-800 rounded-lg p-3 sm:p-4 shadow-sm border border-gray-100 dark:border-slate-700">
+            <div className="flex items-center justify-between mb-3">
               <p className="text-sm font-bold text-gray-900 dark:text-white">Weekly Schedule</p>
-              <p className="text-xs text-gray-500 dark:text-slate-400">Mon – Fri · 8 AM – 6 PM</p>
+              <p className="text-2xs text-gray-500 dark:text-slate-400">Mon – Fri · 8 AM – 6 PM</p>
             </div>
             <WeeklyChart timetable={timetable} today={today} />
           </div>
         ) : (
-          <div className={`space-y-2.5 ${animating ? (slideDir === 'right' ? 'animate-[slideInRight_0.25s_ease]' : 'animate-[slideInLeft_0.25s_ease]') : ''}`}>
+          <div className={`space-y-2 ${animating ? (slideDir === 'right' ? 'animate-[slideInRight_0.25s_ease]' : 'animate-[slideInLeft_0.25s_ease]') : ''}`}>
             {lectures.length === 0 ? (
-              <div className="flex flex-col items-center justify-center py-16 text-center">
-                <div className="w-20 h-20 rounded-full bg-gray-100 dark:bg-slate-800 flex items-center justify-center mb-4">
-                  <span className="material-symbols-outlined text-4xl text-gray-400 dark:text-slate-500">
+              <div className="flex flex-col items-center justify-center py-12 text-center">
+                <div className="w-14 h-14 rounded-full bg-gray-100 dark:bg-slate-800 flex items-center justify-center mb-3">
+                  <span className="material-symbols-outlined text-2xl text-gray-400 dark:text-slate-500">
                     {search ? 'search_off' : 'event_available'}
                   </span>
                 </div>
-                <p className="text-base font-bold text-gray-900 dark:text-white mb-1">
+                <p className="text-sm font-bold text-gray-900 dark:text-white mb-1">
                   {search ? 'No matching lectures' : 'No classes scheduled'}
                 </p>
-                <p className="text-sm text-gray-500 dark:text-slate-400 max-w-[260px] leading-relaxed">
+                <p className="text-xs text-gray-500 dark:text-slate-400 max-w-[240px] leading-relaxed">
                   {search ? 'Try a different subject, faculty, or room.' : `${childName} has a free day! 🎉`}
                 </p>
               </div>
@@ -576,46 +576,46 @@ export default function ParentTimetable() {
               const live = isOngoing(lec);
               return (
                 <div key={lec.id}
-                  className={`bg-white dark:bg-slate-800 rounded-xl border shadow-sm flex overflow-hidden transition-all hover:shadow-md hover:-translate-y-px
+                  className={`bg-white dark:bg-slate-800 rounded-lg border shadow-sm flex overflow-hidden transition-all hover:shadow-md hover:-translate-y-px
                     ${live ? 'border-blue-300 dark:border-blue-700 ring-2 ring-blue-100 dark:ring-blue-900 animate-pulse-border' : 'border-gray-100 dark:border-slate-700'}`}>
                   <div className="w-1 shrink-0" style={{ background: c.dot }} />
-                  <div className="flex-1 px-4 py-3 flex flex-wrap items-center gap-3 min-w-0">
+                  <div className="flex-1 px-3 py-2.5 flex flex-wrap items-center gap-2.5 min-w-0">
                     <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 flex-wrap mb-1">
-                        <span className="text-xs font-bold px-2.5 py-0.5 rounded-full border"
+                      <div className="flex items-center gap-1.5 flex-wrap mb-1">
+                        <span className="text-2xs font-bold px-2 py-0.5 rounded-full border"
                           style={{ background: c.bg, color: c.text, borderColor: c.border }}>
                           {lec.subject_name}
                         </span>
                         {live && (
-                          <span className="inline-flex items-center gap-1 text-[9px] font-extrabold uppercase tracking-wider bg-indigo-600 text-white px-2 py-0.5 rounded-full animate-pulse">
+                          <span className="inline-flex items-center gap-1 text-3xs font-extrabold uppercase tracking-wider bg-indigo-600 text-white px-1.5 py-0.5 rounded-full animate-pulse">
                             <span className="w-1.5 h-1.5 bg-white rounded-full" />Live
                           </span>
                         )}
                       </div>
-                      <p className="text-xs text-gray-500 dark:text-slate-400 flex items-center gap-1">
-                        <span className="material-symbols-outlined text-[13px]">person</span>
+                      <p className="text-2xs text-gray-500 dark:text-slate-400 flex items-center gap-1">
+                        <span className="material-symbols-outlined text-xs">person</span>
                         {lec.faculty_name}
                       </p>
-                      <div className="flex items-center gap-2 mt-1.5 flex-wrap">
-                        <span className={`inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full ${tm.bg} ${tm.text}`}>
-                          <span className="material-symbols-outlined text-[11px]">{tm.icon}</span>
+                      <div className="flex items-center gap-1.5 mt-1 flex-wrap">
+                        <span className={`inline-flex items-center gap-1 text-3xs font-bold px-1.5 py-0.5 rounded-full ${tm.bg} ${tm.text}`}>
+                          <span className="material-symbols-outlined text-xs">{tm.icon}</span>
                           {tm.label}
                         </span>
                         {lec.classroom && (
-                          <span className="inline-flex items-center gap-1 text-[10px] font-medium text-gray-500 dark:text-slate-400">
-                            <span className="material-symbols-outlined text-[12px]">location_on</span>
+                          <span className="inline-flex items-center gap-1 text-3xs font-medium text-gray-500 dark:text-slate-400">
+                            <span className="material-symbols-outlined text-xs">location_on</span>
                             {lec.classroom}
                           </span>
                         )}
                       </div>
                     </div>
                     <div className="flex flex-col items-end shrink-0 gap-0.5">
-                      <p className="text-sm font-extrabold text-gray-900 dark:text-white whitespace-nowrap">
+                      <p className="text-xs font-extrabold text-gray-900 dark:text-white whitespace-nowrap">
                         {formatTime(lec.start_time)}
                         <span className="text-slate-300 dark:text-slate-600 mx-1">→</span>
                         {formatTime(lec.end_time)}
                       </p>
-                      <p className="text-[10px] font-semibold text-gray-500 dark:text-slate-400">{dur(lec.start_time, lec.end_time)}</p>
+                      <p className="text-3xs font-semibold text-gray-500 dark:text-slate-400">{dur(lec.start_time, lec.end_time)}</p>
                     </div>
                   </div>
                 </div>

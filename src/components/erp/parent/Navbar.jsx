@@ -61,43 +61,43 @@ const Navbar = ({ onOpenSidebar, onToggleSidebar, isMobile }) => {
       {showIDCard && <StudentIDCardModal onClose={() => setShowIDCard(false)} />}
 
       <header
-        className="w-full sticky top-0 z-30
+        className="font-body w-full sticky top-0 z-30
                    bg-white/80 dark:bg-slate-900/80
                    backdrop-blur-xl
                    border-b border-slate-200 dark:border-slate-700/50
-                   flex justify-between items-center px-3 sm:px-6 h-14 sm:h-16
-                   transition-colors duration-300 gap-2"
+                   flex justify-between items-center px-2.5 sm:px-4 h-12 sm:h-14
+                   transition-colors duration-300 gap-1.5"
       >
         {/* Left: hamburger + page title */}
-        <div className="flex items-center gap-1.5 sm:gap-3 min-w-0 flex-1">
+        <div className="flex items-center gap-1 sm:gap-2 min-w-0 flex-1">
           <button
             type="button"
             onClick={handleHamburgerClick}
-            className="md:hidden w-8 h-8 sm:w-9 sm:h-9 -ml-1 flex items-center justify-center rounded-lg
+            className="md:hidden w-7 h-7 sm:w-8 sm:h-8 -ml-1 flex items-center justify-center rounded-md
                        text-blue-700 dark:text-blue-300
                        hover:bg-blue-50 dark:hover:bg-slate-800 active:scale-90
                        transition-all flex-shrink-0"
             aria-label="Toggle menu"
           >
-            <span className="material-symbols-outlined text-xl sm:text-2xl">menu</span>
+            <span className="material-symbols-outlined text-lg sm:text-xl">menu</span>
           </button>
 
-          <h1 className="font-bold tracking-tight text-blue-800 dark:text-blue-300 font-headline truncate
-                         text-sm sm:text-base md:text-xl min-w-0">
+          <h1 className="font-headline font-bold tracking-tight text-blue-800 dark:text-blue-300 truncate
+                         text-xs sm:text-sm md:text-lg min-w-0">
             <span className="md:hidden">{pageName}</span>
             <span className="hidden md:inline">The Academic Architect</span>
           </h1>
         </div>
 
         {/* Right */}
-        <div className="flex items-center gap-2 sm:gap-3 lg:gap-4 flex-shrink-0">
+        <div className="flex items-center gap-1.5 sm:gap-2 lg:gap-3 flex-shrink-0">
 
           {/* ── ID Card button — child switcher se PEHLE ── */}
           <button
             type="button"
             onClick={() => setShowIDCard(true)}
             title="Download Student ID Card"
-            className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg
+            className="flex items-center gap-1 px-2 py-1 rounded-md
                        border border-slate-200 dark:border-slate-700
                        bg-white dark:bg-slate-800
                        hover:bg-blue-50 dark:hover:bg-slate-700
@@ -105,9 +105,9 @@ const Navbar = ({ onOpenSidebar, onToggleSidebar, isMobile }) => {
                        hover:shadow-sm active:scale-95
                        text-slate-600 dark:text-slate-300
                        hover:text-blue-700 dark:hover:text-blue-300
-                       transition-all text-xs font-bold group"
+                       transition-all text-2xs font-bold group"
           >
-            <span className="material-symbols-outlined text-base group-hover:scale-110 transition-transform">
+            <span className="material-symbols-outlined text-sm group-hover:scale-110 transition-transform">
               badge
             </span>
             <span className="hidden sm:inline">ID Card</span>
@@ -119,22 +119,22 @@ const Navbar = ({ onOpenSidebar, onToggleSidebar, isMobile }) => {
               <button
                 type="button"
                 onClick={() => setChildMenuOpen((v) => !v)}
-                className="flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-1.5 rounded-lg
+                className="flex items-center gap-1 sm:gap-1.5 px-1.5 sm:px-2 py-1 rounded-md
                            border border-slate-200 dark:border-slate-700
                            bg-white dark:bg-slate-800
                            hover:bg-blue-50 dark:hover:bg-slate-700
                            hover:border-blue-200 dark:hover:border-blue-800
                            hover:shadow-sm
-                           transition-all max-w-[140px] sm:max-w-[200px]"
+                           transition-all max-w-[120px] sm:max-w-[180px]"
               >
-                <span className="material-symbols-outlined text-blue-600 dark:text-blue-300 text-base sm:text-lg flex-shrink-0">
+                <span className="material-symbols-outlined text-blue-600 dark:text-blue-300 text-sm sm:text-base flex-shrink-0">
                   face
                 </span>
-                <span className="text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-200 truncate">
+                <span className="text-2xs sm:text-xs font-semibold text-slate-700 dark:text-slate-200 truncate">
                   {activeChild?.name || "Select child"}
                 </span>
                 <span
-                  className={`material-symbols-outlined text-slate-400 text-base transition-transform flex-shrink-0 ${
+                  className={`material-symbols-outlined text-slate-400 text-sm transition-transform flex-shrink-0 ${
                     childMenuOpen ? "rotate-180" : ""
                   }`}
                 >
@@ -143,7 +143,7 @@ const Navbar = ({ onOpenSidebar, onToggleSidebar, isMobile }) => {
               </button>
 
               {childMenuOpen && (
-                <div className="absolute right-0 mt-2 w-56 bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-100 dark:border-slate-700 py-1.5 z-40 animate-[pageFadeIn_0.15s_ease-out]">
+                <div className="absolute right-0 mt-1.5 w-48 bg-white dark:bg-slate-800 rounded-lg shadow-lg border border-slate-100 dark:border-slate-700 py-1 z-40 animate-[pageFadeIn_0.15s_ease-out]">
                   {students.map((s) => (
                     <button
                       key={s.id}
@@ -151,7 +151,7 @@ const Navbar = ({ onOpenSidebar, onToggleSidebar, isMobile }) => {
                         switchChild(s.id);
                         setChildMenuOpen(false);
                       }}
-                      className={`w-full flex items-center justify-between gap-2 px-3 py-2 text-left text-sm
+                      className={`w-full flex items-center justify-between gap-2 px-2.5 py-1.5 text-left text-xs
                                  hover:bg-blue-50 dark:hover:bg-slate-700 transition-colors
                                  ${
                                    s.id === activeChild?.id
@@ -161,7 +161,7 @@ const Navbar = ({ onOpenSidebar, onToggleSidebar, isMobile }) => {
                     >
                       <span className="truncate">{s.name}</span>
                       {s.id === activeChild?.id && (
-                        <span className="material-symbols-outlined text-blue-600 dark:text-blue-300 text-base flex-shrink-0">
+                        <span className="material-symbols-outlined text-blue-600 dark:text-blue-300 text-sm flex-shrink-0">
                           check
                         </span>
                       )}
@@ -173,20 +173,20 @@ const Navbar = ({ onOpenSidebar, onToggleSidebar, isMobile }) => {
           )}
 
           {/* Parent name */}
-          <div className="hidden lg:flex items-center gap-4">
+          <div className="hidden lg:flex items-center gap-3">
             <button
               type="button"
               onClick={() => navigate("/parent/settings")}
-              className="text-sm font-medium text-blue-700 dark:text-blue-400 whitespace-nowrap
+              className="text-xs font-medium text-blue-700 dark:text-blue-400 whitespace-nowrap
                          hover:underline hover:text-blue-900 dark:hover:text-blue-300 transition-colors"
             >
               {displayName}
             </button>
-            <div className="h-8 w-px bg-slate-200 dark:bg-slate-700" />
+            <div className="h-6 w-px bg-slate-200 dark:bg-slate-700" />
           </div>
 
           {/* Search */}
-          <span className="material-symbols-outlined text-blue-700 dark:text-blue-400 cursor-pointer text-lg sm:text-xl hidden sm:block hover:scale-110 transition-transform">
+          <span className="material-symbols-outlined text-blue-700 dark:text-blue-400 cursor-pointer text-base sm:text-lg hidden sm:block hover:scale-110 transition-transform">
             search
           </span>
 
@@ -198,7 +198,7 @@ const Navbar = ({ onOpenSidebar, onToggleSidebar, isMobile }) => {
                        hover:scale-110 active:scale-95
                        transition-all flex-shrink-0"
           >
-            <span className="material-symbols-outlined text-lg sm:text-xl">notifications</span>
+            <span className="material-symbols-outlined text-base sm:text-lg">notifications</span>
           </button>
         </div>
       </header>

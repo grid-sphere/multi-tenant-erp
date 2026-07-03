@@ -79,33 +79,33 @@ const AIInsights = () => {
   const name = activeChild?.name?.split(" ")[0] || "Your child";
 
   return (
-    <div className="ai-insight-card h-full min-h-[280px] sm:min-h-[320px] bg-surface-container-lowest dark:bg-slate-800/60 rounded-xl border-2 border-primary/5 dark:border-slate-700/40 relative flex flex-col overflow-hidden transition-shadow hover:shadow-md">
+    <div className="font-body ai-insight-card h-full min-h-[220px] sm:min-h-[260px] bg-surface-container-lowest dark:bg-slate-800/60 rounded-lg border-2 border-primary/5 dark:border-slate-700/40 relative flex flex-col overflow-hidden transition-shadow hover:shadow-md">
       <style>{`
         .ai-insight-card {
           container-type: inline-size;
           container-name: aicard;
-          padding: 0.75rem;
-          gap: 0.5rem;
+          padding: 0.625rem;
+          gap: 0.375rem;
         }
-        .ai-insight-card .ai-bg-icon { padding: 0.5rem; animation: aiFloat 4s ease-in-out infinite; }
-        .ai-insight-card .ai-bg-icon .material-symbols-outlined { font-size: 2rem; }
-        .ai-insight-card .ai-header { gap: 0.5rem; }
-        .ai-insight-card .ai-header-icon-wrap { padding: 0.375rem; transition: transform 0.2s ease; }
+        .ai-insight-card .ai-bg-icon { padding: 0.375rem; animation: aiFloat 4s ease-in-out infinite; }
+        .ai-insight-card .ai-bg-icon .material-symbols-outlined { font-size: 1.5rem; }
+        .ai-insight-card .ai-header { gap: 0.375rem; }
+        .ai-insight-card .ai-header-icon-wrap { padding: 0.25rem; transition: transform 0.2s ease; }
         .ai-insight-card:hover .ai-header-icon-wrap { transform: scale(1.1) rotate(-4deg); }
-        .ai-insight-card .ai-header-icon-wrap .material-symbols-outlined { font-size: 1rem; }
-        .ai-insight-card .ai-title { font-size: 0.875rem; }
-        .ai-insight-card .ai-quote { padding: 0.5rem; transition: background-color 0.2s ease; }
-        .ai-insight-card .ai-quote p { font-size: 0.75rem; }
-        .ai-insight-card .ai-checklist { font-size: 0.75rem; }
-        .ai-insight-card .ai-checklist li { gap: 0.375rem; }
-        .ai-insight-card .ai-checklist li + li { margin-top: 0.375rem; }
-        .ai-insight-card .ai-checklist .material-symbols-outlined { font-size: 0.875rem; }
-        .ai-insight-card .ai-rec-title { font-size: 0.6875rem; }
-        .ai-insight-card .ai-rec-desc { font-size: 0.625rem; }
-        .ai-insight-card .ai-rec-card { padding: 0.5rem; gap: 0.5rem; }
-        .ai-insight-card .ai-rec-icon { padding: 0.3125rem; }
-        .ai-insight-card .ai-rec-icon .material-symbols-outlined { font-size: 0.875rem; }
-        .ai-insight-card .ai-button { font-size: 0.6875rem; padding: 0.5rem 0.5rem; }
+        .ai-insight-card .ai-header-icon-wrap .material-symbols-outlined { font-size: 0.875rem; }
+        .ai-insight-card .ai-title { font-size: 0.8125rem; }
+        .ai-insight-card .ai-quote { padding: 0.375rem; transition: background-color 0.2s ease; }
+        .ai-insight-card .ai-quote p { font-size: 0.6875rem; }
+        .ai-insight-card .ai-checklist { font-size: 0.6875rem; }
+        .ai-insight-card .ai-checklist li { gap: 0.3125rem; }
+        .ai-insight-card .ai-checklist li + li { margin-top: 0.3125rem; }
+        .ai-insight-card .ai-checklist .material-symbols-outlined { font-size: 0.75rem; }
+        .ai-insight-card .ai-rec-title { font-size: 0.625rem; }
+        .ai-insight-card .ai-rec-desc { font-size: 0.5625rem; }
+        .ai-insight-card .ai-rec-card { padding: 0.375rem; gap: 0.375rem; }
+        .ai-insight-card .ai-rec-icon { padding: 0.25rem; }
+        .ai-insight-card .ai-rec-icon .material-symbols-outlined { font-size: 0.75rem; }
+        .ai-insight-card .ai-button { font-size: 0.625rem; padding: 0.375rem 0.5rem; }
 
         @keyframes aiFloat {
           0%, 100% { transform: translateY(0); }
@@ -116,32 +116,32 @@ const AIInsights = () => {
         .ai-rec-card:hover { transform: translateX(2px); box-shadow: 0 4px 10px rgba(0,0,0,0.06); }
 
         @container aicard (min-width: 250px) {
-          .ai-insight-card { padding: 1rem; gap: 0.75rem; }
-          .ai-insight-card .ai-bg-icon { padding: 0.75rem; }
-          .ai-insight-card .ai-bg-icon .material-symbols-outlined { font-size: 3rem; }
-          .ai-insight-card .ai-header { gap: 0.75rem; }
-          .ai-insight-card .ai-header-icon-wrap { padding: 0.5rem; }
-          .ai-insight-card .ai-header-icon-wrap .material-symbols-outlined { font-size: 1.25rem; }
-          .ai-insight-card .ai-title { font-size: 1rem; }
-          .ai-insight-card .ai-quote { padding: 0.75rem; }
-          .ai-insight-card .ai-quote p { font-size: 0.875rem; }
-          .ai-insight-card .ai-checklist { font-size: 0.875rem; }
-          .ai-insight-card .ai-checklist li { gap: 0.5rem; }
-          .ai-insight-card .ai-checklist li + li { margin-top: 0.5rem; }
-          .ai-insight-card .ai-checklist .material-symbols-outlined { font-size: 1rem; }
-          .ai-insight-card .ai-rec-title { font-size: 0.8125rem; }
-          .ai-insight-card .ai-rec-desc { font-size: 0.75rem; }
-          .ai-insight-card .ai-rec-card { padding: 0.625rem; gap: 0.625rem; }
-          .ai-insight-card .ai-rec-icon { padding: 0.375rem; }
-          .ai-insight-card .ai-rec-icon .material-symbols-outlined { font-size: 1rem; }
-          .ai-insight-card .ai-button { font-size: 0.75rem; padding: 0.625rem 0.5rem; }
+          .ai-insight-card { padding: 0.75rem; gap: 0.5rem; }
+          .ai-insight-card .ai-bg-icon { padding: 0.5rem; }
+          .ai-insight-card .ai-bg-icon .material-symbols-outlined { font-size: 2.25rem; }
+          .ai-insight-card .ai-header { gap: 0.5rem; }
+          .ai-insight-card .ai-header-icon-wrap { padding: 0.375rem; }
+          .ai-insight-card .ai-header-icon-wrap .material-symbols-outlined { font-size: 1rem; }
+          .ai-insight-card .ai-title { font-size: 0.875rem; }
+          .ai-insight-card .ai-quote { padding: 0.5rem; }
+          .ai-insight-card .ai-quote p { font-size: 0.75rem; }
+          .ai-insight-card .ai-checklist { font-size: 0.75rem; }
+          .ai-insight-card .ai-checklist li { gap: 0.375rem; }
+          .ai-insight-card .ai-checklist li + li { margin-top: 0.375rem; }
+          .ai-insight-card .ai-checklist .material-symbols-outlined { font-size: 0.875rem; }
+          .ai-insight-card .ai-rec-title { font-size: 0.6875rem; }
+          .ai-insight-card .ai-rec-desc { font-size: 0.625rem; }
+          .ai-insight-card .ai-rec-card { padding: 0.5rem; gap: 0.5rem; }
+          .ai-insight-card .ai-rec-icon { padding: 0.3125rem; }
+          .ai-insight-card .ai-rec-icon .material-symbols-outlined { font-size: 0.875rem; }
+          .ai-insight-card .ai-button { font-size: 0.6875rem; padding: 0.5rem 0.5rem; }
         }
 
         @container aicard (min-width: 320px) {
-          .ai-insight-card { padding: 1.25rem; gap: 1rem; }
-          .ai-insight-card .ai-bg-icon .material-symbols-outlined { font-size: 3.75rem; }
-          .ai-insight-card .ai-title { font-size: 1.125rem; }
-          .ai-insight-card .ai-button { font-size: 0.875rem; }
+          .ai-insight-card { padding: 0.875rem; gap: 0.625rem; }
+          .ai-insight-card .ai-bg-icon .material-symbols-outlined { font-size: 2.75rem; }
+          .ai-insight-card .ai-title { font-size: 0.9375rem; }
+          .ai-insight-card .ai-button { font-size: 0.75rem; }
         }
       `}</style>
 
@@ -152,28 +152,28 @@ const AIInsights = () => {
       </div>
 
       <div className="ai-header flex items-center justify-between flex-shrink-0 min-w-0">
-        <div className="flex items-center gap-2 min-w-0">
-          <div className="ai-header-icon-wrap bg-tertiary-fixed dark:bg-purple-900/30 rounded-lg flex-shrink-0">
+        <div className="flex items-center gap-1.5 min-w-0">
+          <div className="ai-header-icon-wrap bg-tertiary-fixed dark:bg-purple-900/30 rounded-md flex-shrink-0">
             <span className="material-symbols-outlined text-tertiary dark:text-purple-400" style={{ fontVariationSettings: "'FILL' 1" }}>
               auto_awesome
             </span>
           </div>
-          <h3 className="ai-title font-bold font-headline text-on-surface dark:text-white leading-tight min-w-0 truncate">
+          <h3 className="font-headline ai-title font-bold text-on-surface dark:text-white leading-tight min-w-0 truncate">
             AI Insight Alert
           </h3>
         </div>
         <button
           onClick={() => navigate("/parent/ai-insights")}
-          className="flex-shrink-0 p-1.5 rounded-full text-on-surface-variant dark:text-slate-400
+          className="flex-shrink-0 p-1 rounded-full text-on-surface-variant dark:text-slate-400
                      hover:bg-surface-container-low dark:hover:bg-slate-700 hover:text-primary
                      transition-colors"
           title="Insight settings"
         >
-          <span className="material-symbols-outlined text-base">settings</span>
+          <span className="material-symbols-outlined text-sm">settings</span>
         </button>
       </div>
 
-      <div className="ai-quote bg-tertiary/5 dark:bg-purple-900/20 hover:bg-tertiary/10 dark:hover:bg-purple-900/30 rounded-xl border-l-4 border-tertiary dark:border-purple-500 flex-shrink-0">
+      <div className="ai-quote bg-tertiary/5 dark:bg-purple-900/20 hover:bg-tertiary/10 dark:hover:bg-purple-900/30 rounded-lg border-l-4 border-tertiary dark:border-purple-500 flex-shrink-0">
         <p className="text-on-surface dark:text-slate-200 font-medium leading-relaxed">
           {topSubject ? (
             <>
@@ -190,15 +190,15 @@ const AIInsights = () => {
 
       {recommendations.length > 0 && (
         <div className="flex-shrink-0">
-          <p className="text-[10px] sm:text-xs font-semibold text-on-surface-variant dark:text-slate-400 mb-1.5">
+          <p className="text-3xs sm:text-2xs font-semibold text-on-surface-variant dark:text-slate-400 mb-1">
             Smart Recommendations
           </p>
-          <div className="flex flex-col gap-1.5">
+          <div className="flex flex-col gap-1">
             {recommendations.map((rec, i) => {
               const theme = REC_THEME[rec.type];
               return (
-                <div key={i} className={`ai-rec-card flex items-start rounded-lg ${theme.bg}`}>
-                  <div className={`ai-rec-icon rounded-md flex-shrink-0 ${theme.iconBg}`}>
+                <div key={i} className={`ai-rec-card flex items-start rounded-md ${theme.bg}`}>
+                  <div className={`ai-rec-icon rounded flex-shrink-0 ${theme.iconBg}`}>
                     <span className={`material-symbols-outlined ${theme.text}`}>{theme.icon}</span>
                   </div>
                   <div className="min-w-0">
@@ -236,7 +236,7 @@ const AIInsights = () => {
 
       <button
         onClick={() => navigate("/parent/ai-insights")}
-        className="ai-button w-full rounded-xl font-bold flex-shrink-0 leading-snug
+        className="ai-button w-full rounded-lg font-bold flex-shrink-0 leading-snug
                    bg-surface-container-high dark:bg-slate-700
                    text-primary dark:text-blue-300
                    hover:bg-primary hover:text-white hover:shadow-md

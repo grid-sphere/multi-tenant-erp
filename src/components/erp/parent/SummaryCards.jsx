@@ -25,74 +25,95 @@ const attendancePill = (status) => {
 };
 
 // ---------------------------------------------------------------------------
-// Tiny inline sparkline (no chart library needed)
+// Circular progress ring — used by the Attendance card. Compact, centered.
 // ---------------------------------------------------------------------------
-const Sparkline = ({ data, stroke }) => {
-  if (!Array.isArray(data) || data.length < 2) return null;
-
-  const w = 64;
-  const h = 24;
-  const max = Math.max(...data);
-  const min = Math.min(...data);
-  const range = max - min || 1;
-
-  const points = data
-    .map((d, i) => {
-      const x = (i / (data.length - 1)) * w;
-      const y = h - ((d - min) / range) * h;
-      return `${x.toFixed(1)},${y.toFixed(1)}`;
-    })
-    .join(" ");
-
-  const lastY = h - ((data[data.length - 1] - min) / range) * h;
+const RadialProgress = ({ percentage, size = 52, strokeWidth = 6 }) => {
+  const clamped = Math.max(0, Math.min(100, percentage));
+  const radius = (size - strokeWidth) / 2;
+  const circumference = 2 * Math.PI * radius;
+  const offset = circumference - (clamped / 100) * circumference;
+  const center = size / 2;
+  const color = "#059669"; // emerald-600
+  const trackColor = "#d1fae5"; // emerald-100
 
   return (
-    <svg
-      width={w}
-      height={h}
-      viewBox={`0 0 ${w} ${h}`}
-      className="overflow-visible flex-shrink-0"
-      aria-hidden="true"
-    >
-      <polyline
-        points={points}
-        fill="none"
-        stroke={stroke}
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <circle cx={w} cy={lastY} r="2.5" fill={stroke} />
-    </svg>
-  );
-};
-
-// ---------------------------------------------------------------------------
-// Trend row (arrow + "x% vs last month" + sparkline)
-// Renders nothing if the backend hasn't supplied trend data yet.
-// ---------------------------------------------------------------------------
-const TrendRow = ({ direction, value, series, stroke }) => {
-  if (direction == null || value == null) return null;
-
-  const isUp = direction === "up";
-  const arrowIcon = isUp ? "trending_up" : "trending_down";
-  const colorClass = isUp
-    ? "text-emerald-600 dark:text-emerald-400"
-    : "text-error";
-
-  return (
-    <div className="flex items-center justify-between mt-2 sm:mt-3">
-      <span className={`flex items-center gap-0.5 text-[10px] sm:text-[11px] font-semibold ${colorClass}`}>
-        <span className="material-symbols-outlined text-sm leading-none">{arrowIcon}</span>
-        {value}% vs last month
-      </span>
-      <Sparkline data={series} stroke={stroke} />
+    <div className="relative flex-shrink-0" style={{ width: size, height: size }}>
+      <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
+        <circle cx={center} cy={center} r={radius} fill="none" stroke={trackColor} strokeWidth={strokeWidth} />
+        <circle
+          cx={center}
+          cy={center}
+          r={radius}
+          fill="none"
+          stroke={color}
+          strokeWidth={strokeWidth}
+          strokeLinecap="round"
+          strokeDasharray={circumference}
+          strokeDashoffset={offset}
+          transform={`rotate(-90 ${center} ${center})`}
+          style={{ transition: "stroke-dashoffset 0.6s ease" }}
+        />
+      </svg>
+      <div className="absolute inset-0 flex items-center justify-center">
+        <span className="font-body text-3xs sm:text-2xs font-extrabold" style={{ color }}>
+          {Math.round(clamped)}%
+        </span>
+      </div>
     </div>
   );
 };
 
 // ---------------------------------------------------------------------------
-// Per-card visual theme — soft gradients matching the target design
+// Semi-circle gauge — used by the Avg Grade card.
+// (Trophy badge removed — arc now sits directly above the 0%/100% labels.)
+// ---------------------------------------------------------------------------
+const GaugeArc = ({ percentage, size = 68, strokeWidth = 7 }) => {
+  const clamped = Math.max(0, Math.min(100, percentage));
+  const r = (size - strokeWidth) / 2;
+  const cx = size / 2;
+  const cy = r + strokeWidth / 2;
+  const circumference = Math.PI * r;
+  const offset = circumference - (clamped / 100) * circumference;
+  const pathD = `M ${cx - r} ${cy} A ${r} ${r} 0 0 1 ${cx + r} ${cy}`;
+  const arcHeight = r + strokeWidth;
+
+  const labelGap = 4; // breathing room between arc and labels
+  const labelRowHeight = 12;
+  const labelTop = arcHeight + labelGap;
+  const totalHeight = labelTop + labelRowHeight;
+
+  const color = "#9333ea"; // purple-600
+  const trackColor = "#ede9fe"; // purple-100
+
+  return (
+    <div className="relative flex-shrink-0" style={{ width: size, height: totalHeight }}>
+      <svg width={size} height={arcHeight} viewBox={`0 0 ${size} ${arcHeight}`}>
+        <path d={pathD} fill="none" stroke={trackColor} strokeWidth={strokeWidth} strokeLinecap="round" />
+        <path
+          d={pathD}
+          fill="none"
+          stroke={color}
+          strokeWidth={strokeWidth}
+          strokeLinecap="round"
+          strokeDasharray={circumference}
+          strokeDashoffset={offset}
+          style={{ transition: "stroke-dashoffset 0.6s ease" }}
+        />
+      </svg>
+
+      <div
+        className="font-body absolute inset-x-0 flex justify-between px-0.5 text-3xs text-on-surface-variant dark:text-slate-400 font-medium"
+        style={{ top: labelTop }}
+      >
+        <span>0%</span>
+        <span>100%</span>
+      </div>
+    </div>
+  );
+};
+
+// ---------------------------------------------------------------------------
+// Per-card visual theme
 // ---------------------------------------------------------------------------
 const THEME = {
   attendance: {
@@ -100,7 +121,6 @@ const THEME = {
     iconBg: "bg-blue-100 dark:bg-blue-900/40",
     iconColor: "text-blue-600 dark:text-blue-400",
     ring: "hover:border-blue-300 dark:hover:border-blue-700",
-    sparkStroke: "#2563eb",
     watermarkIcon: null,
   },
   grade: {
@@ -108,7 +128,6 @@ const THEME = {
     iconBg: "bg-purple-100 dark:bg-purple-900/40",
     iconColor: "text-purple-600 dark:text-purple-400",
     ring: "hover:border-purple-300 dark:hover:border-purple-700",
-    sparkStroke: "#9333ea",
     watermarkIcon: null,
   },
   assignments: {
@@ -116,7 +135,6 @@ const THEME = {
     iconBg: "bg-orange-100 dark:bg-orange-900/40",
     iconColor: "text-orange-600 dark:text-orange-400",
     ring: "hover:border-orange-300 dark:hover:border-orange-700",
-    sparkStroke: "#ea580c",
     watermarkIcon: "content_paste",
   },
   exams: {
@@ -124,7 +142,6 @@ const THEME = {
     iconBg: "bg-emerald-100 dark:bg-emerald-900/40",
     iconColor: "text-emerald-600 dark:text-emerald-400",
     ring: "hover:border-emerald-300 dark:hover:border-emerald-700",
-    sparkStroke: "#059669",
     watermarkIcon: "calendar_month",
   },
 };
@@ -132,109 +149,43 @@ const THEME = {
 const SummaryCards = () => {
   const { dashboard, attendanceSummary, loading } = useParent();
 
-  const cards = useMemo(() => {
-    if (!dashboard) return [];
+  const { attendanceCard, gradeCard, assignmentsCard, examsCard } = useMemo(() => {
+    if (!dashboard) return {};
 
     const att = attendanceSummary || dashboard.attendance || {};
     const overallPct = dashboard.overall_percentage ?? 0;
     const upcomingExams = dashboard.upcoming_exams || [];
     const stats = dashboard.stats || {};
 
-    // FIX: no more hardcoded fallback (was defaulting to 2 whenever
-    // total_assignments existed). Now this is 100% backend-driven:
-    // - if the backend sends `pending_assignments`, use it as-is (0 included)
-    // - if it doesn't send that field at all, we fall back to 0, not a fake number
     const totalAssignments = stats.total_assignments ?? 0;
     const pendingCount = stats.pending_assignments ?? 0;
+    const attendancePct = att.attendance_percentage ?? 0;
 
-    return [
-      {
-        key: "attendance",
-        icon: "calendar_check",
-        label: "Attendance",
-        value: `${att.attendance_percentage ?? 0}%`,
-        pill: (
-          <span className={`px-2 py-0.5 rounded-full font-bold text-[9px] sm:text-[10px] uppercase tracking-wider whitespace-nowrap ${attendancePill(att.status)}`}>
-            {att.status || "—"}
-          </span>
-        ),
-        // Fallback demo trend — replace with real att.trend_direction /
-        // trend_percentage / trend_series from your API when available.
-        trend: {
-          direction: att.trend_direction ?? "down",
-          value: att.trend_percentage ?? 4.3,
-          series: att.trend_series ?? [74, 71, 73, 70, 67, att.attendance_percentage ?? 69.23],
-        },
+    return {
+      attendanceCard: {
+        percentage: attendancePct,
+        status: att.status,
       },
-      {
-        key: "grade",
-        icon: "star_rate",
-        label: "Avg Grade",
-        value: getGradeLetter(overallPct),
-        pill: (
-          <span className="px-2 py-0.5 rounded-full bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 font-bold text-[9px] sm:text-[10px] uppercase tracking-wider whitespace-nowrap">
-            {overallPct}%
-          </span>
-        ),
-        // Fallback demo trend — replace with real dashboard.grade_trend_direction /
-        // grade_trend_percentage / grade_trend_series from your API when available.
-        trend: {
-          direction: dashboard.grade_trend_direction ?? "up",
-          value: dashboard.grade_trend_percentage ?? 8.6,
-          series: dashboard.grade_trend_series ?? [58, 64, 61, 68, 72, overallPct],
-        },
+      gradeCard: {
+        percentage: overallPct,
+        letter: getGradeLetter(overallPct),
       },
-      {
-        key: "assignments",
-        icon: "pending_actions",
-        label: "Assignments",
-        value: totalAssignments,
-        pill: null,
-        // FIX: purely derived from backend `pendingCount` now.
-        // pendingCount === 0 -> "All caught up"
-        // pendingCount > 0   -> "{n} pending"
-        secondaryText: pendingCount > 0 ? (
-          <span className="text-orange-600 dark:text-orange-400 font-semibold text-[11px] sm:text-xs flex items-center gap-1">
-            <span className="material-symbols-outlined text-sm leading-none">schedule</span>
-            {pendingCount} pending
-          </span>
-        ) : (
-          <span className="text-on-surface-variant dark:text-slate-400 font-medium text-[11px] sm:text-xs">
-            All caught up
-          </span>
-        ),
-      },
-      {
-        key: "exams",
-        icon: "event_note",
-        label: "Upcoming Exams",
-        value: upcomingExams.length,
-        pill: null,
-        secondaryText:
-          upcomingExams.length > 0 ? (
-            <span className="text-on-surface-variant dark:text-slate-400 font-medium text-[11px] sm:text-xs truncate block">
-              Next: {upcomingExams[0].name || upcomingExams[0].exam_name || ""}
-            </span>
-          ) : (
-            <span className="text-emerald-600 dark:text-emerald-400 font-medium text-[11px] sm:text-xs">
-              No exams scheduled
-            </span>
-          ),
-      },
-    ];
+      assignmentsCard: { totalAssignments, pendingCount },
+      examsCard: { upcomingExams },
+    };
   }, [dashboard, attendanceSummary]);
 
   if (loading || !dashboard) {
     return (
-      <section className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
+      <section className="grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-3 lg:gap-4">
         {[1, 2, 3, 4].map((i) => (
-          <div key={i} className="bg-surface-container-lowest p-3 sm:p-4 lg:p-6 rounded-xl border border-outline-variant/10 animate-pulse">
-            <div className="flex justify-between items-start mb-3">
-              <div className="w-8 h-8 sm:w-9 sm:h-9 bg-surface-container-low rounded-lg" />
-              <div className="w-10 sm:w-12 h-3 bg-surface-container-low rounded" />
+          <div key={i} className="bg-surface-container-lowest p-2.5 sm:p-3 lg:p-4 rounded-lg border border-outline-variant/10 animate-pulse">
+            <div className="flex justify-between items-start mb-2">
+              <div className="w-6 h-6 sm:w-7 sm:h-7 bg-surface-container-low rounded-md" />
+              <div className="w-8 sm:w-10 h-2.5 bg-surface-container-low rounded" />
             </div>
-            <div className="w-16 sm:w-20 h-3 bg-surface-container-low rounded mb-2" />
-            <div className="w-12 sm:w-14 h-6 sm:h-7 bg-surface-container-low rounded" />
+            <div className="w-14 sm:w-16 h-2.5 bg-surface-container-low rounded mb-1.5" />
+            <div className="w-10 sm:w-12 h-5 sm:h-6 bg-surface-container-low rounded" />
           </div>
         ))}
       </section>
@@ -242,62 +193,151 @@ const SummaryCards = () => {
   }
 
   return (
-    <section className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
-      {cards.map(({ key, icon, label, value, pill, secondaryText, trend }) => {
-        const theme = THEME[key];
-        return (
-          <div
-            key={key}
-            className={`relative bg-gradient-to-br ${theme.gradient}
-                        p-3 sm:p-4 lg:p-6 rounded-xl group cursor-default
-                        transition-all duration-200 hover:-translate-y-1 hover:shadow-lg
-                        border border-outline-variant/10 dark:border-slate-700/40
-                        ${theme.ring}
-                        min-w-0 overflow-hidden`}
-          >
-            {/* Faint watermark icon (assignments / exams) */}
-            {theme.watermarkIcon && (
-              <span
-                className={`material-symbols-outlined absolute -bottom-3 -right-3 text-7xl sm:text-8xl opacity-[0.07] dark:opacity-[0.08] pointer-events-none select-none ${theme.iconColor}`}
-                aria-hidden="true"
-              >
-                {theme.watermarkIcon}
-              </span>
-            )}
-
-            <div className="relative flex justify-between items-start mb-2.5 sm:mb-3 lg:mb-4 gap-1">
-              <div className={`p-1.5 sm:p-2 rounded-lg transition-transform duration-200 group-hover:scale-110 group-hover:rotate-3 flex-shrink-0 ${theme.iconBg}`}>
-                <span className={`material-symbols-outlined ${theme.iconColor} text-base sm:text-lg lg:text-xl`}>
-                  {icon}
-                </span>
-              </div>
-              <div className="min-w-0 text-right">{pill}</div>
-            </div>
-
-            <p className="relative text-on-surface-variant dark:text-slate-400 text-[11px] sm:text-xs lg:text-sm font-medium leading-tight truncate">
-              {label}
-            </p>
-            <h3 className="relative text-xl sm:text-2xl lg:text-3xl font-extrabold text-on-surface dark:text-white mt-1 leading-none truncate">
-              {value}
-            </h3>
-
-            {/* Attendance / Grade: trend row with sparkline */}
-            {trend && (
-              <div className="relative">
-                <TrendRow
-                  direction={trend.direction}
-                  value={trend.value}
-                  series={trend.series}
-                  stroke={theme.sparkStroke}
-                />
-              </div>
-            )}
-
-            {/* Assignments / Exams: secondary status line */}
-            {secondaryText && <div className="relative mt-2 sm:mt-3">{secondaryText}</div>}
+    <section className="font-body grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-3 lg:gap-4">
+      {/* ---------------------------- ATTENDANCE ---------------------------- */}
+      <div
+        className={`relative bg-gradient-to-br ${THEME.attendance.gradient} p-2.5 sm:p-3 lg:p-4 rounded-lg
+                    border border-outline-variant/10 dark:border-slate-700/40 ${THEME.attendance.ring}
+                    transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md
+                    min-w-0 overflow-hidden`}
+      >
+        <div className="flex justify-between items-start mb-1.5 sm:mb-2 gap-1">
+          <div className={`p-1 sm:p-1.5 rounded-md flex-shrink-0 ${THEME.attendance.iconBg}`}>
+            <span className={`material-symbols-outlined ${THEME.attendance.iconColor} text-sm sm:text-base`}>
+              calendar_check
+            </span>
           </div>
-        );
-      })}
+          <span className={`px-1.5 py-0.5 rounded-full font-bold text-3xs sm:text-2xs uppercase tracking-wide whitespace-nowrap ${attendancePill(attendanceCard.status)}`}>
+            {attendanceCard.status || "—"}
+          </span>
+        </div>
+
+        <p className="text-on-surface-variant dark:text-slate-400 text-3xs sm:text-2xs font-medium leading-tight truncate">
+          Attendance
+        </p>
+        <h3 className="font-headline text-base sm:text-lg lg:text-xl font-extrabold text-on-surface dark:text-white mt-0.5 leading-none truncate">
+          {attendanceCard.percentage}%
+        </h3>
+
+        <div className="flex justify-center mt-1.5 sm:mt-2">
+          <RadialProgress percentage={attendanceCard.percentage} />
+        </div>
+      </div>
+
+      {/* ------------------------------ AVG GRADE ---------------------------- */}
+      <div
+        className={`relative bg-gradient-to-br ${THEME.grade.gradient} p-2.5 sm:p-3 lg:p-4 rounded-lg
+                    border border-outline-variant/10 dark:border-slate-700/40 ${THEME.grade.ring}
+                    transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md
+                    min-w-0 overflow-hidden`}
+      >
+        <div className="flex justify-between items-start mb-1.5 sm:mb-2 gap-1">
+          <div className={`p-1 sm:p-1.5 rounded-md flex-shrink-0 ${THEME.grade.iconBg}`}>
+            <span className={`material-symbols-outlined ${THEME.grade.iconColor} text-sm sm:text-base`}>
+              star_rate
+            </span>
+          </div>
+          <span className="px-1.5 py-0.5 rounded-full bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 font-bold text-3xs sm:text-2xs uppercase tracking-wide whitespace-nowrap">
+            {gradeCard.percentage}%
+          </span>
+        </div>
+
+        <p className="text-on-surface-variant dark:text-slate-400 text-3xs sm:text-2xs font-medium leading-tight truncate">
+          Avg Grade
+        </p>
+        <h3 className="font-headline text-base sm:text-lg lg:text-xl font-extrabold text-on-surface dark:text-white mt-0.5 leading-none truncate">
+          {gradeCard.letter}
+        </h3>
+
+        <div className="flex justify-center mt-1.5 sm:mt-2">
+          <GaugeArc percentage={gradeCard.percentage} />
+        </div>
+      </div>
+
+      {/* ---------------------------- ASSIGNMENTS ---------------------------- */}
+      <div
+        className={`relative bg-gradient-to-br ${THEME.assignments.gradient} p-2.5 sm:p-3 lg:p-4 rounded-lg group cursor-default
+                    transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md
+                    border border-outline-variant/10 dark:border-slate-700/40 ${THEME.assignments.ring}
+                    min-w-0 overflow-hidden`}
+      >
+        <span
+          className={`material-symbols-outlined absolute -bottom-2 -right-2 text-5xl sm:text-6xl opacity-[0.07] dark:opacity-[0.08] pointer-events-none select-none ${THEME.assignments.iconColor}`}
+          aria-hidden="true"
+        >
+          {THEME.assignments.watermarkIcon}
+        </span>
+
+        <div className="relative flex justify-between items-start mb-1.5 sm:mb-2 gap-1">
+          <div className={`p-1 sm:p-1.5 rounded-md transition-transform duration-200 group-hover:scale-110 group-hover:rotate-3 flex-shrink-0 ${THEME.assignments.iconBg}`}>
+            <span className={`material-symbols-outlined ${THEME.assignments.iconColor} text-sm sm:text-base`}>
+              pending_actions
+            </span>
+          </div>
+        </div>
+
+        <p className="relative text-on-surface-variant dark:text-slate-400 text-3xs sm:text-2xs font-medium leading-tight truncate">
+          Assignments
+        </p>
+        <h3 className="font-headline relative text-base sm:text-lg lg:text-xl font-extrabold text-on-surface dark:text-white mt-0.5 leading-none truncate">
+          {assignmentsCard.totalAssignments}
+        </h3>
+
+        <div className="relative mt-1.5 sm:mt-2">
+          {assignmentsCard.pendingCount > 0 ? (
+            <span className="text-orange-600 dark:text-orange-400 font-semibold text-3xs sm:text-2xs flex items-center gap-1">
+              <span className="material-symbols-outlined text-xs leading-none">schedule</span>
+              {assignmentsCard.pendingCount} pending
+            </span>
+          ) : (
+            <span className="text-on-surface-variant dark:text-slate-400 font-medium text-3xs sm:text-2xs">
+              All caught up
+            </span>
+          )}
+        </div>
+      </div>
+
+      {/* ------------------------------- EXAMS ------------------------------- */}
+      <div
+        className={`relative bg-gradient-to-br ${THEME.exams.gradient} p-2.5 sm:p-3 lg:p-4 rounded-lg group cursor-default
+                    transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md
+                    border border-outline-variant/10 dark:border-slate-700/40 ${THEME.exams.ring}
+                    min-w-0 overflow-hidden`}
+      >
+        <span
+          className={`material-symbols-outlined absolute -bottom-2 -right-2 text-5xl sm:text-6xl opacity-[0.07] dark:opacity-[0.08] pointer-events-none select-none ${THEME.exams.iconColor}`}
+          aria-hidden="true"
+        >
+          {THEME.exams.watermarkIcon}
+        </span>
+
+        <div className="relative flex justify-between items-start mb-1.5 sm:mb-2 gap-1">
+          <div className={`p-1 sm:p-1.5 rounded-md transition-transform duration-200 group-hover:scale-110 group-hover:rotate-3 flex-shrink-0 ${THEME.exams.iconBg}`}>
+            <span className={`material-symbols-outlined ${THEME.exams.iconColor} text-sm sm:text-base`}>
+              event_note
+            </span>
+          </div>
+        </div>
+
+        <p className="relative text-on-surface-variant dark:text-slate-400 text-3xs sm:text-2xs font-medium leading-tight truncate">
+          Upcoming Exams
+        </p>
+        <h3 className="font-headline relative text-base sm:text-lg lg:text-xl font-extrabold text-on-surface dark:text-white mt-0.5 leading-none truncate">
+          {examsCard.upcomingExams.length}
+        </h3>
+
+        <div className="relative mt-1.5 sm:mt-2">
+          {examsCard.upcomingExams.length > 0 ? (
+            <span className="text-on-surface-variant dark:text-slate-400 font-medium text-3xs sm:text-2xs truncate block">
+              Next: {examsCard.upcomingExams[0].name || examsCard.upcomingExams[0].exam_name || ""}
+            </span>
+          ) : (
+            <span className="text-emerald-600 dark:text-emerald-400 font-medium text-3xs sm:text-2xs">
+              No exams scheduled
+            </span>
+          )}
+        </div>
+      </div>
     </section>
   );
 };

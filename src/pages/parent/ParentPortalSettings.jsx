@@ -6,7 +6,7 @@ import api from "../../services/axiosClient";
 const Toggle = ({ enabled, onToggle }) => (
   <button
     onClick={onToggle}
-    className={`w-9 h-5 rounded-full relative transition-colors duration-200 flex-shrink-0
+    className={`w-7 h-5 rounded-full relative transition-colors duration-200 flex-shrink-0
       ${enabled ? "bg-blue-600" : "bg-slate-300 dark:bg-slate-600"}`}
   >
     <div className={`absolute top-1 w-3 h-3 bg-white rounded-full transition-all duration-200 ${enabled ? "right-1" : "left-1"}`} />
@@ -255,32 +255,32 @@ const handleSave = async () => {
 
   return (
     <DashboardLayout>
-      <div className="p-3 sm:p-5 max-w-7xl mx-auto flex flex-col gap-3 sm:gap-4">
+      <div className="p-3 sm:p-5 max-w-7xl mx-auto flex flex-col gap-3 sm:gap-2">
 
         <div>
-          <h1 className="text-lg sm:text-xl font-bold text-slate-800 dark:text-white">Settings</h1>
+          <h1 className="text-xs sm:text-sm font-bold text-slate-800 dark:text-white">Settings</h1>
           <p className="text-xs text-slate-500 dark:text-slate-300 mt-0.5">
             Manage your account preferences and configuration.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 xl:grid-cols-12 gap-3 sm:gap-4">
+        <div className="grid grid-cols-1 xl:grid-cols-12 gap-3 sm:gap-2">
 
           {/* ── Account Profile ── */}
           <section className="xl:col-span-7 bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-4 flex flex-col transition-colors duration-300">
 
             {/* <div className="flex items-center gap-2 mb-4">
-              <span className="p-1.5 bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-300 rounded-lg material-symbols-outlined text-base">person</span>
+              <span className="p-1.5 bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-300 rounded-lg material-symbols-outlined text-xs">person</span>
               <h2 className="text-sm font-bold text-slate-800 dark:text-white">Account Profile</h2>
             </div> */}
 
             {/* Profile picture */}
-            <div className="flex items-center gap-4 mb-4">
+            <div className="flex items-center gap-2 mb-4">
               <div className="relative flex-shrink-0">
                 <img
                   src={avatarSrc}
                   alt="Profile"
-                  className="w-16 h-16 rounded-xl object-cover ring-2 ring-slate-200 dark:ring-slate-600"
+                  className="w-11 h-11 rounded-xl object-cover ring-2 ring-slate-200 dark:ring-slate-600"
                 />
                 <button
                   type="button"
@@ -482,12 +482,12 @@ const handleSave = async () => {
           </section>
 
           {/* ── Right column ── */}
-          <div className="xl:col-span-5 flex flex-col gap-3 sm:gap-4">
+          <div className="xl:col-span-5 flex flex-col gap-3 sm:gap-2">
 
             {/* Language & Appearance */}
             <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-4 flex flex-col gap-3 transition-colors duration-300">
               <div className="flex items-center gap-2">
-                <span className="p-1.5 bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-300 rounded-lg material-symbols-outlined text-base">language</span>
+                <span className="p-1.5 bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-300 rounded-lg material-symbols-outlined text-xs">language</span>
                 <h2 className="text-sm font-bold text-slate-800 dark:text-white">Language &amp; Appearance</h2>
               </div>
               <div className="grid grid-cols-2 gap-2 sm:gap-3">
@@ -537,7 +537,7 @@ const handleSave = async () => {
             {/* AI Configuration */}
             <div className="bg-amber-50 dark:bg-amber-950/20 rounded-xl p-3 sm:p-4 border-l-4 border-amber-500 flex flex-col sm:flex-row sm:items-center justify-between gap-3 transition-colors duration-300">
               <div className="flex items-start gap-2 min-w-0">
-                <span className="material-symbols-outlined text-amber-600 dark:text-amber-300 text-base mt-0.5 flex-shrink-0">auto_awesome</span>
+                <span className="material-symbols-outlined text-amber-600 dark:text-amber-300 text-xs mt-0.5 flex-shrink-0">auto_awesome</span>
                 <div className="min-w-0">
                   <h3 className="text-xs font-bold text-slate-900 dark:text-white">AI Configuration</h3>
                   <p className="text-[10px] text-slate-500 dark:text-slate-300 mt-0.5 leading-relaxed">
@@ -553,7 +553,7 @@ const handleSave = async () => {
             {/* Account Security */}
             <div className="bg-red-50 dark:bg-red-950/20 rounded-xl p-3 sm:p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 transition-colors duration-300">
               <div className="flex items-start gap-2 min-w-0">
-                <span className="material-symbols-outlined text-red-500 dark:text-red-300 text-base mt-0.5 flex-shrink-0">warning</span>
+                <span className="material-symbols-outlined text-red-500 dark:text-red-300 text-xs mt-0.5 flex-shrink-0">warning</span>
                 <div className="min-w-0">
                   <h3 className="text-xs font-bold text-red-600 dark:text-red-300">Account Security</h3>
                   <p className="text-[10px] text-slate-500 dark:text-slate-300 mt-0.5 leading-relaxed">
@@ -570,7 +570,7 @@ const handleSave = async () => {
           {/* ── Notifications ── */}
           <section className="xl:col-span-12 bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-4 transition-colors duration-300">
             <div className="flex items-center gap-2 mb-3">
-              <span className="p-1.5 bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-300 rounded-lg material-symbols-outlined text-base">notifications_active</span>
+              <span className="p-1.5 bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-300 rounded-lg material-symbols-outlined text-xs">notifications_active</span>
               <h2 className="text-sm font-bold text-slate-800 dark:text-white">Notification Preferences</h2>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-2 sm:gap-3">
@@ -584,7 +584,7 @@ const handleSave = async () => {
                   className="flex items-center justify-between gap-3 p-3 rounded-xl bg-slate-50 dark:bg-slate-700/50 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
                 >
                   <div className="flex items-center gap-2 sm:gap-3 min-w-0">
-                    <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-white dark:bg-slate-600 flex items-center justify-center shadow-sm flex-shrink-0">
+                    <div className="w-7 h-7 sm:w-6 sm:h-6 rounded-lg bg-white dark:bg-slate-600 flex items-center justify-center shadow-sm flex-shrink-0">
                       <span className={`material-symbols-outlined text-sm ${notifs[key] ? "text-blue-600 dark:text-blue-300" : "text-slate-400 dark:text-slate-300"}`}>
                         {icon}
                       </span>
