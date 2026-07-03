@@ -41,7 +41,7 @@ export const getParentFullDashboard = async () => {
   return response.data;
 };
 
-// Single child detail (extra profile fields: DOB, blood group, picture)
+// Single child detail (extra profile fields: DOB, blood group)
 // + the same dashboard bundle, scoped to just this one child.
 export const getChildDetail = async (childId) => {
   const response = await api.get(`/profiles/parents/me/children/${childId}/`);
@@ -136,6 +136,71 @@ export const getParentCirculars = async () => {
     return response.data.results || response.data || [];
   } catch (error) {
     if (isNotFoundError(error) || isForbiddenError(error)) return [];
+    throw error;
+  }
+};
+
+/* ---------- Location Tracking ---------- */
+/* Overview route: has_device / last_location may be false/null per child —
+   device may not be linked yet, always check has_device before rendering a pin.
+   Single-child route: current_location coords come back as numbers (float),
+   but recent_history coords come back as strings — parseFloat() before use.
+   Day-exact filtering isn't supported server-side yet, only rolling `days` window. */
+
+export const getChildrenLocations = async () => {
+  try {
+    const response = await api.get(`/profiles/parents/me/children/locations/`);
+    return response.data.children || [];
+  } catch (error) {
+    if (isNotFoundError(error)) return [];
+    throw error;
+  }
+};
+
+export const getChildLocation = async (childId, filters = {}) => {
+  const { days, limit } = filters;
+  const params = new URLSearchParams();
+  if (days) params.append("days", days);
+  if (limit) params.append("limit", limit);
+  const qs = params.toString();
+  try {
+    const response = await api.get(
+      `/profiles/parents/me/children/${childId}/location/${qs ? `?${qs}` : ""}`
+    );
+    return response.data;
+  } catch (error) {
+    if (isForbiddenError(error)) {
+      return { unauthorized: true, current_location: null, device_info: null, recent_history: [] };
+    }
+    if (isNotFoundError(error)) {
+      return { current_location: null, device_info: null, recent_history: [] };
+    }
+    throw error;
+  }
+};
+
+/* ---------- Profile Pictures ---------- */
+/* Returns a pre-signed R2 URL, valid for ~1 hour (expires_in: 3600 seconds).
+   has_picture=false means no picture uploaded yet — url will be null.
+   Since the URL is already signed, no separate view-url proxy call is needed. */
+
+export const getChildrenPictures = async () => {
+  try {
+    const response = await api.get(`/profiles/parents/me/children/pictures/`);
+    return response.data.children || [];
+  } catch (error) {
+    if (isNotFoundError(error)) return [];
+    throw error;
+  }
+};
+
+export const getChildPicture = async (childId) => {
+  try {
+    const response = await api.get(`/profiles/parents/me/children/${childId}/picture/`);
+    return response.data;
+  } catch (error) {
+    if (isForbiddenError(error)) return { has_picture: false, unauthorized: true, url: null };
+    if (isNotFoundError(error)) return { has_picture: false, url: null };
     throw error;
   }
 };
