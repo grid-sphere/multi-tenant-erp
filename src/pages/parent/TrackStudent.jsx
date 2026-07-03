@@ -10,16 +10,29 @@ import { getChildrenLocations, getChildLocation, getChildPicture } from "../../s
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconRetinaUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon-2x.png",
-  iconUrl:       "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon.png",
-  shadowUrl:     "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png",
+  iconUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon.png",
+  shadowUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png",
 });
 
 /* ─── Avatar marker icon — circular profile photo with pulsing ring ─────────
-   Falls back to initials on a colored circle if no picture is available. */
+   Falls back to initials on a colored circle if no picture is available.
+
+   ANCHOR FIX: the pin's point is a 38px square rotated 45deg with one sharp
+   corner (border-radius: 50% 50% 0% 50%) — that's what makes it come to a
+   point. The tip of that point sits below the square's own center by its
+   half-diagonal: 19 * sqrt(2) ≈ 26.87px, rounded up to 27px here.
+   Previously the container was only 46px tall with iconAnchor at its exact
+   center [23,23] — the tip was never actually at the anchor, so the pin was
+   pointing about 27px away from the real coordinate. Now the container is
+   made tall enough to contain the full tip (54px), the ping circle and pin
+   are pinned to fixed pixel positions (not percentages) so they don't shift
+   when the container grows, and iconAnchor/popupAnchor are recalculated to
+   match the tip's true pixel position. The photo/pin visuals themselves are
+   unchanged. */
 const makeAvatarIcon = (avatarSrc, initials = "?", color = "#3b82f6") => {
   const inner = avatarSrc
     ? `<img src="${avatarSrc}" crossorigin="anonymous" style="
-         width:100%;height:100%;object-fit:cover;border-radius:50%;display:block;
+         width:100%;height:100%;object-fit:cover;border-radius:50%;display:block; transform: rotate(-45deg);
        " />`
     : `<div style="
          width:100%;height:100%;border-radius:50%;
@@ -28,34 +41,45 @@ const makeAvatarIcon = (avatarSrc, initials = "?", color = "#3b82f6") => {
          color:#fff;font-weight:700;font-size:15px;font-family:system-ui,sans-serif;
        ">${initials}</div>`;
 
+  const PIN_CENTER = 23;        // center of the ping circle / pin square (unchanged from before)
+  const TIP_OFFSET = 27;        // half-diagonal of the 38px pin square, rounded up
+  const TIP_Y = PIN_CENTER + TIP_OFFSET; // 50 — exact pixel row where the pin's point sits
+
   return L.divIcon({
     className: "",
     html: `
-      <div style="position:relative;width:46px;height:46px;">
+      <div style="position:relative;width:46px;height:${TIP_Y}px;">
         <div style="
-          position:absolute;inset:0;
+          position:absolute;
+          top:0;left:0;
+          width:46px;height:46px;
           background:${color}40;
           border-radius:50%;
           animation:ping 1.8s cubic-bezier(0,0,0.2,1) infinite;
         "></div>
-        <div style="
-          position:absolute;top:50%;left:50%;
-          transform:translate(-50%,-50%);
-          width:38px;height:38px;
-          border-radius:50%;
-          border:3px solid #fff;
-          box-shadow:0 2px 10px ${color}80;
-          overflow:hidden;
-          background:#e2e8f0;
-        ">
+        <div
+          style="
+            position:absolute;
+            top:${PIN_CENTER}px;
+            left:${PIN_CENTER}px;
+            transform:translate(-50%, -50%) rotate(45deg);
+            width:38px;
+            height:38px;
+            border-radius: 50% 50% 0% 50%;
+            border:1px solid blue ;
+            box-shadow:0 2px 10px ${color}80;
+            overflow:hidden;
+            background:#e2e8f0;
+          "
+        >
           ${inner}
         </div>
       </div>
       <style>@keyframes ping{75%,100%{transform:scale(1.9);opacity:0}}</style>
     `,
-    iconSize: [46, 46],
-    iconAnchor: [23, 23],
-    popupAnchor: [0, -26],
+    iconSize: [46, TIP_Y],
+    iconAnchor: [23, TIP_Y],   // pin's point now lands exactly on the coordinate
+    popupAnchor: [0, -TIP_Y],
   });
 };
 
