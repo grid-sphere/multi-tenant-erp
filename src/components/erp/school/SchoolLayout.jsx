@@ -1,8 +1,16 @@
 import React, { useState, useEffect } from "react";
 import SchoolSidebar from "./SchoolSidebar";
 import { useNavigate, useLocation } from "react-router-dom";
-import { useSchoolAdmin } from "../../../context/SchoolAdminProvider";
 import { ThemeProvider, useTheme } from "../../../context/ThemeContext";
+import { useNotifications } from "../../../hooks/useNotifications";
+import {
+  getNotificationTitle,
+  getNotificationSubtitle,
+  getNotificationDotColor,
+  getNotificationRoute,
+  getNotificationsPageRoute,
+} from "../../../utils/notificationHelpers";
+
 
 function SchoolLayoutInner({ children, title = "Dashboard" }) {
   const navigate = useNavigate();
@@ -26,35 +34,44 @@ function SchoolLayoutInner({ children, title = "Dashboard" }) {
     localStorage.setItem('schoolSidebarOpen', JSON.stringify(isSidebarOpen));
   }, [isSidebarOpen]);
 
-  const {
-    notificationPreviewList: contextPreview,
-    unreadCount: contextUnread,
-    markNotificationRead,
-    refreshNotifications,
-  } = useSchoolAdmin();
-
-  const placeholderNotifications = [
-    { id: "h-1", title: "System Core Snapshot", message: "Automated verification complete.", is_read: false, category: "system" },
-    { id: "h-2", title: "Security Handshake Blocked", message: "Malicious origin payload contained.", is_read: false, category: "security" },
-    { id: "h-3", title: "Academic Term Window Close", message: "Roster cycle configurations expiring soon.", is_read: false, category: "academic" },
-  ];
-
-  const notificationPreviewList = contextPreview.length > 0 ? contextPreview : placeholderNotifications;
-  const unreadCount = contextPreview.length > 0 ? contextUnread : placeholderNotifications.length;
+  // ── Notifications — same shared hook/service/utils as Student, Teacher,
+  // and Parent portals (see hooks/useNotifications.js + services/notifications.js
+  // + utils/notificationHelpers.js). No more SchoolAdminProvider context
+  // dependency, and no more placeholder fallback data -- an empty inbox
+  // now just renders an empty state, same as everywhere else.
+  const { notifications, unreadCount, refresh, markRead, markAllRead } = useNotifications({
+    pollIntervalMs: 30_000,
+  });
+  const notificationPreviewList = notifications.slice(0, 5);
 
   const [isNotificationDropdownOpen, setIsNotificationDropdownOpen] = useState(false);
   const [searchFocused, setSearchFocused] = useState(false);
   const [searchString, setSearchString] = useState("");
 
+  // Some other part of the app (e.g. after an action elsewhere) can still
+  // dispatch this event to force an immediate refresh of the bell.
   useEffect(() => {
-    const handler = () => refreshNotifications();
+    const handler = () => refresh();
     window.addEventListener("sync-unread-count", handler);
     return () => window.removeEventListener("sync-unread-count", handler);
-  }, [refreshNotifications]);
+  }, [refresh]);
 
-  const handleQuickResolve = (id, e) => {
+  const handleItemClick = async (n) => {
+    setIsNotificationDropdownOpen(false);
+    if (!n.is_read) {
+      try { await markRead(n.id); } catch (e) { /* non-fatal, keep navigating */ }
+    }
+    navigate(getNotificationRoute(n, 'admin'));
+  };
+
+  const handleQuickResolve = async (id, e) => {
     e.stopPropagation();
-    markNotificationRead(id);
+    try { await markRead(id); } catch (e) { /* non-fatal */ }
+  };
+
+  const handleMarkAllRead = async (e) => {
+    e.stopPropagation();
+    try { await markAllRead(); } catch (e) { /* non-fatal */ }
   };
 
   const dk = darkMode;
@@ -132,9 +149,8 @@ function SchoolLayoutInner({ children, title = "Dashboard" }) {
                 onMouseLeave={e => e.currentTarget.style.background = ""}>
                 <span className="material-symbols-outlined text-lg">notifications</span>
                 {unreadCount > 0 && (
-                  <span className="absolute top-0.5 right-0.5 min-w-[14px] h-[14px] text-white text-[9px] font-black rounded-full flex items-center justify-center px-0.5"
-                    style={{ background: "var(--color-error)" }}>
-                    {unreadCount}
+                  <span className="absolute top-0.5 right-0.5 min-w-[16px] h-[16px] px-0.5 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center">
+                    {unreadCount > 9 ? '9+' : unreadCount}
                   </span>
                 )}
               </button>
@@ -147,38 +163,56 @@ function SchoolLayoutInner({ children, title = "Dashboard" }) {
                     <div className={`px-4 py-2.5 border-b flex justify-between items-center
                       ${dk ? "bg-surface-container-high border-outline-variant/20" : "bg-surface-container-high border-outline-variant/10"}`}>
                       <span className="text-xs font-black uppercase tracking-tight" style={{ color: "var(--color-on-surface)" }}>Notifications</span>
-                      <span className="text-[10px] font-bold px-2 py-0.5 rounded-full"
-                        style={{ background: "color-mix(in srgb, var(--color-primary) 12%, transparent)", color: "var(--color-primary)" }}>
-                        {unreadCount} Pending
-                      </span>
+                      {unreadCount > 0 ? (
+                        <button onClick={handleMarkAllRead}
+                          className="text-[10px] font-bold px-2 py-0.5 rounded-full transition"
+                          style={{ background: "color-mix(in srgb, var(--color-primary) 12%, transparent)", color: "var(--color-primary)" }}>
+                          {unreadCount} Pending · Mark all read
+                        </button>
+                      ) : (
+                        <span className="text-[10px] font-bold px-2 py-0.5 rounded-full"
+                          style={{ background: "color-mix(in srgb, var(--color-primary) 12%, transparent)", color: "var(--color-primary)" }}>
+                          All caught up
+                        </span>
+                      )}
                     </div>
                     <div className="divide-y max-h-56 overflow-y-auto"
                       style={{ borderColor: "color-mix(in srgb, var(--color-outline-variant) 15%, transparent)" }}>
-                      {notificationPreviewList.map(n => (
-                        <div key={n.id}
-                          onClick={() => { setIsNotificationDropdownOpen(false); navigate("/school-admin/notifications"); }}
-                          className={`px-3.5 py-2.5 flex items-start gap-2.5 cursor-pointer transition-all ${!n.is_read ? "bg-primary/5" : ""}`}
-                          onMouseEnter={e => e.currentTarget.style.background = "color-mix(in srgb, var(--color-primary) 5%, transparent)"}
-                          onMouseLeave={e => e.currentTarget.style.background = n.is_read ? "" : "color-mix(in srgb, var(--color-primary) 5%, transparent)"}>
-                          <div className="w-1.5 h-1.5 rounded-full mt-1.5 shrink-0"
-                            style={{ background: n.category === "security" ? "var(--color-error)" : n.category === "academic" ? "var(--color-tertiary)" : "var(--color-primary)" }} />
-                          <div className="flex-1 min-w-0">
-                            <p className="text-xs font-bold truncate" style={{ color: "var(--color-on-surface)" }}>{n.title}</p>
-                            <p className="text-[10px] truncate mt-0.5" style={{ color: "var(--color-on-surface-variant)" }}>{n.message}</p>
-                          </div>
-                          {!n.is_read && (
-                            <button onClick={e => handleQuickResolve(n.id, e)}
-                              className="w-4 h-4 rounded-full border flex items-center justify-center transition shrink-0"
-                              style={{ border: "1px solid color-mix(in srgb, var(--color-outline-variant) 20%, transparent)", color: "var(--color-outline)" }}
-                              onMouseEnter={e => { e.currentTarget.style.color = "var(--color-primary)"; }}
-                              onMouseLeave={e => { e.currentTarget.style.color = "var(--color-outline)"; }}>
-                              <span className="material-symbols-outlined text-[10px]">check</span>
-                            </button>
-                          )}
+                      {notificationPreviewList.length === 0 ? (
+                        <div className="px-3.5 py-6 flex flex-col items-center gap-1.5 text-center"
+                          style={{ color: "var(--color-outline)" }}>
+                          <span className="material-symbols-outlined" style={{ fontSize: '28px' }}>notifications_off</span>
+                          <p className="text-[11px] font-semibold">No notifications yet</p>
                         </div>
-                      ))}
+                      ) : (
+                        notificationPreviewList.map(n => (
+                          <div key={n.id}
+                            onClick={() => handleItemClick(n)}
+                            className={`px-3.5 py-2.5 flex items-start gap-2.5 cursor-pointer transition-all ${!n.is_read ? "bg-primary/5" : ""}`}
+                            onMouseEnter={e => e.currentTarget.style.background = "color-mix(in srgb, var(--color-primary) 5%, transparent)"}
+                            onMouseLeave={e => e.currentTarget.style.background = n.is_read ? "" : "color-mix(in srgb, var(--color-primary) 5%, transparent)"}>
+                            {!n.is_read && (
+                              <div className="w-1.5 h-1.5 rounded-full mt-1.5 shrink-0"
+                                style={{ background: getNotificationDotColor(n) }} />
+                            )}
+                            <div className="flex-1 min-w-0">
+                              <p className="text-xs font-bold truncate" style={{ color: n.is_read ? "var(--color-on-surface-variant)" : "var(--color-on-surface)" }}>{getNotificationTitle(n)}</p>
+                              <p className="text-[10px] truncate mt-0.5" style={{ color: "var(--color-on-surface-variant)" }}>{getNotificationSubtitle(n)}</p>
+                            </div>
+                            {!n.is_read && (
+                              <button onClick={e => handleQuickResolve(n.id, e)}
+                                className="w-4 h-4 rounded-full border flex items-center justify-center transition shrink-0"
+                                style={{ border: "1px solid color-mix(in srgb, var(--color-outline-variant) 20%, transparent)", color: "var(--color-outline)" }}
+                                onMouseEnter={e => { e.currentTarget.style.color = "var(--color-primary)"; }}
+                                onMouseLeave={e => { e.currentTarget.style.color = "var(--color-outline)"; }}>
+                                <span className="material-symbols-outlined text-[10px]">check</span>
+                              </button>
+                            )}
+                          </div>
+                        ))
+                      )}
                     </div>
-                    <button onClick={() => { setIsNotificationDropdownOpen(false); navigate("/school-admin/notifications"); }}
+                    <button onClick={() => { setIsNotificationDropdownOpen(false); navigate(getNotificationsPageRoute('admin')); }}
                       className="w-full text-center py-2 border-t text-[11px] font-bold transition"
                       style={{
                         color: "var(--color-primary)",

@@ -1,7 +1,14 @@
-// TopNavbar.jsx
 import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useStudent } from '../../context/StudentProvider';
+import { useNotifications } from '../../hooks/useNotifications';
+import {
+  getNotificationTitle,
+  getNotificationSubtitle,
+  getNotificationDotColor,
+  getNotificationRoute,
+  getNotificationsPageRoute,
+} from '../../utils/notificationHelpers';
 
 function useSearchIndex() {
   const { dashboard, academic, assignments, submissions, attendanceRecords, profile, enrollment } = useStudent();
@@ -303,6 +310,107 @@ function MobileSearchOverlay({ onClose, searchIndex }) {
   );
 }
 
+// ─── Notification Bell + Dropdown ──────────────────────────────────────────────
+function NotificationBell() {
+  const navigate = useNavigate();
+  const { notifications, unreadCount, markRead, markAllRead } = useNotifications({ pollIntervalMs: 30_000 });
+  const [isOpen, setIsOpen] = useState(false);
+  const wrapRef = useRef(null);
+
+  useEffect(() => {
+    const handler = (e) => {
+      if (wrapRef.current && !wrapRef.current.contains(e.target)) setIsOpen(false);
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, []);
+
+  const previewList = notifications.slice(0, 5);
+
+  const handleItemClick = async (n) => {
+    setIsOpen(false);
+    if (!n.is_read) {
+      try { await markRead(n.id); } catch (e) { /* non-fatal, keep navigating */ }
+    }
+    navigate(getNotificationRoute(n, 'student'));
+  };
+
+  const handleMarkAllRead = async (e) => {
+    e.stopPropagation();
+    try { await markAllRead(); } catch (e) { /* non-fatal */ }
+  };
+
+  return (
+    <div className="relative" ref={wrapRef}>
+      <button
+        onClick={() => setIsOpen((p) => !p)}
+        className="relative p-2 text-on-surface-variant hover:bg-surface-container-high rounded-full transition-colors"
+        aria-label="Notifications"
+      >
+        <span className="material-symbols-outlined block">notifications</span>
+        {unreadCount > 0 && (
+          <span className="absolute top-0.5 right-0.5 min-w-[16px] h-[16px] px-0.5 bg-error text-white text-[10px] font-bold rounded-full flex items-center justify-center border-2 border-surface-container-low">
+            {unreadCount > 9 ? '9+' : unreadCount}
+          </span>
+        )}
+      </button>
+
+      {isOpen && (
+        <div className="absolute right-0 top-full mt-2 w-80 bg-surface-container-low rounded-2xl shadow-lg border border-outline-variant/30 overflow-hidden z-50">
+          <div className="px-4 py-3 border-b border-outline-variant/30 flex items-center justify-between">
+            <span className="text-sm font-bold text-on-surface">Notifications</span>
+            {unreadCount > 0 && (
+              <button
+                onClick={handleMarkAllRead}
+                className="text-xs font-semibold text-primary hover:underline"
+              >
+                Mark all read
+              </button>
+            )}
+          </div>
+
+          <div className="max-h-80 overflow-y-auto divide-y divide-outline-variant/20">
+            {previewList.length === 0 ? (
+              <div className="flex flex-col items-center justify-center py-10 gap-2 text-outline">
+                <span className="material-symbols-outlined" style={{ fontSize: '32px' }}>notifications_off</span>
+                <p className="text-xs">No notifications yet</p>
+              </div>
+            ) : (
+              previewList.map((n) => (
+                <button
+                  key={n.id}
+                  onClick={() => handleItemClick(n)}
+                  className={`w-full flex items-start gap-2.5 px-4 py-3 text-left transition-colors hover:bg-surface-container-highest/50 ${!n.is_read ? 'bg-primary/5' : ''}`}
+                >
+                  {!n.is_read && (
+                    <span
+                      className="w-1.5 h-1.5 rounded-full mt-1.5 shrink-0"
+                      style={{ background: getNotificationDotColor(n) }}
+                    />
+                  )}
+                  <div className="flex-1 min-w-0">
+                    <p className={`text-xs font-semibold truncate ${n.is_read ? 'text-on-surface-variant' : 'text-on-surface'}`}>
+                      {getNotificationTitle(n)}
+                    </p>
+                    <p className="text-[11px] text-outline truncate mt-0.5">{getNotificationSubtitle(n)}</p>
+                  </div>
+                </button>
+              ))
+            )}
+          </div>
+
+          <button
+            onClick={() => { setIsOpen(false); navigate(getNotificationsPageRoute('student')); }}
+            className="w-full text-center py-2.5 border-t border-outline-variant/30 text-xs font-bold text-primary hover:bg-surface-container-highest/40 transition-colors"
+          >
+            View All Notifications
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
 // ─── TopNavbar ─────────────────────────────────────────────────────────────────
 export default function TopNavbar({ title, headerActions }) {
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
@@ -351,13 +459,7 @@ export default function TopNavbar({ title, headerActions }) {
             </button>
 
             {/* Notifications */}
-            <Link
-              to="/student/notifications"
-              className="p-2 text-on-surface-variant hover:bg-surface-container-high rounded-full transition-colors relative block"
-            >
-              <span className="material-symbols-outlined block">notifications</span>
-              <span className="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-error rounded-full border-2 border-surface-container-low"></span>
-            </Link>
+            <NotificationBell />
           </div>
         </div>
       </header>

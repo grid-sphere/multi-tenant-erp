@@ -1,9 +1,15 @@
-// src/components/erp/parent/Navbar.jsx
-
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useParent } from "../../../context/ParentProvider";
 import StudentIDCardModal from "../../../pages/parent/StudentIDCard";
+import { useNotifications } from "../../../hooks/useNotifications";
+import {
+  getNotificationTitle,
+  getNotificationSubtitle,
+  getNotificationDotColor,
+  getNotificationRoute,
+  getNotificationsPageRoute,
+} from "../../../utils/notificationHelpers";
 
 const PAGE_NAMES = {
   "/parent":                "Dashboard",
@@ -15,6 +21,116 @@ const PAGE_NAMES = {
   "/parent/settings":       "Settings",
   "/parent/notifications":  "Notifications",
 };
+
+function ParentNotificationBell() {
+  const navigate = useNavigate();
+  const { notifications, unreadCount, markRead, markAllRead } = useNotifications({ pollIntervalMs: 30_000 });
+  const [isOpen, setIsOpen] = useState(false);
+  const wrapRef = useRef(null);
+
+  useEffect(() => {
+    const handler = (e) => {
+      if (wrapRef.current && !wrapRef.current.contains(e.target)) setIsOpen(false);
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
+
+  const previewList = notifications.slice(0, 5);
+
+  const handleItemClick = async (n) => {
+    setIsOpen(false);
+    if (!n.is_read) {
+      try { await markRead(n.id); } catch (e) { /* non-fatal */ }
+    }
+    navigate(getNotificationRoute(n, "parent"));
+  };
+
+  const handleMarkAllRead = async (e) => {
+    e.stopPropagation();
+    try { await markAllRead(); } catch (e) { /* non-fatal */ }
+  };
+
+  return (
+    <div className="relative" ref={wrapRef}>
+      <button
+        type="button"
+        onClick={() => setIsOpen((p) => !p)}
+        className="relative text-slate-600 dark:text-slate-300
+                   hover:text-blue-600 dark:hover:text-blue-300
+                   hover:scale-110 active:scale-95
+                   transition-all flex-shrink-0"
+        aria-label="Notifications"
+      >
+        <span className="material-symbols-outlined text-base sm:text-lg">notifications</span>
+        {unreadCount > 0 && (
+          <span className="absolute -top-1.5 -right-1.5 min-w-[15px] h-[15px] px-0.5 bg-red-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center border border-white dark:border-slate-900">
+            {unreadCount > 9 ? "9+" : unreadCount}
+          </span>
+        )}
+      </button>
+
+      {isOpen && (
+        <div className="absolute right-0 mt-2 w-80 bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-100 dark:border-slate-700 overflow-hidden z-40 animate-[pageFadeIn_0.15s_ease-out]">
+          <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700 flex items-center justify-between">
+            <span className="text-sm font-bold text-slate-800 dark:text-white">Notifications</span>
+            {unreadCount > 0 && (
+              <button
+                onClick={handleMarkAllRead}
+                className="text-xs font-semibold text-blue-600 dark:text-blue-400 hover:underline"
+              >
+                Mark all read
+              </button>
+            )}
+          </div>
+
+          <div className="max-h-80 overflow-y-auto divide-y divide-slate-100 dark:divide-slate-700">
+            {previewList.length === 0 ? (
+              <div className="flex flex-col items-center justify-center py-10 gap-2 text-slate-400">
+                <span className="material-symbols-outlined" style={{ fontSize: "32px" }}>notifications_off</span>
+                <p className="text-xs">No notifications yet</p>
+              </div>
+            ) : (
+              previewList.map((n) => (
+                <button
+                  key={n.id}
+                  onClick={() => handleItemClick(n)}
+                  className={`w-full flex items-start gap-2.5 px-4 py-3 text-left transition-colors hover:bg-blue-50 dark:hover:bg-slate-700 ${
+                    !n.is_read ? "bg-blue-50/60 dark:bg-slate-700/60" : ""
+                  }`}
+                >
+                  {!n.is_read && (
+                    <span
+                      className="w-1.5 h-1.5 rounded-full mt-1.5 shrink-0"
+                      style={{ background: getNotificationDotColor(n) }}
+                    />
+                  )}
+                  <div className="flex-1 min-w-0">
+                    <p className={`text-xs font-semibold truncate ${
+                      n.is_read ? "text-slate-500 dark:text-slate-400" : "text-slate-800 dark:text-white"
+                    }`}>
+                      {getNotificationTitle(n)}
+                    </p>
+                    <p className="text-[11px] text-slate-500 dark:text-slate-400 truncate mt-0.5">
+                      {getNotificationSubtitle(n)}
+                    </p>
+                  </div>
+                </button>
+              ))
+            )}
+          </div>
+
+          <button
+            onClick={() => { setIsOpen(false); navigate(getNotificationsPageRoute("parent")); }}
+            className="w-full text-center py-2.5 border-t border-slate-100 dark:border-slate-700 text-xs font-bold text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-slate-700 transition-colors"
+          >
+            View All Notifications
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
 
 const Navbar = ({ onOpenSidebar, onToggleSidebar, isMobile }) => {
   const navigate = useNavigate();
@@ -191,15 +307,7 @@ const Navbar = ({ onOpenSidebar, onToggleSidebar, isMobile }) => {
           </span>
 
           {/* Notifications */}
-          <button
-            onClick={() => navigate("/parent/notifications")}
-            className="relative text-slate-600 dark:text-slate-300
-                       hover:text-blue-600 dark:hover:text-blue-300
-                       hover:scale-110 active:scale-95
-                       transition-all flex-shrink-0"
-          >
-            <span className="material-symbols-outlined text-base sm:text-lg">notifications</span>
-          </button>
+          <ParentNotificationBell />
         </div>
       </header>
     </>
