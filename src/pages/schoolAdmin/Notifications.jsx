@@ -1,190 +1,115 @@
-import SchoolLayout from "../../components/erp/school/SchoolLayout";
-import { useState, useMemo } from "react";
-import { useSchoolAdmin } from "../../context/SchoolAdminProvider";
+// src/pages/schoolAdmin/Notifications.jsx
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import SchoolLayout from "../../components/erp/school/SchoolLayout"; // adjust path if SchoolLayout lives elsewhere
+import { useNotifications } from "../../hooks/useNotifications";
+import {
+   getNotificationTitle,
+  getNotificationSubtitle,
+  getNotificationDotColor,
+  getNotificationRoute,
+  getNotificationsPageRoute,
+} from "../../utils/notificationHelpers"
 
-const FALLBACK_NOTIFICATIONS = [
-  {
-    id: 1,
-    type: "student",
-    title: "New Student Registered",
-    message: "Emma Wilson has been added to Grade 8-A",
-    time: "2 min ago",
-    read: false,
-    icon: "school",
-  },
-  {
-    id: 2,
-    type: "teacher",
-    title: "Teacher Assigned",
-    message: "Dr. Robert Miller assigned to Physics",
-    time: "1 hour ago",
-    read: false,
-    icon: "person",
-  },
-  {
-    id: 3,
-    type: "alert",
-    title: "Attendance Alert",
-    message: "High absence rate detected in Class 9-B",
-    time: "3 hours ago",
-    read: true,
-    icon: "warning",
-  },
-  {
-    id: 4,
-    type: "system",
-    title: "System Update",
-    message: "New grading feature added",
-    time: "Yesterday",
-    read: true,
-    icon: "settings",
-  },
-  {
-    id: 5,
-    type: "mapping",
-    title: "Parent Mapping Complete",
-    message: "Parent linked successfully with student",
-    time: "Yesterday",
-    read: false,
-    icon: "diversity_1",
-  },
-];
+function resolveRoute(notification) {
+  const payload = notification.payload;
+  switch (payload.redirect_module) {
+    case "leave-dashboard":
+      return `/school-admin/leave-management`;
+    case "grievance":
+      return `/school-admin/grievances`;
+    default:
+      return "/school-admin/notifications";
+  }
+}
 
-const CATEGORY_COLORS = {
-  student: "bg-[#e5eeff] text-[#0058be]",
-  teacher: "bg-[#e9ddff] text-[#6b38d4]",
-  alert: "bg-[#ffdad6] text-[#ba1a1a]",
-  system: "bg-[#eff4ff] text-[#0058be]",
-  mapping: "bg-[#e5eeff] text-[#0058be]",
-  default: "bg-[#f3f4f6] text-[#374151]"
-};
+function timeAgo(iso) {
+  const seconds = Math.floor((Date.now() - new Date(iso).getTime()) / 1000);
+  if (seconds < 60) return "just now";
+  const minutes = Math.floor(seconds / 60);
+  if (minutes < 60) return `${minutes}m ago`;
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) return `${hours}h ago`;
+  return `${Math.floor(hours / 24)}d ago`;
+}
 
-function mapApiNotification(n) {
-  return {
-    id: n.id,
-    type: n.category || n.type || "system",
-    title: n.title,
-    desc: n.message || n.desc || "",
-    time: n.created_at || n.time || "",
-    read: n.is_read ?? n.read ?? false,
-    icon: n.icon || "notifications",
-  };
+function leaveTitle(payload) {
+  if (payload.status === "Pending") {
+    return `${payload.applicant_name} applied for ${payload.leave_type} leave`;
+  }
+  return `Your ${payload.leave_type} leave was ${payload.status.toLowerCase()}`;
+}
+
+export function notificationTitle(notification) {
+  return notification.notification_type === "leave"
+    ? getNotificationSubtitle(notification.payload)
+    : notification.notification_type;
 }
 
 export default function Notifications() {
-  const { 
-    notifications: apiNotifications, 
-    markAllNotificationsRead,
-    markNotificationRead 
-  } = useSchoolAdmin();
-  
-  const [filter, setFilter] = useState("all");
+  const navigate = useNavigate();
+  const { notifications, unreadCount, loading, error, markRead, markAllRead } = useNotifications({
+    pollIntervalMs: 30_000,
+  });
 
-  // Memoize mapped data transformations
-  const notifications = useMemo(() => {
-    return apiNotifications.length > 0
-      ? apiNotifications.map(mapApiNotification)
-      : FALLBACK_NOTIFICATIONS;
-  }, [apiNotifications]);
-
-  // Memoize targeted filtering rules
-  const filteredNotifications = useMemo(() => {
-    return notifications.filter((n) => {
-      if (filter === "all") return true;
-      if (filter === "unread") return !n.read;
-      return n.type === "alert";
-    });
-  }, [notifications, filter]);
-
-  const formatTime = (timeValue) => {
-    if(!timeValue) return "";
-    const date = new Date(timeValue);
-
-    if(isNaN(date.getTime())){
-      return timeValue; //Fallback to just returning the original string ("2 min ago", "Yesterday")
+  async function handleClick(notification) {
+    if (!notification.is_read) {
+      try {
+        await markRead(notification.id);
+      } catch {
+        // Non-fatal -- still navigate even if marking read failed.
+      }
     }
-    return new Intl.DateTimeFormat('en-US', {
-      month: 'short',
-      day: 'numeric',
-      year: 'numeric',
-      hour: 'numeric',
-      minute: '2-digit',
-      hour12: true,
-    }).format(date);
-  };
+    
+    navigate(getNotificationRoute(notification, 'admin'));
+  }
 
   return (
     <SchoolLayout title="Notifications">
-      <div>
-        <div className="flex justify-between items-center mb-8">
-          <div>
-            <h1 className="text-3xl font-bold mb-1">Notifications</h1>
-            <p className="text-[#6b7280]">Track system alerts and updates</p>
-          </div>
-          <button
-            type="button"
-            onClick={markAllNotificationsRead}
-            className="text-sm font-semibold text-[#0058be] hover:underline"
-          >
-            Mark all as read
-          </button>
-        </div>
-
-        <div className="flex gap-4 mb-8">
-          {[
-            { key: "all", label: "All" },
-            { key: "unread", label: "Unread" },
-            { key: "alert", label: "Alerts" },
-          ].map((item) => (
-            <button
-              key={item.key}
-              type="button"
-              onClick={() => setFilter(item.key)}
-              className={`px-4 py-2 rounded-md text-sm font-semibold transition ${
-                filter === item.key
-                  ? "bg-[#0058be] text-white"
-                  : "bg-[#eff4ff] text-[#0b1c30] hover:bg-[#e0eeff]"
-              }`}
-            >
-              {item.label}
+      <div className="max-w-2xl mx-auto w-full">
+        <div className="flex items-center justify-between mb-4">
+          <h1 className="text-lg font-bold">
+            Notifications {unreadCount > 0 && <span className="text-primary">({unreadCount} unread)</span>}
+          </h1>
+          {unreadCount > 0 && (
+            <button onClick={() => markAllRead()} className="text-sm text-primary hover:underline">
+              Mark all read
             </button>
-          ))}
+          )}
         </div>
 
-        <div className="space-y-4">
-          {filteredNotifications.map((n) => {
-            const colorClass = CATEGORY_COLORS[n.type] || CATEGORY_COLORS.default;
-            
-            return (
-              <div
+        <div className="rounded-xl border border-outline-variant/10 bg-surface-container-lowest overflow-hidden">
+          {loading && <div className="px-4 py-8 text-sm text-outline text-center">Loading…</div>}
+
+          {!loading && error && (
+            <div className="px-4 py-8 text-sm text-error text-center">{error}</div>
+          )}
+
+          {!loading && !error && notifications.length === 0 && (
+            <div className="px-4 py-8 text-sm text-outline text-center">You're all caught up.</div>
+          )}
+
+          {!loading &&
+            !error &&
+            notifications.map((n) => (
+              <button
                 key={n.id}
-                onClick={() => !n.read && markNotificationRead(n.id)}
-                className={`bg-surface-container-lowest p-5 rounded-lg shadow-sm flex gap-4 items-start border transition ${
-                  !n.read 
-                    ? "border-[#0058be]/30 cursor-pointer hover:bg-slate-50/50" 
-                    : "border-transparent"
+                onClick={() => handleClick(n)}
+                className={`w-full text-left px-4 py-3 border-b border-outline-variant/10 last:border-0 hover:bg-surface-container transition-colors ${
+                  n.is_read ? "opacity-60" : ""
                 }`}
               >
-                <div className={`w-10 h-10 rounded-md flex items-center justify-center ${colorClass}`}>
-                  <span className="material-symbols-outlined text-lg">{n.icon}</span>
+                <div className="flex items-start gap-3">
+                  {!n.is_read && (
+                    <span className="mt-1.5 w-2 h-2 rounded-full bg-primary flex-shrink-0" />
+                  )}
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium">{getNotificationTitle(n)}</p>
+                    <p className="text-xs text-outline mt-0.5">{timeAgo(n.created_at)}</p>
+                  </div>
                 </div>
-                <div className="flex-1">
-                  <p className="font-semibold text-[#0b1c30]">{n.title}</p>
-                  <p className="text-sm text-[#6b7280] mt-1">{n.desc}</p>
-                  <p className="text-xs text-[#9aa1b1] mt-2">{formatTime(n.time)}</p>
-                </div>
-                {!n.read && (
-                  <span className="w-2 h-2 bg-[#0058be] rounded-full mt-2" />
-                )}
-              </div>
-            );
-          })}
-
-          {filteredNotifications.length === 0 && (
-            <div className="text-center py-12 bg-white rounded-lg border border-gray-100">
-              <p className="text-gray-500 text-sm">No notifications found matches this filter view.</p>
-            </div>
-          )}
+              </button>
+            ))}
         </div>
       </div>
     </SchoolLayout>

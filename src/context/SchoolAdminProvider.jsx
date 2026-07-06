@@ -152,8 +152,8 @@ export const SchoolAdminProvider = ({ children }) => {
 
   const refreshNotifications = useCallback(async () => {
     try {
-      const response = await schoolAdminApi.getNotifications();
-      setNotifications(toList(response));
+      const list = await schoolAdminApi.fetchNotifications();
+      setNotifications(toList(list));
     } catch (err) {
       console.error("Failed to refresh notifications:", err);
     }
@@ -287,13 +287,28 @@ export const SchoolAdminProvider = ({ children }) => {
     [sections]
   );
 
-  const markNotificationRead = useCallback((id) => {
+  const markNotificationRead = useCallback(async (id) => {
+    // Optimistic update first so the UI feels instant...
     setNotifications((prev) => prev.map((n) => (n.id === id ? { ...n, is_read: true } : n)));
+    try {
+      await schoolAdminApi.markNotificationRead(id);
+    } catch (err) {
+      console.error("Failed to mark notification read:", err);
+      // ...roll back on failure.
+      setNotifications((prev) => prev.map((n) => (n.id === id ? { ...n, is_read: false } : n)));
+    }
   }, []);
 
-  const markAllNotificationsRead = useCallback(() => {
+  const markAllNotificationsRead = useCallback(async () => {
+    const previous = notifications;
     setNotifications((prev) => prev.map((n) => ({ ...n, is_read: true })));
-  }, []);
+    try {
+      await schoolAdminApi.markAllNotificationsRead();
+    } catch (err) {
+      console.error("Failed to mark all notifications read:", err);
+      setNotifications(previous);
+    }
+  }, [notifications]);
 
   const updateSettings = useCallback(async (payload) => {
     const updated = await schoolAdminApi.updateSettings(payload);
@@ -314,7 +329,7 @@ export const SchoolAdminProvider = ({ children }) => {
         schoolAdminApi.getTeachers(),
         schoolAdminApi.getDashboardStats(),
         schoolAdminApi.getEnrollmentTrends(),
-        schoolAdminApi.getNotifications(),
+        schoolAdminApi.fetchNotifications(),
         schoolAdminApi.getSettings(),
         schoolAdminApi.getLeaveRequests({ status: "Pending" }),
       ]);
@@ -351,10 +366,8 @@ export const SchoolAdminProvider = ({ children }) => {
         setEnrollmentTrends(Array.isArray(arr) ? arr : []);
       }
 
-      const rawNotifications = notificationsResult.status === "fulfilled" ? notificationsResult.value : null;
-      const parsedNotifications = rawNotifications?.notifications ?? toList(rawNotifications);
-
-      setNotifications(parsedNotifications);
+      const notificationsList = notificationsResult.status === "fulfilled" ? notificationsResult.value : [];
+      setNotifications(toList(notificationsList));
       setSettings(settingsResult.status === "fulfilled" ? settingsResult.value : null);
       setSectionsByClass({});
 
@@ -376,6 +389,13 @@ export const SchoolAdminProvider = ({ children }) => {
   useEffect(() => {
     loadAllData();
   }, [loadAllData]);
+
+  // Poll notifications independently of the (much heavier) full loadAllData
+  // reload, so the bell/unread-count stay live across without needing a manual refresh.
+  useEffect(() => {
+    const interval = setInterval(refreshNotifications, 30_000);
+    return () => clearInterval(interval);
+  }, [refreshNotifications]);
 
   // Context bundle
   const contextValue = useMemo(() => ({

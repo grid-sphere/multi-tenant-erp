@@ -11,10 +11,7 @@ export const getEnrollmentTrends = async () => {
     return response.data;
 };
 
-export const getNotifications = async () => {
-    const response = await apiClient.get('/school-admin/notifications/');
-    return response.data;
-};
+
 
 // --- Academic Years ---
 export const getAcademicYearDetails = async (id) => {
@@ -414,11 +411,32 @@ export const getTeacherAssignmentsForTimetable = async (params = {}) => {
     return response.data;
 };
 
+
+// notifications
+export const fetchNotifications = async(params) => {
+  const res = await apiClient.get(`/notifications/`, { params });
+  return res.data.results;
+}
+
+export const fetchUnreadCount = async() =>  {
+  const res = await apiClient.get(`notifications/unread-count/`);
+  return res.data.unread_count;
+}
+
+export const markNotificationRead= async(id) => {
+  const res = await apiClient.post(`notifications/${id}/mark-read/`);
+  return res.data;
+}
+
+export const  markAllNotificationsRead = async() => {
+  const res = await apiClient.post(`notifications/mark-all-read/`);
+  return res.data;
+}
+
 // --- Bundled Export ---
 export const schoolAdminApi = {
     getDashboardStats,
     getEnrollmentTrends,
-    getNotifications,
     getAcademicYears,
     getAcademicYearDetails,
     createAcademicYear,
@@ -495,5 +513,12 @@ export const schoolAdminApi = {
     rejectLeaveRequest,
     cancelLeaveRequest,
     deleteLeaveRequest,
-    getTeacherAssignmentsForTimetable
+    getTeacherAssignmentsForTimetable,
+
+
+    // notifications
+    fetchNotifications,
+    fetchUnreadCount,
+    markNotificationRead,
+    markAllNotificationsRead
 };
