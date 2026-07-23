@@ -433,6 +433,43 @@ export const  markAllNotificationsRead = async() => {
   return res.data;
 }
 
+// bulk uploads
+export const bulkUploadStudents = async (file) => {
+  const formData = new FormData();
+  formData.append("file", file);
+  const res = await apiClient.post("school-admin/staff/students/bulk-register/", formData, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
+  return res.data;
+};
+
+export const bulkUploadTeachers = async (file) => {
+  const formData = new FormData();
+  formData.append("file", file);
+  const res = await apiClient.post("school-admin/staff/teachers/bulk-register/", formData, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
+  return res.data;
+};
+
+export const bulkUploadParents = async (file) => {
+  const formData = new FormData();
+  formData.append("file", file);
+  const res = await apiClient.post("school-admin/staff/parents/bulk-register/", formData, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
+  return res.data;
+};
+
+export const bulkLinkParentsStudents = async (file) => {
+  const formData = new FormData();
+  formData.append("file", file);
+  const res = await apiClient.post("school-admin/parent-student-mappings/bulk-link/", formData, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
+  return res.data;
+};
+
 // --- Bundled Export ---
 export const schoolAdminApi = {
     getDashboardStats,
@@ -520,5 +557,11 @@ export const schoolAdminApi = {
     fetchNotifications,
     fetchUnreadCount,
     markNotificationRead,
-    markAllNotificationsRead
+    markAllNotificationsRead,
+
+    // bulk uploads
+    bulkUploadStudents,
+    bulkUploadTeachers,
+    bulkUploadParents,
+    bulkLinkParentsStudents
 };
