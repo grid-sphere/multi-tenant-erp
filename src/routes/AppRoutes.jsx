@@ -54,6 +54,7 @@ import LeaveDashboard from '../pages/schoolAdmin/LeaveDashboard';
 import GrievanceManagement from "../pages/schoolAdmin/GrievanceManagement";
 import CircularsPage from "../pages/schoolAdmin/Circulars";
 import TimetableManagement from "../pages/schoolAdmin/TimetableManagement";
+import BulkUpload from '../pages/schoolAdmin/BulkUpload'
 
 /* STUDENT */
 import StudentDashboard from "../pages/student/Dashboard";
@@ -229,6 +230,7 @@ function AppRoutes() {
           <Route path="grievances" element={<GrievanceManagement />} />
           <Route path="circulars" element={<CircularsPage />} />
           <Route path="timetable" element={<TimetableManagement />} />
+          <Route path='/school-admin/bulk-upload' element={<BulkUpload/>} />
         </Route>
 
         {/* ================= STUDENT ================= */}

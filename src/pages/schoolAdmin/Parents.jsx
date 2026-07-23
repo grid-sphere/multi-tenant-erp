@@ -278,13 +278,22 @@ export default function Parents() {
               Manage emergency contacts and parental access for students.
             </p>
           </div>
-          <button
-            onClick={() => navigate("/school-admin/parents/create")}
-            className="sm:w-auto whitespace-nowrap bg-primary text-white px-5 py-2.5 rounded-lg text-sm font-bold shadow-sm hover:bg-primary/90 transition-all active:scale-95 flex items-center gap-2"
-          >
-            <span className="material-symbols-outlined text-[18px]">person_add</span>
-            Add Parent
-          </button>
+          <div className="flex gap-2">
+            <button
+              onClick={() => navigate("/school-admin/bulk-upload?type=parent")}
+              className="whitespace-nowrap bg-surface-container-lowest text-primary border border-primary/30 px-5 py-2.5 rounded-lg text-sm font-bold hover:bg-primary/5 transition-all active:scale-95 flex items-center justify-center gap-2"
+            >
+              <span className="material-symbols-outlined text-[18px]">upload_file</span>
+              Bulk Upload
+            </button>
+            <button
+              onClick={() => navigate("/school-admin/parents/create")}
+              className="sm:w-auto whitespace-nowrap bg-primary text-white px-5 py-2.5 rounded-lg text-sm font-bold shadow-sm hover:bg-primary/90 transition-all active:scale-95 flex items-center gap-2"
+              >
+              <span className="material-symbols-outlined text-[18px]">person_add</span>
+              Add Parent
+            </button>
+          </div>
         </div>
 
         {/* Error */}
