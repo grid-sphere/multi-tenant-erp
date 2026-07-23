@@ -11,7 +11,7 @@ const isIgnorableClientError = (error) =>
 const logIgnoredError = (label, error) => {
   console.warn(
     `[studentAPIs] "${label}" returned ${error?.response?.status} for ` +
-      `${error?.config?.url} — falling back to empty result.`,
+    `${error?.config?.url} — falling back to empty result.`,
   );
 };
 
@@ -24,6 +24,11 @@ export const getStudentProfile = async () => {
 
 export const updateStudentProfile = async (payload) => {
   const response = await api.patch(`/profiles/students/me/`, payload);
+  return response.data;
+};
+
+export const updateMyPassword = async (userId, password) => {
+  const response = await api.patch(`/users/${userId}/`, { password });
   return response.data;
 };
 
