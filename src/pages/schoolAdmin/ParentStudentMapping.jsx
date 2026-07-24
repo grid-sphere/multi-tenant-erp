@@ -4,7 +4,7 @@ import SchoolLayout from "../../components/erp/school/SchoolLayout";
 import { schoolAdminApi } from '../../services/schoolAdminApi';
 
 // ─────────────────────────────────────────────
-// Skeleton Loader (reused)
+// Skeleton Loader
 // ─────────────────────────────────────────────
 function Skeleton({ className = "", style = {} }) {
   return (
@@ -174,12 +174,15 @@ export default function ParentStudentMapping() {
     setCurrentPage(1);
   }, [debouncedSearch, pageSize]);
 
-  // Fetch mappings (only search, no status filter)
+  // Fetch the full mapping directory once on mount. Search is applied
+  // client-side below so typing in the search box never re-triggers a
+  // fetch or flashes the full-page skeleton.
   useEffect(() => {
-    fetchAllMappings(debouncedSearch);
-  }, [debouncedSearch]);
+    fetchAllMappings();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  const fetchAllMappings = async (search) => {
+  const fetchAllMappings = async () => {
     setLoading(true);
     setError(null);
     try {
@@ -187,7 +190,7 @@ export default function ParentStudentMapping() {
       let results = [];
       let hasNext = true;
       while (hasNext) {
-        const data = await schoolAdminApi.getParentStudentMappings(page, search);
+        const data = await schoolAdminApi.getParentStudentMappings(page, "");
         results = [...results, ...(data.results || data || [])];
         hasNext = Boolean(data.next);
         page += 1;
@@ -201,20 +204,35 @@ export default function ParentStudentMapping() {
     }
   };
 
-  // Stats
+  // Stats — always reflect the full directory, not the current search.
   const totalMappings = allMappings.length;
   const verifiedMappings = allMappings.filter(m => m.is_verified !== false).length;
   const primaryContacts = allMappings.filter(m => m.is_primary_contact).length;
 
+  // Client-side search, computed on every render from the already-fetched
+  // list — no network round-trip, no loading flash.
+  const filteredMappings = useMemo(() => {
+    if (!debouncedSearch) return allMappings;
+    const q = debouncedSearch.toLowerCase();
+    return allMappings.filter((m) => {
+      const parentName = `${m.parent_first_name || ""} ${m.parent_last_name || ""}`;
+      const studentName = `${m.student_first_name || ""} ${m.student_last_name || ""}`;
+      const haystack = `${parentName} ${studentName} ${m.relationship || ""} ${m.parent_email || ""} ${m.student_enrollment_number || ""}`.toLowerCase();
+      return haystack.includes(q);
+    });
+  }, [allMappings, debouncedSearch]);
+
+  const filteredCount = filteredMappings.length;
+
   // Pagination
-  const totalPages = Math.max(1, Math.ceil(totalMappings / pageSize));
+  const totalPages = Math.max(1, Math.ceil(filteredCount / pageSize));
   const paginatedMappings = useMemo(() => {
     const start = (currentPage - 1) * pageSize;
-    return allMappings.slice(start, start + pageSize);
-  }, [allMappings, currentPage, pageSize]);
+    return filteredMappings.slice(start, start + pageSize);
+  }, [filteredMappings, currentPage, pageSize]);
 
-  const rangeStart = totalMappings === 0 ? 0 : (currentPage - 1) * pageSize + 1;
-  const rangeEnd = Math.min(currentPage * pageSize, totalMappings);
+  const rangeStart = filteredCount === 0 ? 0 : (currentPage - 1) * pageSize + 1;
+  const rangeEnd = Math.min(currentPage * pageSize, filteredCount);
 
   // Helpers
   const getInitials = (name) => {
@@ -298,7 +316,7 @@ export default function ParentStudentMapping() {
           </div>
           <div className="flex items-center justify-end gap-2 shrink-0">
             <span className="text-xs font-semibold text-on-surface-variant">
-              {totalMappings} {totalMappings === 1 ? "mapping" : "mappings"} found
+              {filteredCount} {filteredCount === 1 ? "mapping" : "mappings"} found
             </span>
           </div>
         </div>
@@ -403,7 +421,7 @@ export default function ParentStudentMapping() {
           </div>
 
           {/* Responsive Pagination Strip */}
-          {totalMappings > 0 && (
+          {filteredCount > 0 && (
             <div className="p-4 flex flex-col sm:flex-row gap-4 justify-between items-center border-t border-outline-variant/10 bg-surface-container-high/30">
               <div className="flex items-center justify-between w-full sm:w-auto gap-2 text-xs font-body text-on-surface-variant">
                 <div className="flex items-center gap-2">
@@ -418,7 +436,7 @@ export default function ParentStudentMapping() {
                     ))}
                   </select>
                 </div>
-                <span>Showing {rangeStart}-{rangeEnd} of {totalMappings}</span>
+                <span>Showing {rangeStart}-{rangeEnd} of {filteredCount}</span>
               </div>
               <div className="flex items-center justify-between w-full sm:w-auto gap-3">
                 <button
