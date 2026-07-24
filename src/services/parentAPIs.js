@@ -10,6 +10,22 @@ export const getParentProfile = async () => {
   return response.data;
 };
 
+/* ---------- Password Change ---------- */
+/* Real, now-implemented endpoint (see accounts/urls.py + ChangePasswordView):
+   POST /api/v1/accounts/change-password/
+   Body:    { old_password, new_password, confirm_password }
+   Success: { success: true, message: "..." }
+   Error:   { error: "..." }  or  { error: [...] } */
+
+export const changeMyPassword = async ({ oldPassword, newPassword, confirmPassword }) => {
+  const response = await api.post(`/accounts/change-password/`, {
+    old_password: oldPassword,
+    new_password: newPassword,
+    confirm_password: confirmPassword,
+  });
+  return response.data;
+};
+
 /* ---------- Children list / active child / switching ---------- */
 
 // Lightweight list of all children mapped to this parent

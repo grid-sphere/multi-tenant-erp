@@ -413,61 +413,66 @@ export const getTeacherAssignmentsForTimetable = async (params = {}) => {
 
 
 // notifications
-export const fetchNotifications = async(params) => {
-  const res = await apiClient.get(`/notifications/`, { params });
-  return res.data.results;
+export const fetchNotifications = async (params) => {
+    const res = await apiClient.get(`/notifications/`, { params });
+    return res.data.results;
 }
 
-export const fetchUnreadCount = async() =>  {
-  const res = await apiClient.get(`notifications/unread-count/`);
-  return res.data.unread_count;
+export const fetchUnreadCount = async () => {
+    const res = await apiClient.get(`notifications/unread-count/`);
+    return res.data.unread_count;
 }
 
-export const markNotificationRead= async(id) => {
-  const res = await apiClient.post(`notifications/${id}/mark-read/`);
-  return res.data;
+export const markNotificationRead = async (id) => {
+    const res = await apiClient.post(`notifications/${id}/mark-read/`);
+    return res.data;
 }
 
-export const  markAllNotificationsRead = async() => {
-  const res = await apiClient.post(`notifications/mark-all-read/`);
-  return res.data;
+export const markAllNotificationsRead = async () => {
+    const res = await apiClient.post(`notifications/mark-all-read/`);
+    return res.data;
 }
 
 // bulk uploads
 export const bulkUploadStudents = async (file) => {
-  const formData = new FormData();
-  formData.append("file", file);
-  const res = await apiClient.post("school-admin/staff/students/bulk-register/", formData, {
-    headers: { "Content-Type": "multipart/form-data" },
-  });
-  return res.data;
+    const formData = new FormData();
+    formData.append("file", file);
+    const res = await apiClient.post("school-admin/staff/students/bulk-register/", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+    });
+    return res.data;
 };
 
 export const bulkUploadTeachers = async (file) => {
-  const formData = new FormData();
-  formData.append("file", file);
-  const res = await apiClient.post("school-admin/staff/teachers/bulk-register/", formData, {
-    headers: { "Content-Type": "multipart/form-data" },
-  });
-  return res.data;
+    const formData = new FormData();
+    formData.append("file", file);
+    const res = await apiClient.post("school-admin/staff/teachers/bulk-register/", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+    });
+    return res.data;
 };
 
 export const bulkUploadParents = async (file) => {
-  const formData = new FormData();
-  formData.append("file", file);
-  const res = await apiClient.post("school-admin/staff/parents/bulk-register/", formData, {
-    headers: { "Content-Type": "multipart/form-data" },
-  });
-  return res.data;
+    const formData = new FormData();
+    formData.append("file", file);
+    const res = await apiClient.post("school-admin/staff/parents/bulk-register/", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+    });
+    return res.data;
 };
 
 export const bulkLinkParentsStudents = async (file) => {
-  const formData = new FormData();
-  formData.append("file", file);
-  const res = await apiClient.post("school-admin/parent-student-mappings/bulk-link/", formData, {
-    headers: { "Content-Type": "multipart/form-data" },
-  });
-  return res.data;
+    const formData = new FormData();
+    formData.append("file", file);
+    const res = await apiClient.post("school-admin/parent-student-mappings/bulk-link/", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+    });
+    return res.data;
+};
+
+export const updateMyPassword = async (userId, password) => {
+    const response = await apiClient.patch(`/users/${userId}/`, { password });
+    return response.data;
 };
 
 // --- Bundled Export ---
@@ -563,5 +568,6 @@ export const schoolAdminApi = {
     bulkUploadStudents,
     bulkUploadTeachers,
     bulkUploadParents,
-    bulkLinkParentsStudents
+    bulkLinkParentsStudents,
+    updateMyPassword
 };

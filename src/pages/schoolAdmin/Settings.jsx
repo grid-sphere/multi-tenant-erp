@@ -2,6 +2,8 @@ import SchoolLayout from "../../components/erp/school/SchoolLayout";
 import { useState, useEffect } from "react";
 import { useTheme } from "../../context/ThemeContext";
 import { useSchoolAdmin } from "../../context/SchoolAdminProvider";
+import { getMyProfile } from "../../services/api";
+import { schoolAdminApi } from "../../services/schoolAdminApi";
 
 // ─────────────────────────────────────────────
 // Skeleton Loader (matches other pages)
@@ -109,6 +111,19 @@ export default function Settings() {
   const [originalForm, setOriginalForm] = useState(null);
   const [toast, setToast] = useState(null);
 
+  // ── Security / Password state ──
+  const [identityId, setIdentityId] = useState(null);
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [passwordSaving, setPasswordSaving] = useState(false);
+  const [passwordError, setPasswordError] = useState(null);
+
+  useEffect(() => {
+    getMyProfile()
+      .then((data) => setIdentityId(data?.identity?.id))
+      .catch((err) => console.error("Failed to resolve admin identity:", err));
+  }, []);
+
   // Force re-render on theme change
   const [renderKey, setRenderKey] = useState(0);
   useEffect(() => {
@@ -186,6 +201,41 @@ export default function Settings() {
       showToast("Failed to save settings. Please try again.", "error");
     } finally {
       setIsSaving(false);
+    }
+  };
+
+  // ── Update own admin password ──
+  const handlePasswordUpdate = async () => {
+    setPasswordError(null);
+
+    if (!newPassword.trim()) {
+      setPasswordError("Please enter a new password.");
+      return;
+    }
+    if (newPassword.length < 8) {
+      setPasswordError("Password must be at least 8 characters.");
+      return;
+    }
+    if (newPassword !== confirmPassword) {
+      setPasswordError("Passwords do not match.");
+      return;
+    }
+    if (!identityId) {
+      setPasswordError("Could not resolve your account. Please refresh and try again.");
+      return;
+    }
+
+    setPasswordSaving(true);
+    try {
+      await schoolAdminApi.updateMyPassword(identityId, newPassword);
+      setNewPassword("");
+      setConfirmPassword("");
+      showToast("Password updated successfully!", "success");
+    } catch (err) {
+      console.error("Failed to update password:", err);
+      setPasswordError(err.response?.data?.detail || "Failed to update password. Please try again.");
+    } finally {
+      setPasswordSaving(false);
     }
   };
 
@@ -466,6 +516,73 @@ export default function Settings() {
             </button>
           </div>
         </form>
+
+        {/* ── SECURITY / CHANGE PASSWORD ── */}
+        <div className="bg-surface-container-lowest rounded-xl border border-outline-variant/10 shadow-sm overflow-hidden mt-8">
+          <div className="p-6 border-b border-outline-variant/10 bg-surface-container-high/30">
+            <div className="flex items-center gap-3">
+              <span className="material-symbols-outlined text-primary text-2xl">lock</span>
+              <div>
+                <h3 className="text-lg font-headline font-bold text-on-surface">Security</h3>
+                <p className="text-xs text-on-surface-variant">Update your own admin account password.</p>
+              </div>
+            </div>
+          </div>
+          <div className="p-6 space-y-5">
+            {passwordError && (
+              <div className="p-3 bg-error/10 text-error rounded-lg text-sm font-medium">
+                {passwordError}
+              </div>
+            )}
+            <div className="grid md:grid-cols-2 gap-5">
+              <div>
+                <label className="text-2xs font-headline font-black tracking-widest uppercase text-on-surface-variant flex items-center gap-2 mb-2">
+                  <span className="material-symbols-outlined text-[14px]">password</span>
+                  New Password
+                </label>
+                <input
+                  type="password"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                  className="w-full border px-4 py-2.5 rounded-lg outline-none focus:border-primary focus:ring-1 focus:ring-primary transition bg-surface-container-low border-outline-variant/10 text-on-surface placeholder:text-outline font-body"
+                  placeholder="Enter new password"
+                />
+              </div>
+              <div>
+                <label className="text-2xs font-headline font-black tracking-widest uppercase text-on-surface-variant flex items-center gap-2 mb-2">
+                  <span className="material-symbols-outlined text-[14px]">password</span>
+                  Confirm Password
+                </label>
+                <input
+                  type="password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  className="w-full border px-4 py-2.5 rounded-lg outline-none focus:border-primary focus:ring-1 focus:ring-primary transition bg-surface-container-low border-outline-variant/10 text-on-surface placeholder:text-outline font-body"
+                  placeholder="Re-enter new password"
+                />
+              </div>
+            </div>
+            <p className="text-2xs text-on-surface-variant">Leave both fields blank if you don't want to change your password.</p>
+            <div className="flex justify-end">
+              <button
+                type="button"
+                onClick={handlePasswordUpdate}
+                disabled={passwordSaving}
+                className="px-8 py-2.5 bg-primary text-white font-headline font-bold text-sm rounded-lg shadow-lg shadow-primary/20 hover:bg-primary/90 transition-all flex items-center gap-2 disabled:opacity-70"
+              >
+                {passwordSaving ? (
+                  <>
+                    <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                    Updating...
+                  </>
+                ) : (
+                  "Update Password"
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+
       </div>
     </SchoolLayout>
   );

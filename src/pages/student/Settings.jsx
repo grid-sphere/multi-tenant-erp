@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import MainLayout from '../../layouts/MainLayout';
 import { schoolAdminApi } from '../../services/schoolAdminApi';
 import { useTheme } from '../../context/ThemeContext';
+import { getMyProfile } from '../../services/api';
+import { updateMyPassword } from '../../services/studentAPIs';
 
 function Skeleton({ className = "" }) {
   return <div className={`animate-pulse bg-gray-200 rounded-md ${className}`} />;
@@ -53,13 +55,11 @@ function Toggle({ value, onChange }) {
   return (
     <button
       onClick={onChange}
-      className={`relative inline-flex h-6 w-11 shrink-0 items-center rounded-full transition-colors focus:outline-none ${
-        value ? 'bg-primary' : 'bg-gray-300'
-      }`}
+      className={`relative inline-flex h-6 w-11 shrink-0 items-center rounded-full transition-colors focus:outline-none ${value ? 'bg-primary' : 'bg-gray-300'
+        }`}
     >
-      <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform duration-300 ${
-        value ? 'translate-x-6' : 'translate-x-1'
-      }`} />
+      <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform duration-300 ${value ? 'translate-x-6' : 'translate-x-1'
+        }`} />
     </button>
   );
 }
@@ -74,6 +74,19 @@ export default function Settings() {
   });
   const [isSaving, setIsSaving] = useState(false);
   const [loading, setLoading] = useState(true);
+
+  // ── Security / Password state ──
+  const [identityId, setIdentityId] = useState(null);
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [passwordSaving, setPasswordSaving] = useState(false);
+  const [passwordMsg, setPasswordMsg] = useState(null);
+
+  useEffect(() => {
+    getMyProfile()
+      .then((data) => setIdentityId(data?.identity?.id))
+      .catch((err) => console.error('Failed to resolve student identity:', err));
+  }, []);
 
   useEffect(() => {
     const fetchSettings = async () => {
@@ -109,9 +122,31 @@ export default function Settings() {
 
   const handleCancel = () => window.history.back();
 
+  // ── Update own student password ──
+  const handlePasswordUpdate = async () => {
+    setPasswordMsg(null);
+    if (!newPassword.trim()) { setPasswordMsg({ type: 'error', text: 'Please enter a new password.' }); return; }
+    if (newPassword.length < 8) { setPasswordMsg({ type: 'error', text: 'Password must be at least 8 characters.' }); return; }
+    if (newPassword !== confirmPassword) { setPasswordMsg({ type: 'error', text: 'Passwords do not match.' }); return; }
+    if (!identityId) { setPasswordMsg({ type: 'error', text: 'Could not resolve your account. Please refresh and try again.' }); return; }
+
+    setPasswordSaving(true);
+    try {
+      await updateMyPassword(identityId, newPassword);
+      setNewPassword('');
+      setConfirmPassword('');
+      setPasswordMsg({ type: 'success', text: 'Password updated successfully!' });
+    } catch (err) {
+      console.error('Failed to update password:', err);
+      setPasswordMsg({ type: 'error', text: err.response?.data?.detail || 'Failed to update password. Please try again.' });
+    } finally {
+      setPasswordSaving(false);
+    }
+  };
+
   const notifItems = [
     { field: 'pushNotifications', icon: 'campaign', label: 'Push Notifications', desc: 'Quiz results and class announcements' },
-    { field: 'emailAlerts',       icon: 'mail',     label: 'Email Alerts',        desc: 'Weekly summaries and parent updates'  },
+    { field: 'emailAlerts', icon: 'mail', label: 'Email Alerts', desc: 'Weekly summaries and parent updates' },
   ];
 
   return (
@@ -264,9 +299,44 @@ export default function Settings() {
                 </div>
                 <span className="text-base font-bold text-on-surface">Security</span>
               </div>
-              <p className="text-sm text-on-surface-variant leading-relaxed pl-11">
+              <p className="text-sm text-on-surface-variant leading-relaxed pl-11 mb-4">
                 Your data is encrypted using institutional-grade protocols. Scholar ID verified.
               </p>
+
+              <div className="pl-11 space-y-3">
+                {passwordMsg && (
+                  <div className={`text-xs font-semibold rounded-lg px-3 py-2 ${passwordMsg.type === 'success' ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-600'}`}>
+                    {passwordMsg.text}
+                  </div>
+                )}
+                <div>
+                  <label className="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-1.5">New Password</label>
+                  <input
+                    type="password"
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                    placeholder="Enter new password"
+                    className="w-full bg-surface-container-low border-none rounded-xl py-2.5 px-3.5 text-sm text-on-surface font-medium focus:ring-2 focus:ring-primary/30 outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-1.5">Confirm Password</label>
+                  <input
+                    type="password"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    placeholder="Re-enter new password"
+                    className="w-full bg-surface-container-low border-none rounded-xl py-2.5 px-3.5 text-sm text-on-surface font-medium focus:ring-2 focus:ring-primary/30 outline-none"
+                  />
+                </div>
+                <button
+                  onClick={handlePasswordUpdate}
+                  disabled={passwordSaving}
+                  className="w-full sm:w-auto px-5 py-2 bg-primary text-white text-xs font-semibold rounded-xl shadow-sm hover:opacity-90 transition-all disabled:opacity-50"
+                >
+                  {passwordSaving ? 'Updating...' : 'Update Password'}
+                </button>
+              </div>
             </div>
 
             {/* Session Info */}

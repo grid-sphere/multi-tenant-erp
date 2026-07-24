@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import DashboardLayout from "../../components/erp/parent/DashboardLayout";
-import { getParentProfile } from "../../services/parentAPIs";
+import { getParentProfile, changeMyPassword } from "../../services/parentAPIs";
 import api from "../../services/axiosClient";
 
 const Toggle = ({ enabled, onToggle }) => (
@@ -14,26 +14,26 @@ const Toggle = ({ enabled, onToggle }) => (
 );
 
 const COUNTRY_CODES = [
-  { code: "+1",   iso: "us", name: "US",  maxDigits: 10 },
-  { code: "+44",  iso: "gb", name: "UK",  maxDigits: 10 },
-  { code: "+91",  iso: "in", name: "IN",  maxDigits: 10 },
-  { code: "+92",  iso: "pk", name: "PK",  maxDigits: 10 },
-  { code: "+971", iso: "ae", name: "UAE", maxDigits: 9  },
-  { code: "+966", iso: "sa", name: "SA",  maxDigits: 9  },
-  { code: "+61",  iso: "au", name: "AU",  maxDigits: 9  },
-  { code: "+49",  iso: "de", name: "DE",  maxDigits: 11 },
-  { code: "+33",  iso: "fr", name: "FR",  maxDigits: 9  },
-  { code: "+86",  iso: "cn", name: "CN",  maxDigits: 11 },
-  { code: "+81",  iso: "jp", name: "JP",  maxDigits: 10 },
-  { code: "+55",  iso: "br", name: "BR",  maxDigits: 11 },
-  { code: "+27",  iso: "za", name: "ZA",  maxDigits: 9  },
-  { code: "+234", iso: "ng", name: "NG",  maxDigits: 10 },
-  { code: "+20",  iso: "eg", name: "EG",  maxDigits: 10 },
-  { code: "+62",  iso: "id", name: "ID",  maxDigits: 12 },
-  { code: "+880", iso: "bd", name: "BD",  maxDigits: 10 },
-  { code: "+90",  iso: "tr", name: "TR",  maxDigits: 10 },
-  { code: "+98",  iso: "ir", name: "IR",  maxDigits: 10 },
-  { code: "+7",   iso: "ru", name: "RU",  maxDigits: 10 },
+  { code: "+1", iso: "us", name: "US", maxDigits: 10 },
+  { code: "+44", iso: "gb", name: "UK", maxDigits: 10 },
+  { code: "+91", iso: "in", name: "IN", maxDigits: 10 },
+  { code: "+92", iso: "pk", name: "PK", maxDigits: 10 },
+  { code: "+971", iso: "ae", name: "UAE", maxDigits: 9 },
+  { code: "+966", iso: "sa", name: "SA", maxDigits: 9 },
+  { code: "+61", iso: "au", name: "AU", maxDigits: 9 },
+  { code: "+49", iso: "de", name: "DE", maxDigits: 11 },
+  { code: "+33", iso: "fr", name: "FR", maxDigits: 9 },
+  { code: "+86", iso: "cn", name: "CN", maxDigits: 11 },
+  { code: "+81", iso: "jp", name: "JP", maxDigits: 10 },
+  { code: "+55", iso: "br", name: "BR", maxDigits: 11 },
+  { code: "+27", iso: "za", name: "ZA", maxDigits: 9 },
+  { code: "+234", iso: "ng", name: "NG", maxDigits: 10 },
+  { code: "+20", iso: "eg", name: "EG", maxDigits: 10 },
+  { code: "+62", iso: "id", name: "ID", maxDigits: 12 },
+  { code: "+880", iso: "bd", name: "BD", maxDigits: 10 },
+  { code: "+90", iso: "tr", name: "TR", maxDigits: 10 },
+  { code: "+98", iso: "ir", name: "IR", maxDigits: 10 },
+  { code: "+7", iso: "ru", name: "RU", maxDigits: 10 },
 ];
 
 function FlagImg({ iso, className = "" }) {
@@ -121,26 +121,33 @@ const ParentPortalSettings = () => {
     }
   }, [isDark]);
 
-  const [notifs, setNotifs]                 = useState({ email: true, push: true, sms: false });
-  const [saved, setSaved]                   = useState(false);
-  const [saveError, setSaveError]           = useState(null);
-  const [saving, setSaving]                 = useState(false);
-  const [countryCode, setCountryCode]       = useState("+91");
-  const [phone, setPhone]                   = useState("");
-  const [firstName, setFirstName]           = useState("");
-  const [lastName, setLastName]             = useState("");
-  const [email, setEmail]                   = useState("");
-  const [relationship, setRelationship]     = useState("Mother");
-  const [address, setAddress]               = useState("");
-  const [occupation, setOccupation]         = useState("");
+  const [notifs, setNotifs] = useState({ email: true, push: true, sms: false });
+  const [saved, setSaved] = useState(false);
+  const [saveError, setSaveError] = useState(null);
+  const [saving, setSaving] = useState(false);
+  const [countryCode, setCountryCode] = useState("+91");
+  const [phone, setPhone] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [relationship, setRelationship] = useState("Mother");
+  const [address, setAddress] = useState("");
+  const [occupation, setOccupation] = useState("");
   const [emergencyContact, setEmergencyContact] = useState("");
-  const [dob, setDob]                       = useState("");
-  const [profilePicUrl, setProfilePicUrl]   = useState(null);
+  const [dob, setDob] = useState("");
+  const [profilePicUrl, setProfilePicUrl] = useState(null);
   const [profilePicFile, setProfilePicFile] = useState(null);
   const [profilePicPreview, setProfilePicPreview] = useState(null);
-  const fileInputRef                        = useRef(null);
+  const fileInputRef = useRef(null);
 
-useEffect(() => {
+  // ── Password change ──
+  const [oldPassword, setOldPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [passwordSaving, setPasswordSaving] = useState(false);
+  const [passwordMsg, setPasswordMsg] = useState(null);
+
+  useEffect(() => {
     const fetchProfile = async () => {
       try {
         const profileData = await getParentProfile();
@@ -152,6 +159,7 @@ useEffect(() => {
         setOccupation(profileData.occupation || "");
         setEmergencyContact(profileData.emergency_contact_number || "");
         setDob(profileData.date_of_birth || "");
+        setRelationship(profileData.relationship || profileData.relationship_to_student || "Mother");
 
         // Get signed URL if profile picture exists
         if (profileData.profile_picture) {
@@ -178,63 +186,106 @@ useEffect(() => {
     setProfilePicPreview(URL.createObjectURL(file));
   };
 
-const handleSave = async () => {
-  setSaving(true);
-  setSaveError(null);
-  try {
-    const userData = JSON.parse(localStorage.getItem("user_data") || "null");
-    const userId = userData?.identity?.id || null;
+  const handleSave = async () => {
+    setSaving(true);
+    setSaveError(null);
+    try {
+      const userData = JSON.parse(localStorage.getItem("user_data") || "null");
+      const userId = userData?.identity?.id || null;
 
-    let newFilePath = null;
+      let newFilePath = null;
 
-    // Upload profile picture
-    if (profilePicFile) {
-      const urlRes = await api.post(`/uploads/profile-image/`, {
-        file_name: profilePicFile.name,
-        content_type: profilePicFile.type,
-        profile_type: "parent",
-      });
+      // Upload profile picture
+      if (profilePicFile) {
+        const urlRes = await api.post(`/uploads/profile-image/`, {
+          file_name: profilePicFile.name,
+          content_type: profilePicFile.type,
+          profile_type: "parent",
+        });
 
-      const { upload_url, file_path } = urlRes.data;
+        const { upload_url, file_path } = urlRes.data;
 
-      await fetch(upload_url, {
-        method: "PUT",
-        body: profilePicFile,
-        headers: { "Content-Type": profilePicFile.type },
-      });
+        await fetch(upload_url, {
+          method: "PUT",
+          body: profilePicFile,
+          headers: { "Content-Type": profilePicFile.type },
+        });
 
-      await api.post(`/uploads/confirm/`, {
-        file_path,
-        file_type: "profile_picture",
-      });
+        await api.post(`/uploads/confirm/`, {
+          file_path,
+          file_type: "profile_picture",
+        });
 
-      newFilePath = file_path; // save for profile update
-      setProfilePicFile(null);
+        newFilePath = file_path; // save for profile update
+        setProfilePicFile(null);
+      }
+
+      // Save profile data — include profile_picture if uploaded
+      const payload = {
+        user: userId,
+        phone_number: phone,
+        address,
+        occupation,
+        emergency_contact_number: emergencyContact,
+      };
+      if (dob) payload.date_of_birth = dob;
+      if (newFilePath) payload.profile_picture = newFilePath; // ← this is the fix
+
+      await api.patch(`/profiles/parents/me/`, payload);
+
+      setSaved(true);
+      setTimeout(() => setSaved(false), 2000);
+    } catch (err) {
+      console.error("Save failed", err);
+      setSaveError("Failed to save. Please try again.");
+      setTimeout(() => setSaveError(null), 3000);
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handlePasswordUpdate = async () => {
+    setPasswordMsg(null);
+
+    if (!oldPassword.trim()) {
+      setPasswordMsg({ type: "error", text: "Please enter your current password." });
+      return;
+    }
+    if (!newPassword.trim()) {
+      setPasswordMsg({ type: "error", text: "Please enter a new password." });
+      return;
+    }
+    if (newPassword.length < 8) {
+      setPasswordMsg({ type: "error", text: "Password must be at least 8 characters." });
+      return;
+    }
+    if (newPassword !== confirmPassword) {
+      setPasswordMsg({ type: "error", text: "Passwords do not match." });
+      return;
     }
 
-    // Save profile data — include profile_picture if uploaded
-    const payload = {
-      user: userId,
-      phone_number: phone,
-      address,
-      occupation,
-      emergency_contact_number: emergencyContact,
-    };
-    if (dob) payload.date_of_birth = dob;
-    if (newFilePath) payload.profile_picture = newFilePath; // ← this is the fix
+    setPasswordSaving(true);
+    try {
+      const res = await changeMyPassword({ oldPassword, newPassword, confirmPassword });
+      setOldPassword("");
+      setNewPassword("");
+      setConfirmPassword("");
+      setPasswordMsg({
+        type: "success",
+        text: res?.message || "Password changed successfully!",
+      });
+    } catch (err) {
+      console.error("Failed to update password:", err);
+      const errData = err.response?.data?.error;
+      const text = Array.isArray(errData)
+        ? errData.join(" ")
+        : errData || "Failed to update password. Please try again.";
+      setPasswordMsg({ type: "error", text });
+    } finally {
+      setPasswordSaving(false);
+    }
+  };
 
-    await api.patch(`/profiles/parents/me/`, payload);
-
-    setSaved(true);
-    setTimeout(() => setSaved(false), 2000);
-  } catch (err) {
-    console.error("Save failed", err);
-    setSaveError("Failed to save. Please try again.");
-    setTimeout(() => setSaveError(null), 3000);
-  } finally {
-    setSaving(false);
-  }
-};
   const avatarSrc =
     profilePicPreview ||
     profilePicUrl ||
@@ -315,72 +366,72 @@ const handleSave = async () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 flex-1">
 
               {/* First Name — readonly */}
-<div className="space-y-1">
-  <label className="text-[10px] font-semibold text-slate-400 dark:text-slate-300 uppercase tracking-wider">
-    First Name
-  </label>
-  <div className="relative">
-    <input type="text" value={firstName} readOnly className={readonlyCls} />
-    <span
-      title="Name can only be changed by school admin"
-      className="absolute right-2 top-1/2 -translate-y-1/2 material-symbols-outlined text-slate-300 dark:text-slate-600 cursor-help"
-      style={{ fontSize: "14px" }}
-    >
-      info
-    </span>
-  </div>
-</div>
+              <div className="space-y-1">
+                <label className="text-[10px] font-semibold text-slate-400 dark:text-slate-300 uppercase tracking-wider">
+                  First Name
+                </label>
+                <div className="relative">
+                  <input type="text" value={firstName} readOnly className={readonlyCls} />
+                  <span
+                    title="Name can only be changed by school admin"
+                    className="absolute right-2 top-1/2 -translate-y-1/2 material-symbols-outlined text-slate-300 dark:text-slate-600 cursor-help"
+                    style={{ fontSize: "14px" }}
+                  >
+                    info
+                  </span>
+                </div>
+              </div>
 
-{/* Last Name — readonly */}
-<div className="space-y-1">
-  <label className="text-[10px] font-semibold text-slate-400 dark:text-slate-300 uppercase tracking-wider">
-    Last Name
-  </label>
-  <div className="relative">
-    <input type="text" value={lastName} readOnly className={readonlyCls} />
-    <span
-      title="Name can only be changed by school admin"
-      className="absolute right-2 top-1/2 -translate-y-1/2 material-symbols-outlined text-slate-300 dark:text-slate-600 cursor-help"
-      style={{ fontSize: "14px" }}
-    >
-      info
-    </span>
-  </div>
-</div>
+              {/* Last Name — readonly */}
+              <div className="space-y-1">
+                <label className="text-[10px] font-semibold text-slate-400 dark:text-slate-300 uppercase tracking-wider">
+                  Last Name
+                </label>
+                <div className="relative">
+                  <input type="text" value={lastName} readOnly className={readonlyCls} />
+                  <span
+                    title="Name can only be changed by school admin"
+                    className="absolute right-2 top-1/2 -translate-y-1/2 material-symbols-outlined text-slate-300 dark:text-slate-600 cursor-help"
+                    style={{ fontSize: "14px" }}
+                  >
+                    info
+                  </span>
+                </div>
+              </div>
 
-{/* Email — readonly */}
-<div className="space-y-1">
-  <label className="text-[10px] font-semibold text-slate-400 dark:text-slate-300 uppercase tracking-wider">
-    Email
-  </label>
-  <div className="relative">
-    <input type="email" value={email} readOnly className={readonlyCls} />
-    <span
-      title="Email can only be changed by school admin"
-      className="absolute right-2 top-1/2 -translate-y-1/2 material-symbols-outlined text-slate-300 dark:text-slate-600 cursor-help"
-      style={{ fontSize: "14px" }}
-    >
-      info
-    </span>
-  </div>
-</div>
+              {/* Email — readonly */}
+              <div className="space-y-1">
+                <label className="text-[10px] font-semibold text-slate-400 dark:text-slate-300 uppercase tracking-wider">
+                  Email
+                </label>
+                <div className="relative">
+                  <input type="email" value={email} readOnly className={readonlyCls} />
+                  <span
+                    title="Email can only be changed by school admin"
+                    className="absolute right-2 top-1/2 -translate-y-1/2 material-symbols-outlined text-slate-300 dark:text-slate-600 cursor-help"
+                    style={{ fontSize: "14px" }}
+                  >
+                    info
+                  </span>
+                </div>
+              </div>
 
-{/* Relationship — readonly */}
-<div className="space-y-1">
-  <label className="text-[10px] font-semibold text-slate-400 dark:text-slate-300 uppercase tracking-wider">
-    Relationship
-  </label>
-  <div className="relative">
-    <input type="text" value={relationship} readOnly className={readonlyCls} />
-    <span
-      title="Relationship is set by school admin"
-      className="absolute right-2 top-1/2 -translate-y-1/2 material-symbols-outlined text-slate-300 dark:text-slate-600 cursor-help"
-      style={{ fontSize: "14px" }}
-    >
-      info
-    </span>
-  </div>
-</div>
+              {/* Relationship — readonly */}
+              <div className="space-y-1">
+                <label className="text-[10px] font-semibold text-slate-400 dark:text-slate-300 uppercase tracking-wider">
+                  Relationship
+                </label>
+                <div className="relative">
+                  <input type="text" value={relationship} readOnly className={readonlyCls} />
+                  <span
+                    title="Relationship is set by school admin"
+                    className="absolute right-2 top-1/2 -translate-y-1/2 material-symbols-outlined text-slate-300 dark:text-slate-600 cursor-help"
+                    style={{ fontSize: "14px" }}
+                  >
+                    info
+                  </span>
+                </div>
+              </div>
 
               {/* Date of Birth — editable */}
               <div className="space-y-1">
@@ -551,19 +602,75 @@ const handleSave = async () => {
             </div>
 
             {/* Account Security */}
-            <div className="bg-red-50 dark:bg-red-950/20 rounded-xl p-3 sm:p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 transition-colors duration-300">
-              <div className="flex items-start gap-2 min-w-0">
-                <span className="material-symbols-outlined text-red-500 dark:text-red-300 text-xs mt-0.5 flex-shrink-0">warning</span>
-                <div className="min-w-0">
-                  <h3 className="text-xs font-bold text-red-600 dark:text-red-300">Account Security</h3>
-                  <p className="text-[10px] text-slate-500 dark:text-slate-300 mt-0.5 leading-relaxed">
-                    Reset password or sign out of all devices.
-                  </p>
+            <div className="bg-red-50 dark:bg-red-950/20 rounded-xl p-3 sm:p-4 flex flex-col gap-3 transition-colors duration-300">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div className="flex items-start gap-2 min-w-0">
+                  <span className="material-symbols-outlined text-red-500 dark:text-red-300 text-xs mt-0.5 flex-shrink-0">warning</span>
+                  <div className="min-w-0">
+                    <h3 className="text-xs font-bold text-red-600 dark:text-red-300">Account Security</h3>
+                    <p className="text-[10px] text-slate-500 dark:text-slate-300 mt-0.5 leading-relaxed">
+                      Reset password or sign out of all devices.
+                    </p>
+                  </div>
                 </div>
+                <button className="flex-shrink-0 w-full sm:w-auto bg-red-500 text-white px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-semibold hover:bg-red-600 transition-colors whitespace-nowrap">
+                  Sign Out All
+                </button>
               </div>
-              <button className="flex-shrink-0 w-full sm:w-auto bg-red-500 text-white px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-semibold hover:bg-red-600 transition-colors whitespace-nowrap">
-                Sign Out All
-              </button>
+
+              <div className="pl-0 sm:pl-6 space-y-2">
+                {passwordMsg && (
+                  <div
+                    className={`text-[10px] font-semibold rounded-lg px-2.5 py-2 ${passwordMsg.type === "success"
+                        ? "bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-300"
+                        : "bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-300"
+                      }`}
+                  >
+                    {passwordMsg.text}
+                  </div>
+                )}
+
+                <div className="space-y-1">
+                  <label className="text-[10px] font-semibold text-slate-400 dark:text-slate-300 uppercase tracking-wider">Current Password</label>
+                  <input
+                    type="password"
+                    value={oldPassword}
+                    onChange={(e) => setOldPassword(e.target.value)}
+                    placeholder="Enter current password"
+                    className={inputCls}
+                  />
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-[10px] font-semibold text-slate-400 dark:text-slate-300 uppercase tracking-wider">New Password</label>
+                  <input
+                    type="password"
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                    placeholder="Enter new password"
+                    className={inputCls}
+                  />
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-[10px] font-semibold text-slate-400 dark:text-slate-300 uppercase tracking-wider">Confirm Password</label>
+                  <input
+                    type="password"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    placeholder="Re-enter new password"
+                    className={inputCls}
+                  />
+                </div>
+
+                <button
+                  onClick={handlePasswordUpdate}
+                  disabled={passwordSaving}
+                  className="w-full sm:w-auto bg-red-600 text-white px-3 py-1.5 rounded-lg text-xs font-semibold hover:bg-red-700 transition-colors disabled:opacity-60"
+                >
+                  {passwordSaving ? "Updating..." : "Update Password"}
+                </button>
+              </div>
             </div>
           </div>
 
@@ -575,9 +682,9 @@ const handleSave = async () => {
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-2 sm:gap-3">
               {[
-                { key: "email", icon: "mail",       label: "Email Summaries",    desc: "Weekly digests of child progress"   },
-                { key: "push",  icon: "smartphone",  label: "Push Notifications", desc: "Real-time alerts for absences"      },
-                { key: "sms",   icon: "sms",         label: "SMS Alerts",         desc: "Emergency weather or security info" },
+                { key: "email", icon: "mail", label: "Email Summaries", desc: "Weekly digests of child progress" },
+                { key: "push", icon: "smartphone", label: "Push Notifications", desc: "Real-time alerts for absences" },
+                { key: "sms", icon: "sms", label: "SMS Alerts", desc: "Emergency weather or security info" },
               ].map(({ key, icon, label, desc }) => (
                 <div
                   key={key}
