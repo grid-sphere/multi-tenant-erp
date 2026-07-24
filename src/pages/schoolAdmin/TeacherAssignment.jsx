@@ -4,7 +4,7 @@ import SchoolLayout from "../../components/erp/school/SchoolLayout";
 import { schoolAdminApi } from '../../services/schoolAdminApi';
 
 // ─────────────────────────────────────────────
-// Skeleton Loader (reused)
+// Skeleton Loader
 // ─────────────────────────────────────────────
 function Skeleton({ className = "", style = {} }) {
   return (
@@ -115,7 +115,7 @@ function TeacherAssignmentSkeleton() {
 }
 
 // ─────────────────────────────────────────────
-// Stat Card (unchanged)
+// Stat Card 
 // ─────────────────────────────────────────────
 function StatCard({ icon, label, value, accentColor, subtitle }) {
   return (
@@ -178,12 +178,15 @@ export default function TeacherAssignment() {
     setCurrentPage(1);
   }, [debouncedSearch, pageSize]);
 
-  // Fetch assignments
+  // Fetch the full assignment directory once on mount. Search is applied
+  // client-side below so typing in the search box never re-triggers a
+  // fetch or flashes the full-page skeleton.
   useEffect(() => {
-    fetchAllAssignments(debouncedSearch);
-  }, [debouncedSearch]);
+    fetchAllAssignments();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  const fetchAllAssignments = async (search) => {
+  const fetchAllAssignments = async () => {
     setLoading(true);
     setError(null);
     try {
@@ -191,7 +194,7 @@ export default function TeacherAssignment() {
       let results = [];
       let hasNext = true;
       while (hasNext) {
-        const data = await schoolAdminApi.getTeacherAssignments(page, search);
+        const data = await schoolAdminApi.getTeacherAssignments(page, "");
         results = [...results, ...(data.results || data || [])];
         hasNext = Boolean(data.next);
         page += 1;
@@ -205,21 +208,34 @@ export default function TeacherAssignment() {
     }
   };
 
-  // Stats
+  // Stats — always reflect the full directory, not the current search.
   const totalCount = allAssignments.length;
   const uniqueClasses = new Set(allAssignments.map(a => a.class_level_name)).size;
   const uniqueSubjects = new Set(allAssignments.map(a => a.subject_name)).size;
   const activeAssignments = allAssignments.filter(a => a.is_active !== false).length;
 
+  // Client-side search, computed on every render from the already-fetched
+  // list — no network round-trip, no loading flash.
+  const filteredAssignments = useMemo(() => {
+    if (!debouncedSearch) return allAssignments;
+    const q = debouncedSearch.toLowerCase();
+    return allAssignments.filter((a) => {
+      const haystack = `${a.teacher_name || ""} ${a.teacher_employee_id || ""} ${a.subject_name || ""} ${a.class_level_name || ""} ${a.section_name || ""}`.toLowerCase();
+      return haystack.includes(q);
+    });
+  }, [allAssignments, debouncedSearch]);
+
+  const filteredCount = filteredAssignments.length;
+
   // Pagination
-  const totalPages = Math.max(1, Math.ceil(totalCount / pageSize));
+  const totalPages = Math.max(1, Math.ceil(filteredCount / pageSize));
   const assignments = useMemo(() => {
     const start = (currentPage - 1) * pageSize;
-    return allAssignments.slice(start, start + pageSize);
-  }, [allAssignments, currentPage, pageSize]);
+    return filteredAssignments.slice(start, start + pageSize);
+  }, [filteredAssignments, currentPage, pageSize]);
 
-  const rangeStart = totalCount === 0 ? 0 : (currentPage - 1) * pageSize + 1;
-  const rangeEnd = Math.min(currentPage * pageSize, totalCount);
+  const rangeStart = filteredCount === 0 ? 0 : (currentPage - 1) * pageSize + 1;
+  const rangeEnd = Math.min(currentPage * pageSize, filteredCount);
 
   // Delete handler
   const handleDelete = async (id) => {
@@ -312,7 +328,7 @@ export default function TeacherAssignment() {
           </div>
           <div className="flex items-center justify-end gap-2 shrink-0">
             <span className="text-xs font-semibold text-on-surface-variant">
-              {totalCount} {totalCount === 1 ? "record" : "records"} found
+              {filteredCount} {filteredCount === 1 ? "record" : "records"} found
             </span>
           </div>
         </div>
@@ -425,7 +441,7 @@ export default function TeacherAssignment() {
           </div>
 
           {/* Responsive Pagination Strip */}
-          {totalCount > 0 && (
+          {filteredCount > 0 && (
             <div className="p-4 flex flex-col sm:flex-row gap-4 justify-between items-center border-t border-outline-variant/10 bg-surface-container-high/30">
               <div className="flex items-center justify-between w-full sm:w-auto gap-2 text-xs font-body text-on-surface-variant">
                 <div className="flex items-center gap-2">
@@ -440,7 +456,7 @@ export default function TeacherAssignment() {
                     ))}
                   </select>
                 </div>
-                <span>Showing {rangeStart}-{rangeEnd} of {totalCount}</span>
+                <span>Showing {rangeStart}-{rangeEnd} of {filteredCount}</span>
               </div>
               <div className="flex items-center justify-between w-full sm:w-auto gap-3">
                 <button
