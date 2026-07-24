@@ -54,7 +54,10 @@ import LeaveDashboard from '../pages/schoolAdmin/LeaveDashboard';
 import GrievanceManagement from "../pages/schoolAdmin/GrievanceManagement";
 import CircularsPage from "../pages/schoolAdmin/Circulars";
 import TimetableManagement from "../pages/schoolAdmin/TimetableManagement";
-import BulkUpload from '../pages/schoolAdmin/BulkUpload'
+import BulkUpload from '../pages/schoolAdmin/BulkUpload';
+import StudentFees from "../pages/schoolAdmin/StudentFees";
+import StudentFeeDetail from "../pages/schoolAdmin/StudentFeeDetail";
+import FeeBulkUpload from '../pages/schoolAdmin/FeeBulkUpload';
 
 /* STUDENT */
 import StudentDashboard from "../pages/student/Dashboard";
@@ -231,6 +234,9 @@ function AppRoutes() {
           <Route path="circulars" element={<CircularsPage />} />
           <Route path="timetable" element={<TimetableManagement />} />
           <Route path='/school-admin/bulk-upload' element={<BulkUpload/>} />
+          <Route path="/school-admin/finance/student-fees" element={<StudentFees />} />
+          <Route path="/school-admin/finance/student-fees/:id" element={<StudentFeeDetail />} />
+          <Route path="/school-admin/finance/bulk-upload"  element={<FeeBulkUpload />} />
         </Route>
 
         {/* ================= STUDENT ================= */}
