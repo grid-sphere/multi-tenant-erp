@@ -34,6 +34,15 @@ export const financeApi = {
       .then((res) => res.data);
   },
 
+  // ── Add Payment (individual student) ─────────────────────────
+  // POST /api/v1/finance/student-fees/{feeId}/add-payment/
+  // payload: { amount, payment_method, payment_date, reference_number, notes }
+  // Returns the updated StudentFeeDetail (including refreshed transactions list).
+  addPayment: (feeId, payload) =>
+    api
+      .post(`finance/student-fees/${feeId}/add-payment/`, payload)
+      .then((res) => res.data),
+
   // ── Transactions ──────────────────────────────────────────────
   // Note: StudentFeeDetailSerializer already embeds the last 10 transactions
   // for a given fee record, so the detail page doesn't need this. This is
