@@ -34,6 +34,16 @@ export const financeApi = {
       .then((res) => res.data);
   },
 
+  // ── Bulk Export ───────────────────────────────────────────────
+  // Backend returns an .xlsx file using the same column schema as the
+  // bulk-upload template, so exported files can be edited and re-imported
+  // directly. responseType: "blob" is required since this is a file
+  // download, not JSON.
+  exportStudentFees: () =>
+    api
+      .get("finance/student-fees/bulk-export/", { responseType: "blob" })
+      .then((res) => res.data),
+
   // ── Transactions ──────────────────────────────────────────────
   // Note: StudentFeeDetailSerializer already embeds the last 10 transactions
   // for a given fee record, so the detail page doesn't need this. This is

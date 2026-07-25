@@ -182,6 +182,9 @@ export default function StudentFees() {
   const [classFilter, setClassFilter] = useState("");
   const [yearFilter, setYearFilter] = useState("");
 
+  // Bulk export loading state
+  const [exporting, setExporting] = useState(false);
+
   // Debounce search
   useEffect(() => {
     const timer = setTimeout(() => setDebouncedSearch(searchQuery), 400);
@@ -220,6 +223,30 @@ export default function StudentFees() {
       setError("Failed to fetch student fee records.");
     } finally {
       setLoading(false);
+    }
+  };
+
+  // Bulk export — downloads all student fee records as an .xlsx file, using
+  // the same column schema as the bulk-upload template (see finance/views.py
+  // StudentFeeViewSet.bulk_export). The backend returns a raw xlsx blob,
+  // so we create a temporary object URL and trigger a download.
+  const handleBulkExport = async () => {
+    setExporting(true);
+    setError(null);
+    try {
+      const blob = await financeApi.exportStudentFees();
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `student-fees-export-${new Date().toISOString().slice(0, 10)}.xlsx`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      setError("Failed to export student fee records.");
+    } finally {
+      setExporting(false);
     }
   };
 
@@ -285,13 +312,25 @@ export default function StudentFees() {
               Track fee payments, dues, and outstanding balances across the institution.
             </p>
           </div>
-          <button
-            onClick={() => navigate("/school-admin/finance/bulk-upload")}
-            className="whitespace-nowrap bg-surface-container-lowest text-primary border border-primary/30 px-5 py-2.5 rounded-lg text-sm font-bold hover:bg-primary/5 transition-all active:scale-95 flex items-center justify-center gap-2"
-          >
-            <span className="material-symbols-outlined text-[18px]">upload_file</span>
-            Bulk Upload
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={handleBulkExport}
+              disabled={exporting}
+              className="whitespace-nowrap bg-surface-container-lowest text-on-surface border border-outline-variant/30 px-5 py-2.5 rounded-lg text-sm font-bold hover:bg-surface-container-high/50 transition-all active:scale-95 flex items-center justify-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed"
+            >
+              <span className={`material-symbols-outlined text-[18px] ${exporting ? "animate-spin" : ""}`}>
+                {exporting ? "progress_activity" : "download"}
+              </span>
+              {exporting ? "Exporting..." : "Bulk Export"}
+            </button>
+            <button
+              onClick={() => navigate("/school-admin/finance/bulk-upload")}
+              className="whitespace-nowrap bg-surface-container-lowest text-primary border border-primary/30 px-5 py-2.5 rounded-lg text-sm font-bold hover:bg-primary/5 transition-all active:scale-95 flex items-center justify-center gap-2"
+            >
+              <span className="material-symbols-outlined text-[18px]">upload_file</span>
+              Bulk Upload
+            </button>
+          </div>
         </div>
 
         {/* Error */}
