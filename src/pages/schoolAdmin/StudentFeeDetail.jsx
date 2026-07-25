@@ -59,13 +59,16 @@ function StatusBadge({ status }) {
   );
 }
 
-function SectionCard({ title, icon, children }) {
+function SectionCard({ title, icon, children, action }) {
   return (
     <div className="bg-surface-container-lowest rounded-xl border border-outline-variant/10 shadow-sm overflow-hidden">
-      <div className="px-4 md:px-6 py-4 border-b border-outline-variant/10 flex items-center gap-2">
-        <span className="w-1 h-5 rounded-full bg-primary shrink-0" />
-        <span className="material-symbols-outlined text-[18px] text-on-surface-variant/60">{icon}</span>
-        <h3 className="text-sm font-headline font-bold text-on-surface">{title}</h3>
+      <div className="px-4 md:px-6 py-4 border-b border-outline-variant/10 flex items-center justify-between gap-2">
+        <div className="flex items-center gap-2">
+          <span className="w-1 h-5 rounded-full bg-primary shrink-0" />
+          <span className="material-symbols-outlined text-[18px] text-on-surface-variant/60">{icon}</span>
+          <h3 className="text-sm font-headline font-bold text-on-surface">{title}</h3>
+        </div>
+        {action}
       </div>
       <div className="p-4 md:p-6">{children}</div>
     </div>
@@ -95,6 +98,154 @@ const PAYMENT_METHOD_LABELS = {
   Other: "Other",
 };
 
+const INITIAL_PAYMENT_FORM = {
+  amount: "",
+  payment_method: "Cash",
+  payment_date: new Date().toISOString().slice(0, 10),
+  reference_number: "",
+  notes: "",
+};
+
+/* ─────────────────────────────────────────────
+   Add Payment Modal
+───────────────────────────────────────────── */
+function AddPaymentModal({ fee, onClose, onSuccess }) {
+  const [form, setForm] = useState(INITIAL_PAYMENT_FORM);
+  const [submitting, setSubmitting] = useState(false);
+  const [formError, setFormError] = useState(null);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setFormError(null);
+
+    const amountNum = Number(form.amount);
+    if (!form.amount || isNaN(amountNum) || amountNum <= 0) {
+      setFormError("Enter a valid amount greater than zero.");
+      return;
+    }
+    if (amountNum > Number(fee.balance_due)) {
+      setFormError(`Amount exceeds balance due (${formatCurrency(fee.balance_due)}).`);
+      return;
+    }
+
+    setSubmitting(true);
+    try {
+      const updated = await financeApi.addPayment(fee.id, form);
+      onSuccess(updated);
+    } catch (err) {
+      setFormError(
+        err?.response?.data?.error || "Failed to record payment. Please try again."
+      );
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  return (
+    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
+      <div className="bg-surface-container-lowest rounded-xl p-6 w-full max-w-md border border-outline-variant/10 shadow-xl">
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-sm font-headline font-bold text-on-surface">Add Payment</h3>
+          <button
+            type="button"
+            onClick={onClose}
+            className="text-on-surface-variant hover:text-on-surface"
+          >
+            <span className="material-symbols-outlined text-lg">close</span>
+          </button>
+        </div>
+
+        <form onSubmit={handleSubmit} className="space-y-3">
+          {formError && (
+            <div className="text-xs text-error bg-error/10 p-2.5 rounded-lg border border-error/20">
+              {formError}
+            </div>
+          )}
+
+          <div>
+            <label className="text-xs font-bold text-on-surface-variant">
+              Amount &nbsp;
+              <span className="font-normal">(Balance due: {formatCurrency(fee.balance_due)})</span>
+            </label>
+            <input
+              type="number"
+              min="0.01"
+              step="0.01"
+              required
+              value={form.amount}
+              onChange={(e) => setForm({ ...form, amount: e.target.value })}
+              className="w-full mt-1 px-3 py-2 rounded-lg border border-outline-variant/30 text-sm bg-surface-container-lowest text-on-surface"
+              placeholder="0.00"
+            />
+          </div>
+
+          <div>
+            <label className="text-xs font-bold text-on-surface-variant">Payment Method</label>
+            <select
+              value={form.payment_method}
+              onChange={(e) => setForm({ ...form, payment_method: e.target.value })}
+              className="w-full mt-1 px-3 py-2 rounded-lg border border-outline-variant/30 text-sm bg-surface-container-lowest text-on-surface"
+            >
+              {Object.entries(PAYMENT_METHOD_LABELS).map(([k, v]) => (
+                <option key={k} value={k}>{v}</option>
+              ))}
+            </select>
+          </div>
+
+          <div>
+            <label className="text-xs font-bold text-on-surface-variant">Payment Date</label>
+            <input
+              type="date"
+              required
+              value={form.payment_date}
+              onChange={(e) => setForm({ ...form, payment_date: e.target.value })}
+              className="w-full mt-1 px-3 py-2 rounded-lg border border-outline-variant/30 text-sm bg-surface-container-lowest text-on-surface"
+            />
+          </div>
+
+          <div>
+            <label className="text-xs font-bold text-on-surface-variant">Reference Number (optional)</label>
+            <input
+              type="text"
+              value={form.reference_number}
+              onChange={(e) => setForm({ ...form, reference_number: e.target.value })}
+              className="w-full mt-1 px-3 py-2 rounded-lg border border-outline-variant/30 text-sm bg-surface-container-lowest text-on-surface"
+              placeholder="e.g. cheque no., UTR no."
+            />
+          </div>
+
+          <div>
+            <label className="text-xs font-bold text-on-surface-variant">Notes (optional)</label>
+            <textarea
+              value={form.notes}
+              onChange={(e) => setForm({ ...form, notes: e.target.value })}
+              rows={2}
+              className="w-full mt-1 px-3 py-2 rounded-lg border border-outline-variant/30 text-sm bg-surface-container-lowest text-on-surface resize-none"
+            />
+          </div>
+
+          <div className="flex justify-end gap-2 pt-2">
+            <button
+              type="button"
+              onClick={onClose}
+              className="text-xs font-bold px-3 py-2 text-on-surface-variant hover:text-on-surface"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              disabled={submitting}
+              className="text-xs font-bold bg-primary text-on-primary px-4 py-2 rounded-lg disabled:opacity-50"
+            >
+              {submitting ? "Saving…" : "Save Payment"}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+}
+
 /* ─────────────────────────────────────────────
    Main Component
 ───────────────────────────────────────────── */
@@ -105,6 +256,7 @@ export default function StudentFeeDetail() {
   const [fee, setFee] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [showAddPayment, setShowAddPayment] = useState(false);
 
   useEffect(() => {
     fetchDetail();
@@ -122,6 +274,11 @@ export default function StudentFeeDetail() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handlePaymentSuccess = (updatedFee) => {
+    setFee(updatedFee);
+    setShowAddPayment(false);
   };
 
   if (loading) {
@@ -190,7 +347,18 @@ export default function StudentFeeDetail() {
                 </p>
               </div>
             </div>
-            <StatusBadge status={fee.status} />
+            <div className="flex items-center gap-3">
+              <StatusBadge status={fee.status} />
+              <button
+                onClick={() => setShowAddPayment(true)}
+                disabled={Number(fee.balance_due) <= 0}
+                title={Number(fee.balance_due) <= 0 ? "This fee is fully paid" : "Add a payment"}
+                className="flex items-center gap-1.5 text-xs font-bold bg-primary text-white px-3 py-2 rounded-lg disabled:opacity-40 disabled:cursor-not-allowed hover:opacity-90 transition"
+              >
+                <span className="material-symbols-outlined text-base">add</span>
+                Add Payment
+              </button>
+            </div>
           </div>
 
           {/* Payment progress */}
@@ -277,6 +445,14 @@ export default function StudentFeeDetail() {
             </div>
           )}
         </SectionCard>
+
+        {showAddPayment && (
+          <AddPaymentModal
+            fee={fee}
+            onClose={() => setShowAddPayment(false)}
+            onSuccess={handlePaymentSuccess}
+          />
+        )}
 
         <style>{`
           @keyframes skeleton-shimmer {

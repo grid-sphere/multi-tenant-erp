@@ -34,6 +34,15 @@ export const financeApi = {
       .then((res) => res.data);
   },
 
+  // ── Add Payment (individual student) ─────────────────────────
+  // POST /api/v1/finance/student-fees/{feeId}/add-payment/
+  // payload: { amount, payment_method, payment_date, reference_number, notes }
+  // Returns the updated StudentFeeDetail (including refreshed transactions list).
+  addPayment: (feeId, payload) =>
+    api
+      .post(`finance/student-fees/${feeId}/add-payment/`, payload)
+      .then((res) => res.data),
+
   // ── Bulk Export ───────────────────────────────────────────────
   // Backend returns an .xlsx file using the same column schema as the
   // bulk-upload template, so exported files can be edited and re-imported
