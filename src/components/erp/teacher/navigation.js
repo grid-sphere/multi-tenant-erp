@@ -17,6 +17,22 @@ export const navItems = [
     icon: "assignment",
   },
 
+  // On-screen marking. Sits next to Assignments because it is the other half
+  // of the same job, and was previously only reachable by drilling into an
+  // assignment's pending submissions.
+  {
+    label: "Marking",
+    path: "/teacher/marking/progress",
+    icon: "rate_review",
+  },
+
+  // Reads scanned or photographed scripts with DeepSeek-OCR on the GPU.
+  {
+    label: "Paper Checking",
+    path: "/teacher/tools/transcribe",
+    icon: "document_scanner",
+  },
+
   {
     label: "Attendance",
     path: "/teacher/attendance",

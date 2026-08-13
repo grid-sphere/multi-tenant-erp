@@ -42,10 +42,10 @@ export default function CreateClass() {
           
           <div className="mb-6">
             <h3 className="text-xl font-bold flex items-center gap-2">
-              <span className="material-symbols-outlined text-[#0058be] text-[24px]">meeting_room</span>
+              <span className="material-symbols-outlined text-primary text-[24px]">meeting_room</span>
               Define Class Level
             </h3>
-            <p className="text-sm text-[#6b7280] mt-1">
+            <p className="text-sm text-on-surface-variant mt-1">
               Establish a base academic grade (e.g. "Grade 10"). You will map specific sections to this later.
             </p>
           </div>
@@ -59,25 +59,25 @@ export default function CreateClass() {
           <form onSubmit={handleSave} className="space-y-5">
             
             <div className="space-y-1.5">
-              <label className="text-2xs font-bold uppercase tracking-wider text-[#6b7280] ml-1">Class Level Name</label>
+              <label className="text-2xs font-bold uppercase tracking-wider text-on-surface-variant ml-1">Class Level Name</label>
               <input
                 required
                 value={name}
                 onChange={e => setName(e.target.value)}
                 placeholder="e.g., Grade 10"
-                className="w-full bg-[#eff4ff] text-sm rounded px-3 py-2.5 outline-none focus:ring-2 focus:ring-[#0058be]/20 border border-transparent focus:border-[#0058be]/40 transition-all"
+                className="w-full bg-surface-container-low text-sm rounded px-3 py-2.5 outline-none focus:ring-2 focus:ring-primary/20 border border-transparent focus:border-primary/40 transition-all"
               />
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-2xs font-bold uppercase tracking-wider text-[#6b7280] ml-1">Numeric Sort Order</label>
+              <label className="text-2xs font-bold uppercase tracking-wider text-on-surface-variant ml-1">Numeric Sort Order</label>
               <input
                 type="number"
                 required
                 value={numericOrder}
                 onChange={e => setNumericOrder(e.target.value)}
                 placeholder="e.g., 10"
-                className="w-full bg-[#eff4ff] text-sm rounded px-3 py-2.5 outline-none focus:ring-2 focus:ring-[#0058be]/20 border border-transparent focus:border-[#0058be]/40 transition-all"
+                className="w-full bg-surface-container-low text-sm rounded px-3 py-2.5 outline-none focus:ring-2 focus:ring-primary/20 border border-transparent focus:border-primary/40 transition-all"
               />
               <p className="text-xs text-gray-500 ml-1 mt-0.5">
                 Used to accurately sort classes logically (Grade 9 comes before Grade 10) instead of alphabetically.
@@ -89,14 +89,14 @@ export default function CreateClass() {
                 type="button"
                 disabled={loading}
                 onClick={() => navigate("/school-admin")}
-                className="px-5 py-2 rounded text-sm text-gray-600 font-semibold hover:bg-[#eff4ff] transition-colors"
+                className="px-5 py-2 rounded text-sm text-gray-600 font-semibold hover:bg-surface-container-low transition-colors"
               >
                 Cancel
               </button>
               <button
                 type="submit"
                 disabled={loading}
-                className="px-6 py-2 bg-gradient-to-r from-[#0058be] to-[#2170e4] text-white text-sm rounded font-bold shadow-md hover:shadow-lg transition-all flex items-center gap-1.5"
+                className="px-6 py-2 bg-gradient-to-r from-primary to-primary-container text-white text-sm rounded font-bold shadow-md hover:shadow-lg transition-all flex items-center gap-1.5"
               >
                 {loading ? (
                   <span className="material-symbols-outlined animate-spin text-[16px]">progress_activity</span>

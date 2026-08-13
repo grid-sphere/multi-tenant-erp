@@ -248,15 +248,15 @@ const ClassPerformanceManagement = () => {
 
             {/* <div className="bg-orange-50 rounded-lg p-6 relative overflow-hidden border border-amber-900/10">
               <div className="flex gap-4 items-start relative z-10">
-                <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center text-[#924700] shrink-0 shadow-sm">
+                <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center text-secondary shrink-0 shadow-sm">
                   <span className="material-symbols-outlined">psychology</span>
                 </div>
                 <div>
-                  <h4 className="font-display font-bold text-[#b75b00] mb-1">AI Insight</h4>
-                  <p className="text-sm text-[#723600] leading-snug">
+                  <h4 className="font-display font-bold text-secondary mb-1">AI Insight</h4>
+                  <p className="text-sm text-on-secondary-container leading-snug">
                     3 students dropped 10% in attendance over the last 14 days. This may impact final grades.
                   </p>
-                  <button className="mt-4 bg-[#723600] text-white text-xs font-bold py-2 px-4 rounded-md uppercase tracking-wider hover:opacity-90">
+                  <button className="mt-4 bg-on-secondary-container text-white text-xs font-bold py-2 px-4 rounded-md uppercase tracking-wider hover:opacity-90">
                     Generate Outreach
                   </button>
                 </div>

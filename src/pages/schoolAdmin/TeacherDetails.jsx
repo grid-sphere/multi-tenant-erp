@@ -236,7 +236,7 @@ export default function TeacherDetails() {
             <p className="text-gray-500">{error || "Teacher not found."}</p>
             <button
               onClick={() => navigate("/school-admin/teachers")}
-              className="mt-4 px-4 py-2 bg-[#6b38d4] text-white rounded-lg text-sm font-bold"
+              className="mt-4 px-4 py-2 bg-primary text-white rounded-lg text-sm font-bold"
             >
               Back
             </button>
@@ -320,7 +320,7 @@ export default function TeacherDetails() {
         <div className="flex flex-wrap justify-between items-center gap-3">
           <button
             onClick={() => navigate("/school-admin/teachers")}
-            className="flex items-center gap-1.5 text-[#0058be] text-sm font-semibold hover:underline"
+            className="flex items-center gap-1.5 text-primary text-sm font-semibold hover:underline"
           >
             <span className="material-symbols-outlined text-[18px]">arrow_back</span> Back
           </button>
@@ -336,7 +336,7 @@ export default function TeacherDetails() {
                 </button>
                 <button
                   onClick={() => setIsEditing(true)}
-                  className="flex items-center gap-2 px-4 py-2 bg-[#f4ebff] text-[#6b38d4] text-sm font-bold rounded-md hover:bg-[#ead9ff] transition-colors"
+                  className="flex items-center gap-2 px-4 py-2 bg-primary-fixed text-primary text-sm font-bold rounded-md hover:bg-primary-fixed transition-colors"
                 >
                   <span className="material-symbols-outlined text-[16px]">edit</span> Edit Profile
                 </button>
@@ -352,7 +352,7 @@ export default function TeacherDetails() {
                 <button
                   onClick={handleSave}
                   disabled={isSaving}
-                  className="flex items-center gap-2 px-4 py-2 bg-[#6b38d4] text-white text-sm font-bold rounded-md shadow-sm disabled:opacity-70"
+                  className="flex items-center gap-2 px-4 py-2 bg-primary text-white text-sm font-bold rounded-md shadow-sm disabled:opacity-70"
                 >
                   {isSaving && <span className="material-symbols-outlined animate-spin text-[16px]">progress_activity</span>}
                   {isSaving ? "Saving..." : "Save Changes"}

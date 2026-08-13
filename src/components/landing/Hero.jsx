@@ -2,27 +2,27 @@ import { Link } from "react-router-dom";
 
 export default function Hero() {
   return (
-    <section className="pt-[100px] lg:pt-28 lg:pb-24 pb-10 bg-[#f5f7fb] ">
+    <section className="pt-[100px] lg:pt-28 lg:pb-24 pb-10 bg-surface-container-low ">
       <div className="max-w-7xl mx-auto px-8 grid lg:grid-cols-2 lg:gap-20 gap-8 items-center">
         {/* LEFT */}
         <div>
           {/* badge */}
-          <div className="inline-flex items-center gap-2 bg-[#e9efff] text-[#3563e9] px-4 py-1 lg:py-1.5 rounded-full text-xs font-semibold tracking-wide lg:mb-8 mb-5">
+          <div className="inline-flex items-center gap-2 bg-surface-container-low text-primary px-4 py-1 lg:py-1.5 rounded-full text-xs font-semibold tracking-wide lg:mb-8 mb-5">
             <span>✦</span>
             THE FUTURE OF PEDAGOGY
           </div>
 
           {/* heading */}
-          <h1 className="lg:text-[72px] text-[34px] leading-[1.05] font-extrabold text-[#0b1c30] tracking-tight">
+          <h1 className="lg:text-[72px] text-[34px] leading-[1.05] font-extrabold text-on-surface tracking-tight">
             AI Powered
             <br />
             School ERP for
             <br />
-            <span className="text-[#3563e9]">Modern Education</span>
+            <span className="text-primary">Modern Education</span>
           </h1>
 
           {/* description */}
-          <p className="text-[#4b5563] lg:text-lg mt-6 max-w-xl leading-relaxed">
+          <p className="text-on-surface-variant lg:text-lg mt-6 max-w-xl leading-relaxed">
             An intelligent platform for schools, teachers, students, and parents
             with automation, analytics, and personalized learning support.
           </p>
@@ -30,12 +30,12 @@ export default function Hero() {
           {/* buttons */}
           <div className="flex gap-4 mt-10">
             <Link to="/login">
-              <button className="lg:px-8 px-4 lg:py-4 py-3 bg-[#2563eb] text-white rounded-xl">
+              <button className="lg:px-8 px-4 lg:py-4 py-3 bg-primary text-white rounded-xl">
                 Login
               </button>
             </Link>
 
-            <button className="bg-[#e3e9f7] text-[#3563e9] lg:px-8 px-4 py-3 rounded-lg font-semibold">
+            <button className="bg-surface-container text-primary lg:px-8 px-4 py-3 rounded-lg font-semibold">
               View Features
             </button>
           </div>
@@ -53,9 +53,9 @@ export default function Hero() {
             {/* insight card */}
             <div className="absolute top-6 right-7 bg-white px-4 py-3 rounded-xl shadow-sm border border-gray-200 w-[230px]">
               <div className="flex items-center gap-2 mb-1">
-                <span className="text-[#f59e0b] text-sm">↗</span>
+                <span className="text-secondary text-sm">↗</span>
 
-                <span className="text-[14px] font-semibold text-[#0b1c30]">
+                <span className="text-[14px] font-semibold text-on-surface">
                   AI Insight
                 </span>
               </div>

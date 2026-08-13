@@ -17,7 +17,7 @@ return(
 
 <div>
 
-<h1 className="text-xl font-bold text-[#0b1c30]">
+<h1 className="text-xl font-bold text-on-surface">
 
 New Subscription Plan
 
@@ -92,7 +92,7 @@ Plan Name
 
 <input
 placeholder="e.g. Enterprise Elite"
-className="w-full mt-2 bg-[#f3f6ff] px-4 py-3 rounded-md outline-none"
+className="w-full mt-2 bg-surface-container-low px-4 py-3 rounded-md outline-none"
 />
 
 </div>
@@ -120,7 +120,7 @@ $
 <input
 placeholder="999"
 type="number"
-className="w-full bg-[#f3f6ff] pl-8 pr-4 py-3 rounded-md outline-none"
+className="w-full bg-surface-container-low pl-8 pr-4 py-3 rounded-md outline-none"
 />
 
 </div>
@@ -139,7 +139,7 @@ Billing Cycle
 
 </label>
 
-<select className="w-full mt-2 bg-[#f3f6ff] px-4 py-3 rounded-md outline-none">
+<select className="w-full mt-2 bg-surface-container-low px-4 py-3 rounded-md outline-none">
 
 <option>Monthly</option>
 
@@ -166,7 +166,7 @@ Max Users
 <input
 placeholder="500"
 type="number"
-className="w-full mt-2 bg-[#f3f6ff] px-4 py-3 rounded-md outline-none"
+className="w-full mt-2 bg-surface-container-low px-4 py-3 rounded-md outline-none"
 />
 
 </div>
@@ -186,7 +186,7 @@ AI Credits / Month
 <input
 placeholder="10000"
 type="number"
-className="w-full mt-2 bg-[#f3f6ff] px-4 py-3 rounded-md outline-none"
+className="w-full mt-2 bg-surface-container-low px-4 py-3 rounded-md outline-none"
 />
 
 </div>
@@ -206,7 +206,7 @@ Storage Limit (GB)
 <input
 placeholder="50"
 type="number"
-className="w-full mt-2 bg-[#f3f6ff] px-4 py-3 rounded-md outline-none"
+className="w-full mt-2 bg-surface-container-low px-4 py-3 rounded-md outline-none"
 />
 
 </div>
@@ -248,7 +248,7 @@ Modules & Features
 
 <input type="checkbox" defaultChecked className="hidden peer"/>
 
-<div className="p-5 bg-[#f3f6ff] rounded-lg border-2 border-transparent peer-checked:border-blue-600 peer-checked:bg-white transition">
+<div className="p-5 bg-surface-container-low rounded-lg border-2 border-transparent peer-checked:border-blue-600 peer-checked:bg-white transition">
 
 <div className="flex justify-between">
 
@@ -288,7 +288,7 @@ Automated tracking and parent alerts
 
 <input type="checkbox" className="hidden peer"/>
 
-<div className="p-5 bg-[#f3f6ff] rounded-lg border-2 border-transparent peer-checked:border-blue-600 peer-checked:bg-white">
+<div className="p-5 bg-surface-container-low rounded-lg border-2 border-transparent peer-checked:border-blue-600 peer-checked:bg-white">
 
 <div className="flex justify-between">
 
@@ -328,7 +328,7 @@ Digital assessments
 
 <input type="checkbox" className="hidden peer"/>
 
-<div className="p-5 bg-[#f3f6ff] rounded-lg border-2 border-transparent peer-checked:border-blue-600 peer-checked:bg-white">
+<div className="p-5 bg-surface-container-low rounded-lg border-2 border-transparent peer-checked:border-blue-600 peer-checked:bg-white">
 
 <div className="flex justify-between">
 
@@ -368,7 +368,7 @@ Payments & reports
 
 <input type="checkbox" defaultChecked className="hidden peer"/>
 
-<div className="p-5 bg-[#f3f6ff] rounded-lg border-2 border-transparent peer-checked:border-purple-600 peer-checked:bg-white">
+<div className="p-5 bg-surface-container-low rounded-lg border-2 border-transparent peer-checked:border-purple-600 peer-checked:bg-white">
 
 <div className="flex justify-between">
 
@@ -408,7 +408,7 @@ AI powered help
 
 <input type="checkbox" defaultChecked className="hidden peer"/>
 
-<div className="p-5 bg-[#f3f6ff] rounded-lg border-2 border-transparent peer-checked:border-blue-600 peer-checked:bg-white">
+<div className="p-5 bg-surface-container-low rounded-lg border-2 border-transparent peer-checked:border-blue-600 peer-checked:bg-white">
 
 <div className="flex justify-between">
 
@@ -448,7 +448,7 @@ Reports & charts
 
 <input type="checkbox" defaultChecked className="hidden peer"/>
 
-<div className="p-5 bg-[#f3f6ff] rounded-lg border-2 border-transparent peer-checked:border-orange-600 peer-checked:bg-white">
+<div className="p-5 bg-surface-container-low rounded-lg border-2 border-transparent peer-checked:border-orange-600 peer-checked:bg-white">
 
 <div className="flex justify-between">
 
@@ -603,7 +603,7 @@ navigate("/global-admin/subscriptions");
 
 }}
 
-className="w-full bg-gradient-to-r from-[#0058be] to-[#2170e4] text-white font-bold py-4 rounded-md shadow-lg hover:scale-[1.02] transition"
+className="w-full bg-gradient-to-r from-primary to-primary-container text-white font-bold py-4 rounded-md shadow-lg hover:scale-[1.02] transition"
 
 >
 
@@ -619,7 +619,7 @@ className="w-full bg-gradient-to-r from-[#0058be] to-[#2170e4] text-white font-b
 
 {/* tip */}
 
-<div className="bg-[#eef2ff] p-6 rounded-lg">
+<div className="bg-surface-container-low p-6 rounded-lg">
 
 <div className="flex gap-3">
 

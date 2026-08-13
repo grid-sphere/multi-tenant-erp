@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from "react";
 import SchoolLayout from "../../components/erp/school/SchoolLayout";
+import UnenrolledStudentsAlert from "../../components/erp/school/UnenrolledStudentsAlert";
 import { useNavigate } from "react-router-dom";
 import { useSchoolAdmin } from "../../context/SchoolAdminProvider";
 
@@ -414,7 +415,11 @@ export default function Dashboard() {
   return (
     <SchoolLayout>
       <div className="flex flex-col gap-6 px-4 md:px-8 pt-4 pb-12">
-        
+
+        {/* Students with no enrollment are invisible to every scoped query,
+            so their portals sit empty with nothing explaining why. */}
+        <UnenrolledStudentsAlert />
+
         {/* Responsive Header Block matching AcademicYears style */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4">
           <div>

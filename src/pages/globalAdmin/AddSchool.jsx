@@ -14,7 +14,7 @@ return(
 
 <div className="flex items-center justify-between relative">
 
-<div className="absolute top-1/2 left-0 w-full h-[2px] bg-[#e5eeff] -translate-y-1/2"></div>
+<div className="absolute top-1/2 left-0 w-full h-[2px] bg-surface-container-low -translate-y-1/2"></div>
 
 
 
@@ -22,7 +22,7 @@ return(
 
 <div className="flex flex-col items-center gap-3">
 
-<div className="w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold ring-8 ring-[#f8f9ff]">
+<div className="w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold ring-8 ring-background">
 
 1
 
@@ -42,7 +42,7 @@ Institution
 
 <div className="flex flex-col items-center gap-3">
 
-<div className="w-10 h-10 rounded-full bg-[#e5eeff] text-gray-500 flex items-center justify-center font-bold ring-8 ring-[#f8f9ff]">
+<div className="w-10 h-10 rounded-full bg-surface-container-low text-gray-500 flex items-center justify-center font-bold ring-8 ring-background">
 
 2
 
@@ -62,7 +62,7 @@ Identity
 
 <div className="flex flex-col items-center gap-3">
 
-<div className="w-10 h-10 rounded-full bg-[#e5eeff] text-gray-500 flex items-center justify-center font-bold ring-8 ring-[#f8f9ff]">
+<div className="w-10 h-10 rounded-full bg-surface-container-low text-gray-500 flex items-center justify-center font-bold ring-8 ring-background">
 
 3
 
@@ -82,7 +82,7 @@ Plan
 
 <div className="flex flex-col items-center gap-3">
 
-<div className="w-10 h-10 rounded-full bg-[#e5eeff] text-gray-500 flex items-center justify-center font-bold ring-8 ring-[#f8f9ff]">
+<div className="w-10 h-10 rounded-full bg-surface-container-low text-gray-500 flex items-center justify-center font-bold ring-8 ring-background">
 
 4
 
@@ -130,9 +130,9 @@ Provide the core identity details for your academic institution.
 
 {/* logo upload */}
 
-<div className="flex items-center gap-6 p-6 bg-[#eff4ff] rounded-lg border-2 border-dashed border-gray-200">
+<div className="flex items-center gap-6 p-6 bg-surface-container-low rounded-lg border-2 border-dashed border-gray-200">
 
-<div className="w-20 h-20 rounded-xl bg-[#e5eeff] flex items-center justify-center text-blue-600">
+<div className="w-20 h-20 rounded-xl bg-surface-container-low flex items-center justify-center text-blue-600">
 
 <span className="material-symbols-outlined text-4xl">
 
@@ -184,7 +184,7 @@ Official Name
 
 <input
 placeholder="St Peters Academy"
-className="w-full mt-2 bg-[#eff4ff] rounded-md px-4 py-3 outline-none focus:ring-2 focus:ring-blue-200"
+className="w-full mt-2 bg-surface-container-low rounded-md px-4 py-3 outline-none focus:ring-2 focus:ring-blue-200"
 />
 
 </div>
@@ -201,7 +201,7 @@ Institution Email
 
 <input
 placeholder="contact@school.edu"
-className="w-full mt-2 bg-[#eff4ff] rounded-md px-4 py-3 outline-none focus:ring-2 focus:ring-blue-200"
+className="w-full mt-2 bg-surface-container-low rounded-md px-4 py-3 outline-none focus:ring-2 focus:ring-blue-200"
 />
 
 </div>
@@ -218,7 +218,7 @@ Phone Number
 
 <input
 placeholder="+1 000 000 000"
-className="w-full mt-2 bg-[#eff4ff] rounded-md px-4 py-3 outline-none focus:ring-2 focus:ring-blue-200"
+className="w-full mt-2 bg-surface-container-low rounded-md px-4 py-3 outline-none focus:ring-2 focus:ring-blue-200"
 />
 
 </div>
@@ -233,7 +233,7 @@ Country
 
 </label>
 
-<select className="w-full mt-2 bg-[#eff4ff] rounded-md px-4 py-3 outline-none">
+<select className="w-full mt-2 bg-surface-container-low rounded-md px-4 py-3 outline-none">
 
 <option>United States</option>
 <option>United Kingdom</option>
@@ -260,7 +260,7 @@ Physical Address
 <textarea
 rows="3"
 placeholder="123 Education Street..."
-className="w-full mt-2 bg-[#eff4ff] rounded-md px-4 py-3 outline-none"
+className="w-full mt-2 bg-surface-container-low rounded-md px-4 py-3 outline-none"
 />
 
 </div>
@@ -279,7 +279,7 @@ Preferred Language
 
 </label>
 
-<select className="w-full mt-2 bg-[#eff4ff] rounded-md px-4 py-3">
+<select className="w-full mt-2 bg-surface-container-low rounded-md px-4 py-3">
 
 <option>English</option>
 <option>Spanish</option>
@@ -298,7 +298,7 @@ Timezone
 
 </label>
 
-<select className="w-full mt-2 bg-[#eff4ff] rounded-md px-4 py-3">
+<select className="w-full mt-2 bg-surface-container-low rounded-md px-4 py-3">
 
 <option>GMT +5:30</option>
 <option>GMT +0</option>
@@ -321,7 +321,7 @@ Timezone
 
 <button
 onClick={()=>navigate("/global-admin/schools")}
-className="px-6 py-3 text-[#0058be] font-bold hover:bg-[#e5eeff] rounded-md transition-colors"
+className="px-6 py-3 text-primary font-bold hover:bg-surface-container-low rounded-md transition-colors"
 >
 
 Save as Draft
@@ -332,7 +332,7 @@ Save as Draft
 
 <button
 onClick={()=>navigate("/global-admin/add-domain")}
-className="px-10 py-3 bg-gradient-to-br from-[#0058be] to-[#2170e4] text-white font-bold rounded-md shadow-lg shadow-[#0058be]/20 flex items-center gap-2 group"
+className="px-10 py-3 bg-gradient-to-br from-primary to-primary-container text-white font-bold rounded-md shadow-lg shadow-primary/20 flex items-center gap-2 group"
 >
 
 Continue to Domain Setup
@@ -393,7 +393,7 @@ school
 
 {/* tip */}
 
-<div className="bg-[#eff4ff] p-6 rounded-xl">
+<div className="bg-surface-container-low p-6 rounded-xl">
 
 <h3 className="text-xs font-bold tracking-widest mb-4">
 

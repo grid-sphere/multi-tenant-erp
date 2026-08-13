@@ -4,6 +4,7 @@ import MainLayout from "../../layouts/MainLayout";
 import { getMonthName } from "../../utils/calculations";
 import { useStudent } from "../../context/StudentProvider";
 import IDCardModal from "./IDCard";
+import NoEnrollmentBanner from "../../components/erp/marking/NoEnrollmentBanner";
 
 /* ─── Skeleton ───────────────────────────────────────────────────────────── */
 function Skeleton({ className = "" }) {
@@ -446,6 +447,11 @@ export default function Dashboard() {
         }
       >
         <div className="px-4 sm:px-6 lg:px-8 py-6 space-y-5">
+
+          {/* Everything below is scoped by enrollment server-side, so without
+              one the whole dashboard reads as an empty school rather than an
+              unfinished account. */}
+          <NoEnrollmentBanner context="classwork" />
 
           {/* ── HERO BANNER ── */}
           <section className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-indigo-700 via-blue-700 to-indigo-800 p-6 sm:p-8 text-white">

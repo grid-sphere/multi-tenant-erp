@@ -75,7 +75,7 @@ const TeacherNotificationsHub = () => {
 
             {/* System Insight Card */}
             <div className="group bg-surface-container-lowest p-6 rounded-2xl flex items-start gap-5 transition-all hover:bg-surface-container-low border border-transparent hover:border-outline-variant/15 shadow-sm">
-              <div className="w-12 h-12 rounded-2xl bg-purple-50 flex items-center justify-center text-[#6b38d4] shadow-inner shrink-0 hidden sm:flex">
+              <div className="w-12 h-12 rounded-2xl bg-purple-50 flex items-center justify-center text-primary shadow-inner shrink-0 hidden sm:flex">
                 <span className="material-symbols-outlined">auto_awesome</span>
               </div>
               <div className="flex-1 space-y-2">
@@ -143,12 +143,12 @@ const TeacherNotificationsHub = () => {
             <h3 className="font-display font-extrabold text-on-surface text-lg mb-4 pl-1">AI Digest</h3>
             <div className="bg-surface-container-lowest p-5 rounded-2xl shadow-sm space-y-3 relative overflow-hidden group">
               <div className="absolute top-0 right-0 p-2 bg-orange-50 rounded-bl-xl">
-                <span className="material-symbols-outlined text-[#924700] text-sm">auto_awesome</span>
+                <span className="material-symbols-outlined text-secondary text-sm">auto_awesome</span>
               </div>
-              <p className="text-xs font-bold text-[#b75b00] tracking-widest uppercase mt-2">Intelligent Highlight</p>
+              <p className="text-xs font-bold text-secondary tracking-widest uppercase mt-2">Intelligent Highlight</p>
               <p className="text-sm text-on-surface-variant font-medium leading-snug">Students are most active between 8 PM and 10 PM. Consider scheduling your automated assignment release for 7:45 PM.</p>
               <div className="h-1 w-full bg-slate-100 rounded-full overflow-hidden mt-4">
-                <div className="h-full bg-[#924700] w-3/4"></div>
+                <div className="h-full bg-secondary w-3/4"></div>
               </div>
             </div>
           </section>

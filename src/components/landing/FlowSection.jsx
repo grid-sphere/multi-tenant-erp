@@ -1,6 +1,6 @@
 export default function FlowSection() {
   return (
-    <section className="bg-[#071c2f] text-white lg:py-24 py-10">
+    <section className="bg-on-surface text-white lg:py-24 py-10">
       <div className="max-w-7xl mx-auto px-8">
         <h2 className="text-center text-[30px] font-bold mb-20">
           Seamless Integration Flow
@@ -34,7 +34,7 @@ export default function FlowSection() {
             ].map((item, i) => (
               <div key={i} className="relative">
                 {/* number circle */}
-                <div className="w-11 h-11 border border-white/40 rounded-full flex items-center justify-center mb-6 text-sm font-medium bg-[#071c2f] relative z-10">
+                <div className="w-11 h-11 border border-white/40 rounded-full flex items-center justify-center mb-6 text-sm font-medium bg-on-surface relative z-10">
                   {i + 1}
                 </div>
 

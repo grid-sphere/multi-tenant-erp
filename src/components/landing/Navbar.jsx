@@ -16,12 +16,12 @@ export default function Navbar() {
         <div className="flex items-center gap-6">
           <Link
             to="/login"
-            className="text-[#2563eb] font-medium text-[15px] h-[42px] flex items-center"
+            className="text-primary font-medium text-[15px] h-[42px] flex items-center"
           >
             Login
           </Link>
 
-          <button className="h-[42px] lg:px-6 px-3 bg-[#3563e9] text-white rounded-lg font-medium shadow-sm hover:shadow-md transition">
+          <button className="h-[42px] lg:px-6 px-3 bg-primary text-white rounded-lg font-medium shadow-sm hover:shadow-md transition">
             Request Demo
           </button>
         </div>

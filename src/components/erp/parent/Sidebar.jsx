@@ -77,7 +77,7 @@ export default function Sidebar({ isExpanded, isMobile, onToggle, onClose }) {
         className={`
           fixed top-0 left-0 z-50
           flex flex-col
-          bg-[#eff4ff] dark:bg-slate-900
+          bg-surface-container-low dark:bg-slate-900
           border-r border-slate-200 dark:border-slate-700/50
           transition-all duration-300 ease-in-out
           overflow-hidden

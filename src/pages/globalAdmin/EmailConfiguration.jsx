@@ -9,7 +9,7 @@ return(
 
 <Layout>
 
-<div className="min-h-screen bg-[#f8f9ff]">
+<div className="min-h-screen bg-background">
 
 <div className="max-w-6xl mx-auto px-8 py-10">
 
@@ -19,11 +19,11 @@ return(
 
 <div>
 
-<h1 className="text-4xl font-extrabold text-[#0b1c30] leading-tight">
+<h1 className="text-4xl font-extrabold text-on-surface leading-tight">
 Email Configuration
 </h1>
 
-<p className="text-[#424754] mt-2 max-w-2xl">
+<p className="text-on-surface-variant mt-2 max-w-2xl">
 Configure your institutional SMTP server to manage automated notifications, password resets, and official school communications.
 </p>
 
@@ -32,7 +32,7 @@ Configure your institutional SMTP server to manage automated notifications, pass
 
 <button
 onClick={()=>navigate("/global-admin/settings")}
-className="flex items-center gap-2 px-4 py-2 rounded-md bg-[#dce9ff] text-[#0058be] font-semibold text-sm hover:bg-[#d3e4fe] transition-all active:scale-[0.98]"
+className="flex items-center gap-2 px-4 py-2 rounded-md bg-surface-container-high text-primary font-semibold text-sm hover:bg-surface-container-highest transition-all active:scale-[0.98]"
 >
 
 <span className="material-symbols-outlined text-sm">
@@ -56,7 +56,7 @@ Go Back
 
 <h3 className="text-xl font-bold mb-6 flex items-center gap-2">
 
-<span className="material-symbols-outlined text-[#0058be]">
+<span className="material-symbols-outlined text-primary">
 mail
 </span>
 
@@ -80,7 +80,7 @@ SMTP Host
 
 <input
 defaultValue="smtp.postmarkapp.com"
-className="w-full mt-2 px-4 py-3 rounded-md bg-[#eff4ff]"
+className="w-full mt-2 px-4 py-3 rounded-md bg-surface-container-low"
 />
 
 </div>
@@ -99,7 +99,7 @@ Port
 
 <input
 defaultValue="587"
-className="w-full mt-2 px-4 py-3 rounded-md bg-[#eff4ff]"
+className="w-full mt-2 px-4 py-3 rounded-md bg-surface-container-low"
 />
 
 </div>
@@ -118,7 +118,7 @@ Sender Email
 
 <input
 defaultValue="notifications@scholarflow.pro"
-className="w-full mt-2 px-4 py-3 rounded-md bg-[#eff4ff]"
+className="w-full mt-2 px-4 py-3 rounded-md bg-surface-container-low"
 />
 
 </div>
@@ -137,7 +137,7 @@ Sender Name
 
 <input
 defaultValue="ScholarFlow Pro Platform"
-className="w-full mt-2 px-4 py-3 rounded-md bg-[#eff4ff]"
+className="w-full mt-2 px-4 py-3 rounded-md bg-surface-container-low"
 />
 
 </div>
@@ -157,7 +157,7 @@ Password / API Key
 <input
 type="password"
 defaultValue="••••••••••••••••"
-className="w-full mt-2 px-4 py-3 rounded-md bg-[#eff4ff]"
+className="w-full mt-2 px-4 py-3 rounded-md bg-surface-container-low"
 />
 
 </div>
@@ -172,7 +172,7 @@ className="w-full mt-2 px-4 py-3 rounded-md bg-[#eff4ff]"
 
 <div className="flex justify-end gap-4">
 
-<button className="px-6 py-3 text-[#0058be] font-bold hover:bg-[#eff4ff] rounded-md">
+<button className="px-6 py-3 text-primary font-bold hover:bg-surface-container-low rounded-md">
 
 Send Test Email
 
@@ -182,7 +182,7 @@ Send Test Email
 
 <button
 onClick={()=>navigate("/global-admin/settings")}
-className="px-8 py-3 bg-gradient-to-br from-[#0058be] to-[#2170e4] text-white font-bold rounded-md shadow"
+className="px-8 py-3 bg-gradient-to-br from-primary to-primary-container text-white font-bold rounded-md shadow"
 >
 
 Save SMTP Settings
@@ -253,9 +253,9 @@ Postmark infrastructure is responding normally with 14ms latency.
 
 {/* insight */}
 
-<div className="bg-[#eff4ff] p-6 rounded-lg border">
+<div className="bg-surface-container-low p-6 rounded-lg border">
 
-<h4 className="font-bold text-[#0058be] flex items-center gap-2 mb-3">
+<h4 className="font-bold text-primary flex items-center gap-2 mb-3">
 
 <span className="material-symbols-outlined text-sm">
 lightbulb
@@ -266,7 +266,7 @@ Intelligent Insight
 </h4>
 
 
-<p className="text-sm text-[#0b1c30]">
+<p className="text-sm text-on-surface">
 
 Using <b>TLS on Port 587</b> is recommended for academic security compliance.
 
@@ -280,7 +280,7 @@ Ensure your firewall allows outbound traffic to the Postmark IP range.
 
 {/* card */}
 
-<div className="bg-gradient-to-br from-[#0058be] to-[#6b38d4] p-6 rounded-lg text-white">
+<div className="bg-gradient-to-br from-primary to-primary p-6 rounded-lg text-white">
 
 <p className="text-xs uppercase opacity-80">
 Security Protocol

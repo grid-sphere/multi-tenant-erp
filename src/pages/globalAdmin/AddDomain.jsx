@@ -38,7 +38,7 @@ return(
 chevron_right
 </span>
 
-<span className="text-[#0058be] font-semibold">
+<span className="text-primary font-semibold">
 Custom Domains
 </span>
 
@@ -122,7 +122,7 @@ Select School
 
 </label>
 
-<select className="w-full bg-[#eff4ff] px-4 py-3 rounded-md outline-none">
+<select className="w-full bg-surface-container-low px-4 py-3 rounded-md outline-none">
 
 <option>St. Andrews International</option>
 <option>Greenwood Institute</option>
@@ -148,11 +148,11 @@ Domain Name
 
 <input
 placeholder="portal.standrews"
-className="flex-1 bg-[#eff4ff] px-4 py-3 rounded-l-md outline-none"
+className="flex-1 bg-surface-container-low px-4 py-3 rounded-l-md outline-none"
 />
 
 
-<div className="bg-[#dce9ff] px-4 flex items-center rounded-r-md text-sm text-gray-600">
+<div className="bg-surface-container-high px-4 flex items-center rounded-r-md text-sm text-gray-600">
 
 .scholarflow.pro
 
@@ -189,7 +189,7 @@ Creates subdomain
 Preview URL
 </p>
 
-<p className="text-sm font-mono font-semibold text-[#0058be]">
+<p className="text-sm font-mono font-semibold text-primary">
 https://portal.standrews.scholarflow.pro
 </p>
 
@@ -211,8 +211,8 @@ transition
 shadow-sm
 flex items-center justify-center
 ${checking
-? "bg-[#dce9ff] text-[#0058be] cursor-not-allowed"
-: "bg-gradient-to-r from-[#0058be] to-[#2170e4] text-white hover:opacity-90"
+? "bg-surface-container-high text-primary cursor-not-allowed"
+: "bg-gradient-to-r from-primary to-primary-container text-white hover:opacity-90"
 }
 `}
 >
@@ -240,7 +240,7 @@ DNS Records
 </h3>
 
 
-<button className="text-[#0058be] text-xs font-semibold">
+<button className="text-primary text-xs font-semibold">
 
 Copy All Records
 
@@ -254,7 +254,7 @@ Copy All Records
 
 {/* A */}
 
-<div className="p-4 bg-[#eff4ff] rounded-lg flex justify-between items-center">
+<div className="p-4 bg-surface-container-low rounded-lg flex justify-between items-center">
 
 <div className="flex gap-8">
 
@@ -309,7 +309,7 @@ content_copy
 
 {/* cname */}
 
-<div className="p-4 bg-[#eff4ff] rounded-lg flex justify-between items-center">
+<div className="p-4 bg-surface-container-low rounded-lg flex justify-between items-center">
 
 <div className="flex gap-8">
 
@@ -372,7 +372,7 @@ content_copy
 
 <button
 onClick={()=>navigate("/global-admin/domains")}
-className="text-[#0058be] font-semibold flex items-center gap-2"
+className="text-primary font-semibold flex items-center gap-2"
 >
 
 <span className="material-symbols-outlined">
@@ -407,7 +407,7 @@ Continue Setup
 
 {/* SSL */}
 
-<div className="bg-gradient-to-br from-[#0b1c30] to-[#213145] p-8 rounded-xl text-white relative overflow-hidden">
+<div className="bg-gradient-to-br from-on-surface to-on-surface p-8 rounded-xl text-white relative overflow-hidden">
 
 <h3 className="text-lg font-bold mb-2">
 Automated SSL
@@ -433,7 +433,7 @@ Every domain automatically receives SSL certificate.
 
 {/* steps */}
 
-<div className="bg-[#eff4ff] p-8 rounded-xl">
+<div className="bg-surface-container-low p-8 rounded-xl">
 
 <h3 className="text-xs font-bold uppercase mb-6">
 Setup Instructions
@@ -445,7 +445,7 @@ Setup Instructions
 
 <div className="flex gap-3">
 
-<div className="w-6 h-6 rounded-full bg-white flex items-center justify-center text-xs font-bold text-[#0058be]">
+<div className="w-6 h-6 rounded-full bg-white flex items-center justify-center text-xs font-bold text-primary">
 
 1
 
@@ -459,7 +459,7 @@ Log in to domain registrar
 
 <div className="flex gap-3">
 
-<div className="w-6 h-6 rounded-full bg-white flex items-center justify-center text-xs font-bold text-[#0058be]">
+<div className="w-6 h-6 rounded-full bg-white flex items-center justify-center text-xs font-bold text-primary">
 
 2
 
@@ -473,7 +473,7 @@ Add DNS records
 
 <div className="flex gap-3">
 
-<div className="w-6 h-6 rounded-full bg-white flex items-center justify-center text-xs font-bold text-[#0058be]">
+<div className="w-6 h-6 rounded-full bg-white flex items-center justify-center text-xs font-bold text-primary">
 
 3
 

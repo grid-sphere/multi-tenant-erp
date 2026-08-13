@@ -149,7 +149,7 @@ export default function ToolActionButtons({
       <button 
         onClick={onSave}
         disabled={isSaving || !contentData}
-        className="flex items-center gap-2 px-6 py-2.5 bg-[#0058be] text-white text-sm font-bold rounded-lg shadow-sm hover:bg-blue-700 transition-all disabled:opacity-50"
+        className="flex items-center gap-2 px-6 py-2.5 bg-primary text-white text-sm font-bold rounded-lg shadow-sm hover:bg-blue-700 transition-all disabled:opacity-50"
       >
         <span className="material-symbols-outlined text-lg">
           {isSaving ? 'sync' : 'save'}
@@ -160,7 +160,7 @@ export default function ToolActionButtons({
       <button 
         onClick={onExport || handleDefaultExport}
         disabled={isExporting || !contentData}
-        className="flex items-center gap-2 px-6 py-2.5 bg-[#eff4ff] text-[#0058be] text-sm font-bold rounded-lg hover:bg-[#dce9ff] transition-all disabled:opacity-50"
+        className="flex items-center gap-2 px-6 py-2.5 bg-surface-container-low text-primary text-sm font-bold rounded-lg hover:bg-surface-container-high transition-all disabled:opacity-50"
       >
         <span className="material-symbols-outlined text-lg">
           {isExporting ? 'hourglass_empty' : 'download'}
@@ -172,7 +172,7 @@ export default function ToolActionButtons({
       <div className="relative">
         <button 
           onClick={() => setIsShareOpen(!isShareOpen)}
-          className="flex items-center gap-2 px-6 py-2.5 bg-[#eff4ff] text-[#0058be] text-sm font-bold rounded-lg hover:bg-[#dce9ff] transition-all"
+          className="flex items-center gap-2 px-6 py-2.5 bg-surface-container-low text-primary text-sm font-bold rounded-lg hover:bg-surface-container-high transition-all"
         >
           <span className="material-symbols-outlined text-lg">share</span>
           Share
@@ -198,7 +198,7 @@ export default function ToolActionButtons({
         )}
       </div>
 
-      <button className="flex items-center gap-2 px-6 py-2.5 bg-[#6b38d4] text-white text-sm font-bold rounded-lg shadow-sm hover:bg-purple-700 transition-all ml-auto">
+      <button className="flex items-center gap-2 px-6 py-2.5 bg-primary text-white text-sm font-bold rounded-lg shadow-sm hover:bg-purple-700 transition-all ml-auto">
         <span className="material-symbols-outlined text-lg">assignment_add</span>
         Assign
       </button>

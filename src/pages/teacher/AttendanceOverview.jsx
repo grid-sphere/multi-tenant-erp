@@ -162,7 +162,7 @@ const AttendanceOverview = () => {
 
       {/* Bento Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mb-8 md:mb-10">
-        <Card className="flex flex-col justify-between relative overflow-hidden group shadow-lg bg-gradient-to-br from-[#0058be] to-[#0044a0] border-none text-center">
+        <Card className="flex flex-col justify-between relative overflow-hidden group shadow-lg bg-gradient-to-br from-primary to-primary border-none text-center">
           <div className="absolute -right-4 -top-4 w-24 h-24 bg-white/10 rounded-full group-hover:scale-110 transition-transform duration-500"></div>
           <div className="relative z-10">
             <p className="text-2xs md:text-sm font-semibold text-blue-100 mb-1 uppercase tracking-wider">Average Attendance</p>
@@ -180,7 +180,7 @@ const AttendanceOverview = () => {
           )}
         </Card>
 
-        <Card className="flex flex-col justify-between relative overflow-hidden group shadow-lg bg-gradient-to-br from-[#6b38d4] to-[#5527b0] border-none text-center">
+        <Card className="flex flex-col justify-between relative overflow-hidden group shadow-lg bg-gradient-to-br from-primary to-primary border-none text-center">
           <div className="absolute -right-4 -top-4 w-24 h-24 bg-white/10 rounded-full group-hover:scale-110 transition-transform duration-500"></div>
           <div className="relative z-10">
             <p className="text-2xs md:text-sm font-semibold text-purple-100 mb-1 uppercase tracking-wider">Weekly Avg</p>
@@ -199,7 +199,7 @@ const AttendanceOverview = () => {
           )}
         </Card>
 
-        <Card className="flex flex-col justify-between relative overflow-hidden group shadow-lg bg-gradient-to-br from-[#dc2626] to-[#b91c1c] border-none text-center">
+        <Card className="flex flex-col justify-between relative overflow-hidden group shadow-lg bg-gradient-to-br from-error to-error border-none text-center">
           <div className="absolute -right-4 -top-4 w-24 h-24 bg-white/10 rounded-full group-hover:scale-110 transition-transform duration-500"></div>
           <div className="relative z-10">
             <p className="text-2xs md:text-sm font-semibold text-red-100 mb-1 uppercase tracking-wider">Absent Students</p>

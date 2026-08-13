@@ -2,12 +2,34 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ==================================================================== */
+/*  DESIGN TOKENS — Slate & Teal                                        */
+/*                                                                      */
+/*  Near-white surfaces, cool-neutral greys, a single muted teal doing   */
+/*  the accent work. Amber appears only on warnings and pending states.  */
+/*                                                                      */
+/*  EVERY TOKEN IS DECLARED TWICE, ON PURPOSE:                          */
+/*                                                                      */
+/*    --color-x      #rrggbb    a normal CSS colour                     */
+/*    --color-x-rgb  "R G B"    bare channels                           */
+/*                                                                      */
+/*  The hex form is what ~430 inline style={{ color: 'var(--color-x)' }} */
+/*  props and color-mix() calls across the pages consume — those need a  */
+/*  real colour value and break if handed bare channels.                */
+/*                                                                      */
+/*  The channel form is what tailwind.config.js consumes, because        */
+/*  Tailwind's slash-opacity syntax (text-primary/70, bg-tertiary/5)     */
+/*  only works when it can inject an alpha into rgb(R G B / A).          */
+/*                                                                      */
+/*  Keep the two in sync when editing. Hex is the source of truth.       */
+/* ==================================================================== */
+
 /* ================================================ */
-/*   LIGHT MODE – CSS Custom Properties (Default)   */
+/*   LIGHT MODE (Default)                           */
 /* ================================================ */
 :root {
   /* ── Type Scale ───────────────────────────────── */
-  --font-size-3xs: 0.5625rem;  /*  9px — fine print, sub-badges    */
+  --font-size-3xs: 0.5625rem;  /*  9px — fine print, sub-badges     */
   --font-size-2xs: 0.625rem;   /* 10px — badges, labels, timestamps */
   --font-size-xs:  0.75rem;    /* 12px — captions, helper text      */
   --font-size-sm:  0.875rem;   /* 14px — body text, table rows      */
@@ -19,75 +41,200 @@
   --font-size-4xl: 2.25rem;    /* 36px — hero numbers               */
   --font-size-5xl: 3rem;       /* 48px — display                    */
 
-  --color-primary: #0058be;
-  --color-primary-container: #2170e4;
-  --color-primary-fixed: #d6e4ff;
-  --color-on-primary-fixed: #001a41;
+  /* ── Primary: muted teal, the only strong hue in the system ──── */
+  --color-primary: #0f766e;
+  --color-primary-rgb: 15 118 110;
+  --color-primary-container: #0d9488;
+  --color-primary-container-rgb: 13 148 136;
+  --color-primary-fixed: #d6f0ec;
+  --color-primary-fixed-rgb: 214 240 236;
+  --color-on-primary-fixed: #04413a;
+  --color-on-primary-fixed-rgb: 4 65 58;
   --color-on-primary-container: #ffffff;
+  --color-on-primary-container-rgb: 255 255 255;
+  --color-on-primary: #ffffff;              /* label on a filled primary */
+  --color-on-primary-rgb: 255 255 255;
 
-  --color-secondary: #7c4dff;
-  --color-secondary-fixed: #ede7ff;
+  /* ── Secondary: amber, reserved for pending / attention states ─ */
+  --color-secondary: #b45309;
+  --color-secondary-rgb: 180 83 9;
+  --color-secondary-container: #fdf0d8;
+  --color-secondary-container-rgb: 253 240 216;
+  --color-on-secondary-container: #6b3a05;
+  --color-on-secondary-container-rgb: 107 58 5;
+  --color-secondary-fixed: #fef6e7;
+  --color-secondary-fixed-rgb: 254 246 231;
 
-  --color-tertiary: #00897b;
-  --color-tertiary-fixed: #d0f5ef;
-  --color-on-tertiary-fixed-variant: #00504a;
+  /* ── Tertiary: deliberately near-neutral, adds depth not colour ─ */
+  --color-tertiary: #475569;
+  --color-tertiary-rgb: 71 85 105;
+  --color-tertiary-container: #dfe3e8;
+  --color-tertiary-container-rgb: 223 227 232;
+  --color-on-tertiary-container: #22303f;
+  --color-on-tertiary-container-rgb: 34 48 63;
+  --color-tertiary-fixed: #eaeef2;
+  --color-tertiary-fixed-rgb: 234 238 242;
+  --color-on-tertiary-fixed-variant: #33414f;
+  --color-on-tertiary-fixed-variant-rgb: 51 65 79;
 
-  --color-background: #f8f9ff;
-  --color-surface: #f8f9ff;
+  /* ── Surfaces: clean near-white, no warm cast ────────────────── */
+  --color-background: #f7f8f8;
+  --color-background-rgb: 247 248 248;
+  --color-surface: #f7f8f8;
+  --color-surface-rgb: 247 248 248;
   --color-surface-container-lowest: #ffffff;
-  --color-surface-container-low: #eff4ff;
-  --color-surface-container: #e4ecfb;
-  --color-surface-container-high: #dce9ff;
-  --color-surface-container-highest: #d3e4fe;
-  --color-surface-variant: #e0e8f5;
-  --color-surface-tint: #0058be;
+  --color-surface-container-lowest-rgb: 255 255 255;
+  --color-surface-container-low: #f1f3f4;
+  --color-surface-container-low-rgb: 241 243 244;
+  --color-surface-container: #e9eded;
+  --color-surface-container-rgb: 233 237 237;
+  --color-surface-container-high: #dfe3e4;
+  --color-surface-container-high-rgb: 223 227 228;
+  --color-surface-container-highest: #d3d9da;
+  --color-surface-container-highest-rgb: 211 217 218;
+  --color-surface-variant: #eaeeee;
+  --color-surface-variant-rgb: 234 238 238;
+  --color-surface-tint: #0f766e;
+  --color-surface-tint-rgb: 15 118 110;
 
-  --color-on-surface: #0b1c30;
-  --color-on-surface-variant: #424754;
-  --color-on-background: #0b1c30;
+  /* ── Text ────────────────────────────────────────────────────── */
+  --color-on-surface: #1c2124;
+  --color-on-surface-rgb: 28 33 36;
+  --color-on-surface-variant: #5b6770;
+  --color-on-surface-variant-rgb: 91 103 112;
+  --color-on-background: #1c2124;
+  --color-on-background-rgb: 28 33 36;
 
-  --color-outline: #6b7a99;
-  --color-outline-variant: #c4d0e8;
+  /* #7d888d clears the 3:1 minimum for UI borders against the background. */
+  --color-outline: #7d888d;
+  --color-outline-rgb: 125 136 141;
+  --color-outline-variant: #dfe3e4;
+  --color-outline-variant-rgb: 223 227 228;
+  --color-scrim: #1c2124;
+  --color-scrim-rgb: 28 33 36;
 
-  --color-error: #ba1a1a;
-  --color-success: #16a34a;
+  /* ── Status: all clear 4.5:1 on the background ───────────────── */
+  --color-error: #b91c1c;
+  --color-error-rgb: 185 28 28;
+  --color-success: #15803d;
+  --color-success-rgb: 21 128 61;
+  --color-warning: #b45309;
+  --color-warning-rgb: 180 83 9;
+  --color-info: #0f766e;
+  --color-info-rgb: 15 118 110;
+
+  /* ── Per-role accents — muted on purpose ─────────────────────── */
+  --color-role-admin: #475569;      /* global admin — slate  */
+  --color-role-admin-rgb: 71 85 105;
+  --color-role-school: #a16207;     /* school admin — amber  */
+  --color-role-school-rgb: 161 98 7;
+  --color-role-teacher: #0f766e;    /* teacher      — teal   */
+  --color-role-teacher-rgb: 15 118 110;
+  --color-role-parent: #0e6ba8;     /* parent       — blue   */
+  --color-role-parent-rgb: 14 107 168;
+  --color-role-student: #6d4a9c;    /* student      — violet */
+  --color-role-student-rgb: 109 74 156;
+
+  /* ── Elevation ───────────────────────────────────────────────── */
+  --shadow-color: 28, 33, 36;
 }
 
 /* ================================================ */
-/*   DARK MODE – CSS Custom Property Overrides      */
+/*   DARK MODE OVERRIDES                            */
 /* ================================================ */
 .dark {
-  --color-primary: #91c0ff;
-  --color-primary-container: #1a5cb8;
-  --color-primary-fixed: #1e2d42;
-  --color-on-primary-fixed: #c8dfff;
-  --color-on-primary-container: #d6eaff;
+  /* The codebase puts `text-white` on `bg-primary` in ~100 places, so dark
+   * mode cannot use a bright teal — white would fail against it. #11857b is
+   * the balance point: 4.5:1 under a white label, 4.1:1 as an accent on the
+   * dark background. */
+  --color-primary: #11857b;
+  --color-primary-rgb: 17 133 123;
+  --color-primary-container: #0f766e;
+  --color-primary-container-rgb: 15 118 110;
+  --color-primary-fixed: #10312f;
+  --color-primary-fixed-rgb: 16 49 47;
+  --color-on-primary-fixed: #a8e5dd;
+  --color-on-primary-fixed-rgb: 168 229 221;
+  --color-on-primary-container: #ffffff;
+  --color-on-primary-container-rgb: 255 255 255;
+  --color-on-primary: #ffffff;
+  --color-on-primary-rgb: 255 255 255;
 
-  --color-secondary: #c9b8ff;
-  --color-secondary-fixed: #2a1f4a;
+  --color-secondary: #e8a33f;
+  --color-secondary-rgb: 232 163 63;
+  --color-secondary-container: #6b3a05;
+  --color-secondary-container-rgb: 107 58 5;
+  --color-on-secondary-container: #fdf0d8;
+  --color-on-secondary-container-rgb: 253 240 216;
+  --color-secondary-fixed: #3a2807;
+  --color-secondary-fixed-rgb: 58 40 7;
 
-  --color-tertiary: #6cdfd0;
-  --color-tertiary-fixed: #1a3330;
-  --color-on-tertiary-fixed-variant: #a0ede4;
+  --color-tertiary: #9fb0bc;
+  --color-tertiary-rgb: 159 176 188;
+  --color-tertiary-container: #37444f;
+  --color-tertiary-container-rgb: 55 68 79;
+  --color-on-tertiary-container: #dfe6ec;
+  --color-on-tertiary-container-rgb: 223 230 236;
+  --color-tertiary-fixed: #232e37;
+  --color-tertiary-fixed-rgb: 35 46 55;
+  --color-on-tertiary-fixed-variant: #c3ced7;
+  --color-on-tertiary-fixed-variant-rgb: 195 206 215;
 
-  --color-background: #0e1520;
-  --color-surface: #0e1520;
-  --color-surface-container-lowest: #151d2b;
-  --color-surface-container-low: #1a2336;
-  --color-surface-container: #1f2a3f;
-  --color-surface-container-high: #263348;
-  --color-surface-container-highest: #2d3c54;
-  --color-surface-variant: #1e2d42;
-  --color-surface-tint: #91c0ff;
+  /* Cool near-black, matching the light-mode neutral family. */
+  --color-background: #101416;
+  --color-background-rgb: 16 20 22;
+  --color-surface: #101416;
+  --color-surface-rgb: 16 20 22;
+  --color-surface-container-lowest: #161c1f;
+  --color-surface-container-lowest-rgb: 22 28 31;
+  --color-surface-container-low: #1c2427;
+  --color-surface-container-low-rgb: 28 36 39;
+  --color-surface-container: #232c30;
+  --color-surface-container-rgb: 35 44 48;
+  --color-surface-container-high: #2e373b;
+  --color-surface-container-high-rgb: 46 55 59;
+  --color-surface-container-highest: #3a4448;
+  --color-surface-container-highest-rgb: 58 68 72;
+  --color-surface-variant: #212a2d;
+  --color-surface-variant-rgb: 33 42 45;
+  --color-surface-tint: #11857b;
+  --color-surface-tint-rgb: 17 133 123;
 
-  --color-on-surface: #d6e4ff;
-  --color-on-surface-variant: #9aaecb;
-  --color-on-background: #d6e4ff;
+  --color-on-surface: #e8edee;
+  --color-on-surface-rgb: 232 237 238;
+  --color-on-surface-variant: #a4aeb2;
+  --color-on-surface-variant-rgb: 164 174 178;
+  --color-on-background: #e8edee;
+  --color-on-background-rgb: 232 237 238;
 
-  --color-outline: #5a7090;
-  --color-outline-variant: #2d3c54;
+  --color-outline: #7d888d;
+  --color-outline-rgb: 125 136 141;
+  --color-outline-variant: #3a4448;
+  --color-outline-variant-rgb: 58 68 72;
+  --color-scrim: #000000;
+  --color-scrim-rgb: 0 0 0;
 
-  --color-error: #ffb4ab;
+  --color-error: #f87171;
+  --color-error-rgb: 248 113 113;
+  --color-success: #5bbf78;
+  --color-success-rgb: 91 191 120;
+  --color-warning: #e8a33f;
+  --color-warning-rgb: 232 163 63;
+  --color-info: #2dd4bf;
+  --color-info-rgb: 45 212 191;
+
+  --color-role-admin: #94a3b8;
+  --color-role-admin-rgb: 148 163 184;
+  --color-role-school: #e8a33f;
+  --color-role-school-rgb: 232 163 63;
+  --color-role-teacher: #2dd4bf;
+  --color-role-teacher-rgb: 45 212 191;
+  --color-role-parent: #5eaddc;
+  --color-role-parent-rgb: 94 173 220;
+  --color-role-student: #b39ddb;
+  --color-role-student-rgb: 179 157 219;
+
+  --shadow-color: 0, 0, 0;
 }
 
 /* ================================================ */
@@ -95,11 +242,14 @@
 /* ================================================ */
 html {
   background-color: var(--color-background);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
   background-color: var(--color-background);
   color: var(--color-on-surface);
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
   min-height: 100vh;
   transition: background-color 0.3s ease, color 0.3s ease;
 }
@@ -107,6 +257,24 @@ body {
 #root {
   background-color: var(--color-background);
   min-height: 100vh;
+}
+
+/* Headings pick up the display face automatically. */
+h1, h2, h3, h4 {
+  font-family: Manrope, ui-sans-serif, system-ui, sans-serif;
+  letter-spacing: -0.011em;
+}
+
+/* Consistent, visible focus ring for keyboard users. */
+:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: 0.375rem;
+}
+
+::selection {
+  background: var(--color-primary-fixed);
+  color: var(--color-on-primary-fixed);
 }
 
 /* ================================================ */
@@ -120,29 +288,38 @@ body {
   );
 }
 
+/* Subtle alternative for hero and empty-state panels. */
+.warm-gradient {
+  background: linear-gradient(
+    135deg,
+    var(--color-primary-fixed) 0%,
+    var(--color-surface-container) 100%
+  );
+}
+
 .glass-effect {
-  background: rgba(255, 255, 255, 0.8);
+  background: rgb(var(--color-surface-rgb) / 0.82);
   backdrop-filter: blur(12px);
 }
 
 .dark .glass-effect {
-  background: rgba(21, 29, 43, 0.8);
+  background: rgb(var(--color-surface-container-lowest-rgb) / 0.82);
 }
 
 .ambient-shadow {
-  box-shadow: 0 12px 32px rgba(11, 28, 48, 0.06);
+  box-shadow: 0 12px 32px rgba(var(--shadow-color), 0.07);
 }
 
 .dark .ambient-shadow {
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 12px 32px rgba(var(--shadow-color), 0.35);
 }
 
 .custom-shadow {
-  box-shadow: 0 4px 16px rgba(11, 28, 48, 0.06);
+  box-shadow: 0 4px 16px rgba(var(--shadow-color), 0.07);
 }
 
 .dark .custom-shadow {
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 4px 16px rgba(var(--shadow-color), 0.3);
 }
 
 /* ================================================ */
@@ -171,10 +348,21 @@ input[type="range"]::-webkit-slider-thumb {
 /* ================================================ */
 /*   Scrollbar                                      */
 /* ================================================ */
-.dark ::-webkit-scrollbar-track {
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
   background: var(--color-surface-container-low);
 }
 
-.dark ::-webkit-scrollbar-thumb {
+::-webkit-scrollbar-thumb {
   background: var(--color-outline-variant);
+  border-radius: 5px;
+  border: 2px solid var(--color-surface-container-low);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-outline);
 }

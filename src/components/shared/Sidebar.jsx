@@ -8,6 +8,10 @@ const navItems = [
   { icon: 'dashboard', label: 'Dashboard', path: '/student' },
   { icon: 'menu_book', label: 'My Subjects', path: '/student/subjects' },
   { icon: 'assignment', label: 'Assignments', path: '/student/assignments' },
+  // Its own route rather than a query string on /student/assignments: NavLink
+  // matches on pathname only, so a query-string variant would light up both
+  // entries at once. This one lands pre-filtered to work still due.
+  { icon: 'upload_file', label: 'Submit Work', path: '/student/submit' },
   { icon: 'description', label: 'Grades & Report Card', path: '/student/grades' },
   { icon: 'event_available', label: 'Attendance', path: '/student/attendance' },
   { icon: 'calendar_month', label: 'Timetable', path: '/student/timetable' },
@@ -260,7 +264,9 @@ export default function Sidebar() {
               {first_name} {last_name}
             </p>
             <p className="text-xs text-on-surface-variant whitespace-nowrap truncate">
-              {class_level_name} - {section_name}
+              {class_level_name && section_name
+                ? `${class_level_name} - ${section_name}`
+                : "No class assigned"}
             </p>
             <p className="text-[10px] text-primary font-bold whitespace-nowrap truncate">
               ID: {enrollment_number}

@@ -59,7 +59,7 @@ return(
 
 <Layout>
 
-<div className="min-h-screen bg-[#f8f9ff]">
+<div className="min-h-screen bg-background">
 
 <div className="max-w-6xl mx-auto px-8 py-10">
 
@@ -69,11 +69,11 @@ return(
 
 <div>
 
-<h1 className="text-4xl font-extrabold text-[#0b1c30] leading-tight">
+<h1 className="text-4xl font-extrabold text-on-surface leading-tight">
 AI Configuration
 </h1>
 
-<p className="text-[#424754] mt-2 max-w-2xl">
+<p className="text-on-surface-variant mt-2 max-w-2xl">
 Fine-tune the intelligence engine driving ScholarFlow Pro's automated workflows and student insights.
 </p>
 
@@ -82,7 +82,7 @@ Fine-tune the intelligence engine driving ScholarFlow Pro's automated workflows 
 
 <button
 onClick={()=>navigate("/global-admin/settings")}
-className="flex items-center gap-2 px-4 py-2 rounded-md bg-[#dce9ff] text-[#0058be] font-semibold text-sm hover:bg-[#d3e4fe] transition-all active:scale-[0.98]"
+className="flex items-center gap-2 px-4 py-2 rounded-md bg-surface-container-high text-primary font-semibold text-sm hover:bg-surface-container-highest transition-all active:scale-[0.98]"
 >
 
 <span className="material-symbols-outlined text-sm">
@@ -108,7 +108,7 @@ Go Back
 
 	<div className="flex items-center gap-3 mb-6">
 
-		<span className="material-symbols-outlined text-[#6b38d4]">auto_awesome</span>
+		<span className="material-symbols-outlined text-primary">auto_awesome</span>
 
 		<h3 className="text-xl font-bold">Lesson Plan Generator</h3>
 
@@ -120,21 +120,21 @@ Go Back
 			placeholder="Class name (e.g. 10)"
 			value={className}
 			onChange={(e)=>setClassName(e.target.value)}
-			className="w-full bg-[#eff4ff] rounded-md px-4 py-3 outline-none"
+			className="w-full bg-surface-container-low rounded-md px-4 py-3 outline-none"
 		/>
 
 		<input
 			placeholder="Subject (e.g. Mathematics)"
 			value={subject}
 			onChange={(e)=>setSubject(e.target.value)}
-			className="w-full bg-[#eff4ff] rounded-md px-4 py-3 outline-none"
+			className="w-full bg-surface-container-low rounded-md px-4 py-3 outline-none"
 		/>
 
 		<input
 			placeholder="Chapter name"
 			value={chapterName}
 			onChange={(e)=>setChapterName(e.target.value)}
-			className="w-full bg-[#eff4ff] rounded-md px-4 py-3 outline-none col-span-2"
+			className="w-full bg-surface-container-low rounded-md px-4 py-3 outline-none col-span-2"
 		/>
 
 		<input
@@ -142,7 +142,7 @@ Go Back
 			placeholder="# MCQs"
 			value={numMCQs}
 			onChange={(e)=>setNumMCQs(Number(e.target.value))}
-			className="w-full bg-[#eff4ff] rounded-md px-4 py-3 outline-none"
+			className="w-full bg-surface-container-low rounded-md px-4 py-3 outline-none"
 		/>
 
 		<input
@@ -150,7 +150,7 @@ Go Back
 			placeholder="# Short answers"
 			value={numShortAnswers}
 			onChange={(e)=>setNumShortAnswers(Number(e.target.value))}
-			className="w-full bg-[#eff4ff] rounded-md px-4 py-3 outline-none"
+			className="w-full bg-surface-container-low rounded-md px-4 py-3 outline-none"
 		/>
 
 		<input
@@ -158,7 +158,7 @@ Go Back
 			placeholder="# Case based"
 			value={numCaseBased}
 			onChange={(e)=>setNumCaseBased(Number(e.target.value))}
-			className="w-full bg-[#eff4ff] rounded-md px-4 py-3 outline-none"
+			className="w-full bg-surface-container-low rounded-md px-4 py-3 outline-none"
 		/>
 
 	</div>
@@ -167,14 +167,14 @@ Go Back
 		<button
 			onClick={handleGenerate}
 			disabled={loading}
-			className="px-4 py-2 bg-[#6b38d4] text-white rounded-md font-bold"
+			className="px-4 py-2 bg-primary text-white rounded-md font-bold"
 		>
 			{loading ? "Generating..." : "Generate Lesson Plan"}
 		</button>
 
 		<button
 			onClick={clearForm}
-			className="px-4 py-2 bg-[#dce9ff] text-gray-700 rounded-md font-bold"
+			className="px-4 py-2 bg-surface-container-high text-gray-700 rounded-md font-bold"
 		>
 			Clear
 		</button>
@@ -195,7 +195,7 @@ Go Back
 				<h4 className="font-bold">MCQs</h4>
 				<div className="space-y-3 mt-2">
 					{result.mcqs?.map((m, idx) => (
-						<div key={idx} className="p-3 bg-[#f8fafc] rounded-md">
+						<div key={idx} className="p-3 bg-surface-container-low rounded-md">
 							<p className="font-semibold">{idx+1}. {m.question}</p>
 							<ul className="mt-2 list-disc ml-5 text-sm">
 								{m.options?.map((opt, oidx) => (
@@ -211,7 +211,7 @@ Go Back
 				<h4 className="font-bold">Short Answers</h4>
 				<div className="space-y-3 mt-2">
 					{result.short_answers?.map((s, idx) => (
-						<div key={idx} className="p-3 bg-[#f8fafc] rounded-md">
+						<div key={idx} className="p-3 bg-surface-container-low rounded-md">
 							<p className="font-semibold">{idx+1}. {s.question}</p>
 							<p className="text-sm text-gray-700 mt-1">{s.answer_key}</p>
 						</div>
@@ -223,7 +223,7 @@ Go Back
 				<h4 className="font-bold">Case Based Questions</h4>
 				<div className="space-y-3 mt-2">
 					{result.case_based_questions?.map((c, idx) => (
-						<div key={idx} className="p-3 bg-[#f8fafc] rounded-md">
+						<div key={idx} className="p-3 bg-surface-container-low rounded-md">
 							<p className="font-semibold">Scenario: {c.scenario}</p>
 							<p className="mt-2">{c.question}</p>
 							<p className="text-sm text-gray-700 mt-1">{c.answer_key}</p>
@@ -243,7 +243,7 @@ Go Back
 
 <div className="flex items-center gap-3 mb-6">
 
-<span className="material-symbols-outlined text-[#6b38d4]">
+<span className="material-symbols-outlined text-primary">
 memory
 </span>
 
@@ -257,13 +257,13 @@ Model Selection
 
 <label className="block mb-6">
 
-<span className="text-sm font-semibold text-[#424754] block mb-2">
+<span className="text-sm font-semibold text-on-surface-variant block mb-2">
 Primary Intelligence Engine
 </span>
 
 
 <select
-className="w-full bg-[#eff4ff] rounded-md px-4 py-3 outline-none"
+className="w-full bg-surface-container-low rounded-md px-4 py-3 outline-none"
 >
 
 <option>
@@ -284,14 +284,14 @@ Claude 3.5 Sonnet (Nuanced Reasoning)
 
 
 
-<div className="flex gap-3 bg-[#ffdcc6]/40 border-l-4 border-[#924700] p-4 rounded-md">
+<div className="flex gap-3 bg-secondary-container/40 border-l-4 border-secondary p-4 rounded-md">
 
-<span className="material-symbols-outlined text-[#924700]">
+<span className="material-symbols-outlined text-secondary">
 lightbulb
 </span>
 
 
-<p className="text-sm text-[#723600]">
+<p className="text-sm text-on-secondary-container">
 
 <span className="font-bold">
 AI Insight:
@@ -313,7 +313,7 @@ AI Insight:
 
 <div className="flex items-center gap-3 mb-6">
 
-<span className="material-symbols-outlined text-[#0058be]">
+<span className="material-symbols-outlined text-primary">
 tune
 </span>
 
@@ -333,7 +333,7 @@ Performance & Controls
 
 <div>
 
-<p className="font-semibold text-[#424754]">
+<p className="font-semibold text-on-surface-variant">
 Creativity (Temperature)
 </p>
 
@@ -344,7 +344,7 @@ Lower values are focused and deterministic.
 </div>
 
 
-<span className="bg-[#d8e2ff] text-[#0058be] px-3 py-1 rounded-full text-sm font-bold">
+<span className="bg-surface-container-high text-primary px-3 py-1 rounded-full text-sm font-bold">
 {temperature}
 </span>
 
@@ -394,7 +394,7 @@ cursor:pointer;
 
 <div>
 
-<p className="text-sm font-semibold text-[#424754] mb-2">
+<p className="text-sm font-semibold text-on-surface-variant mb-2">
 Context Token Limit
 </p>
 
@@ -405,7 +405,7 @@ Context Token Limit
 type="number"
 defaultValue="4096"
 
-className="w-full bg-[#eff4ff] rounded-md px-4 py-3 outline-none"
+className="w-full bg-surface-container-low rounded-md px-4 py-3 outline-none"
 />
 
 
@@ -436,7 +436,7 @@ Maximum allowed: 128,000 tokens for GPT-4o.
 
 <button
 onClick={()=>navigate("/global-admin/settings")}
-className="px-8 py-3 bg-gradient-to-r from-[#0058be] to-[#2170e4] text-white font-bold rounded-md shadow hover:opacity-90"
+className="px-8 py-3 bg-gradient-to-r from-primary to-primary-container text-white font-bold rounded-md shadow hover:opacity-90"
 >
 Save Changes
 </button>
@@ -444,7 +444,7 @@ Save Changes
 
 <button
 onClick={()=>navigate("/global-admin/settings")}
-className="px-8 py-3 bg-[#dce9ff] text-gray-600 font-bold rounded-md"
+className="px-8 py-3 bg-surface-container-high text-gray-600 font-bold rounded-md"
 >
 Discard
 </button>
@@ -477,7 +477,7 @@ analytics
 
 
 
-<p className="text-3xl font-black text-[#0058be]">
+<p className="text-3xl font-black text-primary">
 124.8k
 </p>
 
@@ -490,19 +490,19 @@ Tokens used today
 
 <div className="flex items-end gap-1 h-28 mb-6">
 
-<div className="bg-[#d3e4fe] w-full h-1/2 rounded-t"></div>
+<div className="bg-surface-container-highest w-full h-1/2 rounded-t"></div>
 
-<div className="bg-[#d3e4fe] w-full h-2/3 rounded-t"></div>
+<div className="bg-surface-container-highest w-full h-2/3 rounded-t"></div>
 
-<div className="bg-[#d3e4fe] w-full h-1/3 rounded-t"></div>
+<div className="bg-surface-container-highest w-full h-1/3 rounded-t"></div>
 
-<div className="bg-[#d3e4fe] w-full h-3/4 rounded-t"></div>
+<div className="bg-surface-container-highest w-full h-3/4 rounded-t"></div>
 
-<div className="bg-[#2170e4] w-full h-4/5 rounded-t"></div>
+<div className="bg-primary-container w-full h-4/5 rounded-t"></div>
 
-<div className="bg-[#2170e4] w-full h-full rounded-t"></div>
+<div className="bg-primary-container w-full h-full rounded-t"></div>
 
-<div className="bg-[#2170e4] w-full h-5/6 rounded-t"></div>
+<div className="bg-primary-container w-full h-5/6 rounded-t"></div>
 
 </div>
 
@@ -521,9 +521,9 @@ Monthly Quota
 </div>
 
 
-<div className="w-full bg-[#eff4ff] h-2 rounded-full overflow-hidden">
+<div className="w-full bg-surface-container-low h-2 rounded-full overflow-hidden">
 
-<div className="bg-[#6b38d4] h-full w-[62%]"></div>
+<div className="bg-primary h-full w-[62%]"></div>
 
 </div>
 

@@ -310,7 +310,7 @@ export default function GuardianDetails() {
                 <button onClick={() => setShowDeleteModal(true)} className="flex items-center gap-2 px-4 py-2 bg-red-50 text-red-600 text-sm font-bold rounded-md hover:bg-red-100 transition-colors">
                   <span className="material-symbols-outlined text-base">delete</span> Delete
                 </button>
-                <button onClick={() => setIsEditing(true)} className="flex items-center gap-2 px-4 py-2 bg-[#f4ebff] text-[#6b38d4] text-sm font-bold rounded-md hover:bg-[#ead9ff] transition-colors">
+                <button onClick={() => setIsEditing(true)} className="flex items-center gap-2 px-4 py-2 bg-primary-fixed text-primary text-sm font-bold rounded-md hover:bg-primary-fixed transition-colors">
                   <span className="material-symbols-outlined text-base">edit</span> Edit Profile
                 </button>
               </>
@@ -319,7 +319,7 @@ export default function GuardianDetails() {
                 <button onClick={() => { setIsEditing(false); fetchParent(); }} className="px-4 py-2 text-sm text-gray-500 font-bold hover:bg-gray-100 rounded-md">
                   Cancel
                 </button>
-                <button onClick={handleSave} disabled={isSaving} className="flex items-center gap-2 px-4 py-2 bg-[#6b38d4] text-white text-sm font-bold rounded-md shadow-sm disabled:opacity-70">
+                <button onClick={handleSave} disabled={isSaving} className="flex items-center gap-2 px-4 py-2 bg-primary text-white text-sm font-bold rounded-md shadow-sm disabled:opacity-70">
                   {isSaving ? "Saving..." : "Save Changes"}
                 </button>
               </div>

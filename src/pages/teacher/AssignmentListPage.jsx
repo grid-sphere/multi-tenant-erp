@@ -141,7 +141,7 @@ export default function AssignmentListPage() {
 
   const filterButtonClass = (filter) =>
     activeFilter === filter
-      ? "px-3 py-3 md:px-6 md:py-4 text-xs md:text-sm font-bold text-[#0058be] dark:text-blue-400 border-b-2 border-[#0058be] dark:border-blue-400 whitespace-nowrap"
+      ? "px-3 py-3 md:px-6 md:py-4 text-xs md:text-sm font-bold text-primary dark:text-blue-400 border-b-2 border-primary dark:border-blue-400 whitespace-nowrap"
       : "px-3 py-3 md:px-6 md:py-4 text-xs md:text-sm font-medium text-gray-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 transition-colors whitespace-nowrap";
 
   return (
@@ -150,7 +150,7 @@ export default function AssignmentListPage() {
       <div className="flex flex-col md:flex-row md:items-end justify-between mb-6 md:mb-8 gap-3 md:gap-4">
         <div>
           <nav className="flex text-xs text-slate-500 dark:text-slate-400 mb-2 gap-2 items-center font-medium">
-            <span className="hover:text-[#0058be] dark:hover:text-blue-400 cursor-pointer" onClick={() => navigate("/teacher")}>Dashboard</span>
+            <span className="hover:text-primary dark:hover:text-blue-400 cursor-pointer" onClick={() => navigate("/teacher")}>Dashboard</span>
             <span className="material-symbols-outlined text-2xs">chevron_right</span>
             <span className="font-semibold text-slate-800 dark:text-slate-200">Assignments</span>
           </nav>
@@ -168,7 +168,7 @@ export default function AssignmentListPage() {
           </button>
           <button
             onClick={() => navigate("/teacher/assignments/create")}
-            className="px-3 py-2 md:px-6 md:py-3 bg-gradient-to-r from-[#0058be] to-[#2170e4] dark:from-blue-600 dark:to-blue-500 text-white rounded-md font-semibold text-xs md:text-sm shadow-lg hover:shadow-xl transition-all flex items-center gap-1 md:gap-2"
+            className="px-3 py-2 md:px-6 md:py-3 bg-gradient-to-r from-primary to-primary-container dark:from-blue-600 dark:to-blue-500 text-white rounded-md font-semibold text-xs md:text-sm shadow-lg hover:shadow-xl transition-all flex items-center gap-1 md:gap-2"
           >
             <span className="material-symbols-outlined text-base md:text-lg">add</span>
             <span className="hidden sm:inline">Create Assignment</span>
@@ -180,13 +180,17 @@ export default function AssignmentListPage() {
       {error && (
         <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/30 text-red-700 dark:text-red-300 rounded-md border border-red-200 dark:border-red-800 shadow-sm flex items-center gap-2">
            <span className="material-symbols-outlined">error</span>
-           <span className="font-medium text-sm">{error}</span>
+           {/* useStaleData surfaces the raw caught Error; rendering the object
+               itself crashes React, so pull the message off it. */}
+           <span className="font-medium text-sm">
+             {error?.message || String(error) || "Could not load assignments."}
+           </span>
         </div>
       )}
 
       {/* Main Data Canvas */}
       <div className="bg-white dark:bg-slate-800 rounded-lg md:rounded-xl shadow-sm overflow-hidden mb-12 border border-gray-100 dark:border-slate-700">
-        <div className="flex flex-col md:flex-row border-b border-gray-100 dark:border-slate-700 px-3 md:px-6 overflow-x-auto bg-[#f8f9ff] dark:bg-slate-800/50 md:justify-between md:items-center">
+        <div className="flex flex-col md:flex-row border-b border-gray-100 dark:border-slate-700 px-3 md:px-6 overflow-x-auto bg-background dark:bg-slate-800/50 md:justify-between md:items-center">
           <div className="flex overflow-x-auto">
             <button className={filterButtonClass("all")} onClick={() => setActiveFilter("all")}>All ({searchedAssignments.length})</button>
             <button className={filterButtonClass("upcoming")} onClick={() => setActiveFilter("upcoming")}>Upcoming ({upcomingAssignments.length})</button>
@@ -194,7 +198,7 @@ export default function AssignmentListPage() {
           </div>
           <div className="flex items-center gap-2 md:gap-3 py-2 md:py-3">
             <select
-              className="px-2 py-1.5 md:px-3 md:py-2 bg-white dark:bg-slate-700 border border-gray-200 dark:border-slate-600 rounded-md text-xs md:text-sm text-slate-700 dark:text-slate-200 outline-none focus:border-[#0058be]/40 dark:focus:border-blue-400"
+              className="px-2 py-1.5 md:px-3 md:py-2 bg-white dark:bg-slate-700 border border-gray-200 dark:border-slate-600 rounded-md text-xs md:text-sm text-slate-700 dark:text-slate-200 outline-none focus:border-primary/40 dark:focus:border-blue-400"
               value={`${sortBy}:${sortDirection}`}
               onChange={(e) => {
                 const [nextSortBy, nextSortDirection] = e.target.value.split(":");
@@ -210,7 +214,7 @@ export default function AssignmentListPage() {
             <div className="relative flex-1 md:flex-none">
               <span className="material-symbols-outlined absolute left-2 md:left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-slate-500 text-sm">search</span>
               <input 
-                className="w-full md:w-auto pl-7 md:pl-9 pr-3 md:pr-4 py-1.5 md:py-2 bg-white dark:bg-slate-700 border border-gray-200 dark:border-slate-600 rounded-md text-xs md:text-sm text-slate-700 dark:text-slate-200 placeholder:text-gray-400 dark:placeholder:text-slate-500 outline-none focus:border-[#0058be]/40 dark:focus:border-blue-400" 
+                className="w-full md:w-auto pl-7 md:pl-9 pr-3 md:pr-4 py-1.5 md:py-2 bg-white dark:bg-slate-700 border border-gray-200 dark:border-slate-600 rounded-md text-xs md:text-sm text-slate-700 dark:text-slate-200 placeholder:text-gray-400 dark:placeholder:text-slate-500 outline-none focus:border-primary/40 dark:focus:border-blue-400" 
                 placeholder="Search..." 
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
@@ -219,7 +223,7 @@ export default function AssignmentListPage() {
           </div>
         </div>
         {revalidating && (
-          <div className="px-6 py-2 bg-blue-50 dark:bg-blue-900/30 text-[#0058be] dark:text-blue-400 text-xs font-semibold border-b border-blue-100 dark:border-blue-800">
+          <div className="px-6 py-2 bg-blue-50 dark:bg-blue-900/30 text-primary dark:text-blue-400 text-xs font-semibold border-b border-blue-100 dark:border-blue-800">
             Refreshing assignments...
           </div>
         )}
@@ -240,15 +244,15 @@ export default function AssignmentListPage() {
               {loading ? (
                 <tr>
                   <td colSpan="6" className="text-center py-16 text-gray-500 dark:text-slate-400">
-                    <span className="material-symbols-outlined animate-spin text-3xl text-[#0058be] dark:text-blue-400 mb-3">progress_activity</span>
+                    <span className="material-symbols-outlined animate-spin text-3xl text-primary dark:text-blue-400 mb-3">progress_activity</span>
                     <p>Loading assignments database...</p>
                   </td>
                 </tr>
               ) : filteredAssignments.length === 0 ? (
                 <tr>
                   <td colSpan="6" className="text-center py-16 text-gray-500 dark:text-slate-400">
-                    <div className="w-16 h-16 bg-[#eff4ff] dark:bg-blue-900/30 rounded-full flex items-center justify-center mx-auto mb-3">
-                       <span className="material-symbols-outlined text-[#0058be] dark:text-blue-400 text-3xl">assignment</span>
+                    <div className="w-16 h-16 bg-surface-container-low dark:bg-blue-900/30 rounded-full flex items-center justify-center mx-auto mb-3">
+                       <span className="material-symbols-outlined text-primary dark:text-blue-400 text-3xl">assignment</span>
                     </div>
                     <p className="font-semibold text-slate-700 dark:text-slate-200">No assignments found.</p>
                     <p className="text-sm mt-1">Create an assignment to get started.</p>
@@ -258,10 +262,10 @@ export default function AssignmentListPage() {
                 filteredAssignments.map(item => {
                   const isPast = new Date(item.due_date) < new Date();
                   return (
-                    <tr key={item.id} className="hover:bg-[#fcfdff] dark:hover:bg-slate-700/50 transition-colors group cursor-pointer" onClick={() => navigate(`/teacher/assignments/${item.id}`)}>
+                    <tr key={item.id} className="hover:bg-background dark:hover:bg-slate-700/50 transition-colors group cursor-pointer" onClick={() => navigate(`/teacher/assignments/${item.id}`)}>
                       <td className="px-3 py-3 md:px-6 md:py-5">
                         <div className="flex items-center">
-                          <div className={`w-7 h-7 md:w-10 md:h-10 rounded-lg flex items-center justify-center mr-2 md:mr-4 border ${isPast ? 'bg-gray-50 dark:bg-slate-700 text-gray-400 dark:text-slate-500 border-gray-200 dark:border-slate-600' : 'bg-blue-50 dark:bg-blue-900/30 text-[#0058be] dark:text-blue-400 border-blue-100 dark:border-blue-800'}`}>
+                          <div className={`w-7 h-7 md:w-10 md:h-10 rounded-lg flex items-center justify-center mr-2 md:mr-4 border ${isPast ? 'bg-gray-50 dark:bg-slate-700 text-gray-400 dark:text-slate-500 border-gray-200 dark:border-slate-600' : 'bg-blue-50 dark:bg-blue-900/30 text-primary dark:text-blue-400 border-blue-100 dark:border-blue-800'}`}>
                             <span className="material-symbols-outlined text-base md:text-xl">assignment</span>
                           </div>
                           <div>
@@ -272,7 +276,7 @@ export default function AssignmentListPage() {
                         </div>
                       </td>
                       <td className="px-3 py-3 md:px-6 md:py-5 hidden sm:table-cell">
-                        <span className="text-[10px] md:text-2xs uppercase tracking-wider font-bold text-[#6b38d4] dark:text-purple-300 bg-[#e9ddff] dark:bg-purple-900/30 px-2 py-0.5 md:px-2.5 md:py-1 rounded-full inline-block border border-[#d6beff] dark:border-purple-800">
+                        <span className="text-[10px] md:text-2xs uppercase tracking-wider font-bold text-primary dark:text-purple-300 bg-primary-fixed dark:bg-purple-900/30 px-2 py-0.5 md:px-2.5 md:py-1 rounded-full inline-block border border-primary-fixed dark:border-purple-800">
                           {item.subject_name || "N/A"}
                         </span>
                       </td>
@@ -290,7 +294,7 @@ export default function AssignmentListPage() {
                         </div>
                       </td>
                       <td className="px-3 py-3 md:px-6 md:py-5 text-center hidden md:table-cell">
-                        <span className="px-2 py-0.5 md:px-3 md:py-1 bg-blue-50 dark:bg-blue-900/30 text-[#0058be] dark:text-blue-400 text-[10px] md:text-xs font-bold rounded-full border border-blue-200 dark:border-blue-800">
+                        <span className="px-2 py-0.5 md:px-3 md:py-1 bg-blue-50 dark:bg-blue-900/30 text-primary dark:text-blue-400 text-[10px] md:text-xs font-bold rounded-full border border-blue-200 dark:border-blue-800">
                           {item.submission_count || 0} submitted
                         </span>
                         {item.pending_count > 0 && (
@@ -302,7 +306,7 @@ export default function AssignmentListPage() {
                       <td className="px-3 py-3 md:px-6 md:py-5 text-right">
                         <div className="flex items-center justify-end space-x-1 md:space-x-2 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
                           <button 
-                            className="p-1.5 md:p-2 text-[#0058be] dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-md transition-colors"
+                            className="p-1.5 md:p-2 text-primary dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-md transition-colors"
                             onClick={(e) => { e.stopPropagation(); navigate(`/teacher/assignments/${item.id}`); }}
                           >
                             <span className="material-symbols-outlined text-lg md:text-xl">visibility</span>

@@ -1,9 +1,13 @@
 import { useNavigate, useLocation } from "react-router-dom";
 
-export default function Sidebar(){
+export default function Sidebar({ onClose }){
 
 const navigate = useNavigate();
 const location = useLocation();
+
+/* Below lg the sidebar is an overlay drawer, so navigating must dismiss it —
+   otherwise the drawer stays over the page the user just opened. */
+const go = (to) => { navigate(to); onClose?.(); };
 
 const path = location.pathname;
 
@@ -45,8 +49,8 @@ transition-all
 duration-150
 
 ${active
-? "bg-white text-[#0058be] font-semibold shadow-sm"
-: "text-gray-600 hover:bg-blue-100/50"}
+? "bg-surface-container-lowest text-primary font-semibold shadow-sm"
+: "text-on-surface-variant hover:bg-primary/10"}
 `;
 
 const handleLogout = () => {
@@ -59,13 +63,13 @@ const handleLogout = () => {
 
 return(
 
-<nav className="fixed left-0 top-0 h-screen w-64 p-4 bg-[#f3f6ff] border-r flex flex-col">
+<nav className="h-full w-64 p-4 bg-surface-container-low border-r border-outline-variant flex flex-col overflow-y-auto">
 
 {/* logo */}
 
 <div className="mb-8 px-2">
 
-<h1 className="text-xl font-bold text-[#0058be]">
+<h1 className="text-xl font-bold text-primary">
 Academic Architect
 </h1>
 
@@ -80,7 +84,7 @@ Academic Architect
 {/* Dashboard */}
 
 <div
-onClick={()=>navigate("/global-admin")}
+onClick={()=>go("/global-admin")}
 className={navItem(isDashboard)}
 >
 
@@ -97,7 +101,7 @@ Dashboard
 {/* Schools */}
 
 <div
-onClick={()=>navigate("/global-admin/schools")}
+onClick={()=>go("/global-admin/schools")}
 className={navItem(isSchoolsModule)}
 >
 
@@ -114,7 +118,7 @@ Schools
 {/* Domains */}
 
 <div
-onClick={()=>navigate("/global-admin/domains")}
+onClick={()=>go("/global-admin/domains")}
 className={navItem(isDomainModule)}
 >
 
@@ -131,7 +135,7 @@ Domains
 {/* Subscriptions */}
 
 <div
-onClick={()=>navigate("/global-admin/subscriptions")}
+onClick={()=>go("/global-admin/subscriptions")}
 className={navItem(isSubscriptionModule)}
 >
 
@@ -148,7 +152,7 @@ Subscriptions
 {/* Settings */}
 
 <div
-onClick={()=>navigate("/global-admin/settings")}
+onClick={()=>go("/global-admin/settings")}
 className={navItem(isSettingsModule)}
 >
 
@@ -170,9 +174,9 @@ Settings
 <div className="bg-white p-3 rounded-lg shadow-sm">
   <div className="flex items-center gap-3 mb-3">
 
-    <div className="w-10 h-10 rounded-full bg-[#dce9ff] flex items-center justify-center">
+    <div className="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center">
 
-      <span className="material-symbols-outlined text-[#0058be]">
+      <span className="material-symbols-outlined text-primary">
       person
       </span>
 

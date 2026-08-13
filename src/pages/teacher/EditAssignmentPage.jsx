@@ -145,7 +145,7 @@ export default function EditAssignmentPage() {
     return (
       <MainLayout title="Edit Assignment">
         <div className="flex items-center justify-center min-h-[60vh]">
-          <div className="flex flex-col items-center gap-3 text-[#0058be] dark:text-blue-400">
+          <div className="flex flex-col items-center gap-3 text-primary dark:text-blue-400">
             <span className="material-symbols-outlined animate-spin text-4xl">progress_activity</span>
             <p className="font-semibold tracking-wide">Loading Assignment...</p>
           </div>
@@ -160,7 +160,7 @@ export default function EditAssignmentPage() {
         <div>
           <Link
             to={`/teacher/assignments/${id}`}
-            className="flex items-center gap-1.5 text-[#0058be] dark:text-blue-400 font-semibold text-xs md:text-sm mb-3 md:mb-4 hover:-translate-x-1 transition-transform w-max"
+            className="flex items-center gap-1.5 text-primary dark:text-blue-400 font-semibold text-xs md:text-sm mb-3 md:mb-4 hover:-translate-x-1 transition-transform w-max"
           >
             <span className="material-symbols-outlined text-base md:text-lg">arrow_back</span>
             Back to Assignment Details
@@ -179,7 +179,7 @@ export default function EditAssignmentPage() {
           <button 
             onClick={handleSave}
             disabled={submitting}
-            className="px-4 py-2 md:px-6 md:py-2.5 bg-gradient-to-r from-[#0058be] to-[#2170e4] dark:from-blue-600 dark:to-blue-500 text-white font-bold rounded-md text-xs md:text-sm shadow-md hover:shadow-lg transition-all flex items-center gap-1.5 md:gap-2 disabled:opacity-50"
+            className="px-4 py-2 md:px-6 md:py-2.5 bg-gradient-to-r from-primary to-primary-container dark:from-blue-600 dark:to-blue-500 text-white font-bold rounded-md text-xs md:text-sm shadow-md hover:shadow-lg transition-all flex items-center gap-1.5 md:gap-2 disabled:opacity-50"
           >
             {submitting ? (
               <span className="material-symbols-outlined animate-spin text-base md:text-lg">progress_activity</span>
@@ -205,7 +205,7 @@ export default function EditAssignmentPage() {
         <div className="col-span-12 lg:col-span-8 space-y-6 md:space-y-8">
           <div className="bg-white dark:bg-slate-800 p-5 md:p-6 lg:p-8 rounded-lg md:rounded-xl shadow-sm border border-gray-100 dark:border-slate-700">
             <h3 className="text-lg md:text-xl font-display font-bold mb-4 md:mb-6 flex items-center text-slate-800 dark:text-slate-100">
-              <span className="material-symbols-outlined mr-2 text-[#0058be] dark:text-blue-400 text-xl md:text-2xl">assignment</span>
+              <span className="material-symbols-outlined mr-2 text-primary dark:text-blue-400 text-xl md:text-2xl">assignment</span>
               Assignment Details
             </h3>
             
@@ -216,7 +216,7 @@ export default function EditAssignmentPage() {
                   required
                   value={title}
                   onChange={e => setTitle(e.target.value)}
-                  className="w-full bg-[#f8f9ff] dark:bg-slate-700/50 border border-transparent dark:border-slate-600 rounded-md p-2.5 md:p-3.5 text-xs md:text-sm text-slate-800 dark:text-slate-200 placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:border-[#0058be]/40 dark:focus:border-blue-400 focus:ring-2 focus:ring-[#0058be]/10 dark:focus:ring-blue-400/10 transition-all outline-none" 
+                  className="w-full bg-background dark:bg-slate-700/50 border border-transparent dark:border-slate-600 rounded-md p-2.5 md:p-3.5 text-xs md:text-sm text-slate-800 dark:text-slate-200 placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:border-primary/40 dark:focus:border-blue-400 focus:ring-2 focus:ring-primary/10 dark:focus:ring-blue-400/10 transition-all outline-none" 
                   placeholder="e.g., Chapter 5 Homework - Algebra" 
                 />
               </div>
@@ -228,7 +228,7 @@ export default function EditAssignmentPage() {
                   rows="4"
                   value={description}
                   onChange={e => setDescription(e.target.value)}
-                  className="w-full bg-[#f8f9ff] dark:bg-slate-700/50 border border-transparent dark:border-slate-600 rounded-md p-2.5 md:p-3.5 text-xs md:text-sm text-slate-800 dark:text-slate-200 placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:border-[#0058be]/40 dark:focus:border-blue-400 focus:ring-2 focus:ring-[#0058be]/10 dark:focus:ring-blue-400/10 transition-all outline-none resize-none" 
+                  className="w-full bg-background dark:bg-slate-700/50 border border-transparent dark:border-slate-600 rounded-md p-2.5 md:p-3.5 text-xs md:text-sm text-slate-800 dark:text-slate-200 placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:border-primary/40 dark:focus:border-blue-400 focus:ring-2 focus:ring-primary/10 dark:focus:ring-blue-400/10 transition-all outline-none resize-none" 
                   placeholder="Describe the assignment, requirements, and any special instructions..." 
                 />
               </div>
@@ -242,7 +242,7 @@ export default function EditAssignmentPage() {
                       required
                       value={selectedSection}
                       onChange={e => setSelectedSection(e.target.value)}
-                      className="w-full bg-[#f8f9ff] dark:bg-slate-700/50 border border-transparent dark:border-slate-600 rounded-md py-2.5 md:py-3.5 pl-9 md:pl-10 pr-3 md:pr-4 text-xs md:text-sm font-medium text-slate-700 dark:text-slate-200 focus:border-[#0058be]/40 dark:focus:border-blue-400 focus:ring-2 focus:ring-[#0058be]/10 dark:focus:ring-blue-400/10 outline-none transition-all appearance-none"
+                      className="w-full bg-background dark:bg-slate-700/50 border border-transparent dark:border-slate-600 rounded-md py-2.5 md:py-3.5 pl-9 md:pl-10 pr-3 md:pr-4 text-xs md:text-sm font-medium text-slate-700 dark:text-slate-200 focus:border-primary/40 dark:focus:border-blue-400 focus:ring-2 focus:ring-primary/10 dark:focus:ring-blue-400/10 outline-none transition-all appearance-none"
                     >
                       <option value="">Select Section...</option>
                       {loadingContext ? (
@@ -267,7 +267,7 @@ export default function EditAssignmentPage() {
                       required
                       value={selectedSubject}
                       onChange={e => setSelectedSubject(e.target.value)}
-                      className="w-full bg-[#f8f9ff] dark:bg-slate-700/50 border border-transparent dark:border-slate-600 rounded-md py-2.5 md:py-3.5 pl-9 md:pl-10 pr-3 md:pr-4 text-xs md:text-sm font-medium text-slate-700 dark:text-slate-200 focus:border-[#0058be]/40 dark:focus:border-blue-400 focus:ring-2 focus:ring-[#0058be]/10 dark:focus:ring-blue-400/10 outline-none transition-all appearance-none"
+                      className="w-full bg-background dark:bg-slate-700/50 border border-transparent dark:border-slate-600 rounded-md py-2.5 md:py-3.5 pl-9 md:pl-10 pr-3 md:pr-4 text-xs md:text-sm font-medium text-slate-700 dark:text-slate-200 focus:border-primary/40 dark:focus:border-blue-400 focus:ring-2 focus:ring-primary/10 dark:focus:ring-blue-400/10 outline-none transition-all appearance-none"
                     >
                       <option value="">Select Subject...</option>
                       {loadingContext ? (
@@ -292,7 +292,7 @@ export default function EditAssignmentPage() {
                   required
                   value={dueDate}
                   onChange={e => setDueDate(e.target.value)}
-                  className="w-full bg-[#f8f9ff] dark:bg-slate-700/50 border border-transparent dark:border-slate-600 rounded-md p-2.5 md:p-3.5 text-xs md:text-sm font-medium text-slate-700 dark:text-slate-200 focus:border-[#0058be]/40 dark:focus:border-blue-400 focus:ring-2 focus:ring-[#0058be]/10 dark:focus:ring-blue-400/10 transition-all outline-none" 
+                  className="w-full bg-background dark:bg-slate-700/50 border border-transparent dark:border-slate-600 rounded-md p-2.5 md:p-3.5 text-xs md:text-sm font-medium text-slate-700 dark:text-slate-200 focus:border-primary/40 dark:focus:border-blue-400 focus:ring-2 focus:ring-primary/10 dark:focus:ring-blue-400/10 transition-all outline-none" 
                 />
               </div>
             </div>
@@ -300,7 +300,7 @@ export default function EditAssignmentPage() {
         </div>
 
         <div className="col-span-12 lg:col-span-4 space-y-6 md:space-y-8">
-          <div className="bg-gradient-to-br from-[#0b1c30] to-[#1e3450] p-5 md:p-6 lg:p-8 rounded-lg md:rounded-xl text-white shadow-lg relative overflow-hidden">
+          <div className="bg-gradient-to-br from-on-surface to-on-surface p-5 md:p-6 lg:p-8 rounded-lg md:rounded-xl text-white shadow-lg relative overflow-hidden">
              <span className="material-symbols-outlined absolute -right-4 -bottom-4 text-7xl md:text-9xl text-white/5">edit</span>
              <h4 className="text-base md:text-lg lg:text-xl font-bold mb-3 md:mb-4 relative z-10 flex items-center gap-2 text-blue-200">
                <span className="material-symbols-outlined text-lg md:text-xl">info</span>

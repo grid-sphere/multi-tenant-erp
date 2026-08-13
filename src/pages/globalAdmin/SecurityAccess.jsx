@@ -12,7 +12,7 @@ return(
 
 <Layout>
 
-<div className="min-h-screen bg-[#f8f9ff]">
+<div className="min-h-screen bg-background">
 
 <div className="max-w-6xl mx-auto px-8 py-10">
 
@@ -22,11 +22,11 @@ return(
 
 <div>
 
-<h1 className="text-4xl font-extrabold text-[#0b1c30]">
+<h1 className="text-4xl font-extrabold text-on-surface">
 Security & Access
 </h1>
 
-<p className="text-[#424754] mt-2 max-w-2xl">
+<p className="text-on-surface-variant mt-2 max-w-2xl">
 Configure institutional security protocols and administrative access control.
 </p>
 
@@ -35,7 +35,7 @@ Configure institutional security protocols and administrative access control.
 
 <button
 onClick={()=>navigate("/global-admin/settings")}
-className="flex items-center gap-2 px-4 py-2 bg-[#dce9ff] text-[#0058be] rounded-md font-semibold text-sm hover:bg-[#d3e4fe]"
+className="flex items-center gap-2 px-4 py-2 bg-surface-container-high text-primary rounded-md font-semibold text-sm hover:bg-surface-container-highest"
 >
 
 <span className="material-symbols-outlined text-sm">
@@ -62,9 +62,9 @@ Go Back
 
 <div className="flex gap-4">
 
-<div className="bg-[#d8e2ff] p-3 rounded-xl">
+<div className="bg-surface-container-high p-3 rounded-xl">
 
-<span className="material-symbols-outlined text-[#0058be]">
+<span className="material-symbols-outlined text-primary">
 verified_user
 </span>
 
@@ -90,7 +90,7 @@ Enable Two-Factor Authentication for all Admin accounts
 type="checkbox"
 checked={twoFA}
 onChange={()=>setTwoFA(!twoFA)}
-className="w-5 h-5 accent-[#0058be]"
+className="w-5 h-5 accent-primary"
 />
 
 </div>
@@ -105,7 +105,7 @@ className="w-5 h-5 accent-[#0058be]"
 
 <div className="flex gap-2 items-center">
 
-<span className="material-symbols-outlined text-[#0058be]">
+<span className="material-symbols-outlined text-primary">
 lan
 </span>
 
@@ -116,7 +116,7 @@ IP Whitelist
 </div>
 
 
-<button className="px-4 py-2 bg-[#dce9ff] text-[#0058be] rounded-md text-sm font-semibold">
+<button className="px-4 py-2 bg-surface-container-high text-primary rounded-md text-sm font-semibold">
 Add IP
 </button>
 
@@ -206,7 +206,7 @@ delete
 
 <div className="flex items-center gap-2 mb-6">
 
-<span className="material-symbols-outlined text-[#0058be]">
+<span className="material-symbols-outlined text-primary">
 timer
 </span>
 
@@ -223,7 +223,7 @@ Idle Timeout
 </label>
 
 
-<select className="w-full mt-2 px-4 py-3 bg-[#eff4ff] rounded-md">
+<select className="w-full mt-2 px-4 py-3 bg-surface-container-low rounded-md">
 
 <option>
 30m
@@ -256,7 +256,7 @@ Automatically log out users after periods of inactivity.
 
 {/* insight */}
 
-<div className="bg-gradient-to-br from-[#8455ef] to-[#6b38d4] p-6 rounded-lg text-white">
+<div className="bg-gradient-to-br from-primary to-primary p-6 rounded-lg text-white">
 
 <p className="text-xs uppercase font-bold opacity-70 mb-3">
 AI Insight
@@ -285,7 +285,7 @@ Review Activity
 
 {/* health */}
 
-<div className="bg-[#eff4ff] p-6 rounded-lg border-l-4 border-[#0058be]">
+<div className="bg-surface-container-low p-6 rounded-lg border-l-4 border-primary">
 
 <p className="text-xs uppercase font-bold text-gray-400">
 Security Health
@@ -294,12 +294,12 @@ Security Health
 
 <div className="flex justify-between items-center mt-3">
 
-<h3 className="text-4xl font-bold text-[#0058be]">
+<h3 className="text-4xl font-bold text-primary">
 98%
 </h3>
 
 
-<span className="bg-white px-3 py-1 text-xs font-bold rounded-full text-[#0058be]">
+<span className="bg-white px-3 py-1 text-xs font-bold rounded-full text-primary">
 
 STABLE
 
@@ -335,7 +335,7 @@ className="rounded-lg grayscale opacity-60 hover:opacity-100 transition"
 
 <button
 onClick={()=>navigate("/global-admin/settings")}
-className="px-6 py-3 text-gray-500 font-bold hover:bg-[#eff4ff] rounded-md"
+className="px-6 py-3 text-gray-500 font-bold hover:bg-surface-container-low rounded-md"
 >
 
 Cancel
@@ -346,7 +346,7 @@ Cancel
 
 <button
 onClick={()=>navigate("/global-admin/settings")}
-className="px-8 py-3 bg-gradient-to-br from-[#0058be] to-[#2170e4] text-white font-bold rounded-md shadow"
+className="px-8 py-3 bg-gradient-to-br from-primary to-primary-container text-white font-bold rounded-md shadow"
 >
 
 Update Security Policy

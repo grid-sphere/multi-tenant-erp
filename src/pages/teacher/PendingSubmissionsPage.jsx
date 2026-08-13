@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import MainLayout from "../../components/erp/teacher/MainLayout";
 import { getPendingSubmissions, gradeSubmission } from "../../services/api";
+import TeacherUploadPanel from "../../components/erp/teacher/marking/TeacherUploadPanel";
 
 export default function PendingSubmissionsPage() {
   const navigate = useNavigate();
@@ -68,7 +69,7 @@ export default function PendingSubmissionsPage() {
       <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
         <div>
           <nav className="flex text-xs text-slate-500 dark:text-slate-400 mb-2 gap-2 items-center font-medium">
-            <span className="hover:text-[#0058be] dark:hover:text-blue-400 cursor-pointer" onClick={() => navigate("/teacher")}>Dashboard</span>
+            <span className="hover:text-primary dark:hover:text-blue-400 cursor-pointer" onClick={() => navigate("/teacher")}>Dashboard</span>
             <span className="material-symbols-outlined text-2xs">chevron_right</span>
             <span className="font-semibold text-slate-800 dark:text-slate-200">Pending Submissions</span>
           </nav>
@@ -91,6 +92,10 @@ export default function PendingSubmissionsPage() {
         </div>
       )}
 
+      {/* Put a script in directly — paper scripts, or when a student hasn't
+          uploaded. Also the one route that works on a half-configured school. */}
+      <TeacherUploadPanel onUploaded={fetchPendingSubmissions} />
+
       {/* Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         <div className="bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-900/30 dark:to-orange-900/30 p-6 rounded-xl border border-amber-200 dark:border-amber-800 shadow-sm">
@@ -105,16 +110,16 @@ export default function PendingSubmissionsPage() {
 
       {/* Main Data Canvas */}
       <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm overflow-hidden mb-12 border border-gray-100 dark:border-slate-700">
-        <div className="flex border-b border-gray-100 dark:border-slate-700 px-6 overflow-x-auto bg-[#f8f9ff] dark:bg-slate-800/50 justify-between items-center">
+        <div className="flex border-b border-gray-100 dark:border-slate-700 px-6 overflow-x-auto bg-background dark:bg-slate-800/50 justify-between items-center">
           <div className="flex">
-            <button className="px-6 py-4 text-sm font-bold text-[#0058be] dark:text-blue-400 border-b-2 border-[#0058be] dark:border-blue-400 whitespace-nowrap">
+            <button className="px-6 py-4 text-sm font-bold text-primary dark:text-blue-400 border-b-2 border-primary dark:border-blue-400 whitespace-nowrap">
               All Pending ({filteredSubmissions.length})
             </button>
           </div>
           <div className="relative">
             <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-slate-500 text-sm">search</span>
             <input 
-              className="pl-9 pr-4 py-2 bg-white dark:bg-slate-700 border border-gray-200 dark:border-slate-600 rounded-md text-sm text-slate-700 dark:text-slate-200 placeholder:text-gray-400 dark:placeholder:text-slate-500 outline-none focus:border-[#0058be]/40 dark:focus:border-blue-400" 
+              className="pl-9 pr-4 py-2 bg-white dark:bg-slate-700 border border-gray-200 dark:border-slate-600 rounded-md text-sm text-slate-700 dark:text-slate-200 placeholder:text-gray-400 dark:placeholder:text-slate-500 outline-none focus:border-primary/40 dark:focus:border-blue-400" 
               placeholder="Search submissions..." 
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
@@ -137,15 +142,15 @@ export default function PendingSubmissionsPage() {
               {loading ? (
                 <tr>
                   <td colSpan="5" className="text-center py-16 text-gray-500 dark:text-slate-400">
-                    <span className="material-symbols-outlined animate-spin text-3xl text-[#0058be] dark:text-blue-400 mb-3">progress_activity</span>
+                    <span className="material-symbols-outlined animate-spin text-3xl text-primary dark:text-blue-400 mb-3">progress_activity</span>
                     <p>Loading pending submissions...</p>
                   </td>
                 </tr>
               ) : filteredSubmissions.length === 0 ? (
                 <tr>
                   <td colSpan="5" className="text-center py-16 text-gray-500 dark:text-slate-400">
-                    <div className="w-16 h-16 bg-[#eff4ff] dark:bg-blue-900/30 rounded-full flex items-center justify-center mx-auto mb-3">
-                       <span className="material-symbols-outlined text-[#0058be] dark:text-blue-400 text-3xl">check_circle</span>
+                    <div className="w-16 h-16 bg-surface-container-low dark:bg-blue-900/30 rounded-full flex items-center justify-center mx-auto mb-3">
+                       <span className="material-symbols-outlined text-primary dark:text-blue-400 text-3xl">check_circle</span>
                     </div>
                     <p className="font-semibold text-slate-700 dark:text-slate-200">All caught up!</p>
                     <p className="text-sm mt-1">No pending submissions to grade.</p>
@@ -156,17 +161,25 @@ export default function PendingSubmissionsPage() {
                   const isGrading = gradingId === sub.id;
                   
                   return (
-                    <tr key={sub.id} className="hover:bg-[#fcfdff] dark:hover:bg-slate-700/50 transition-colors group">
+                    <tr key={sub.id} className="hover:bg-background dark:hover:bg-slate-700/50 transition-colors group">
                       <td className="px-6 py-5">
                         <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 rounded-full bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center text-[#0058be] dark:text-blue-400 font-bold text-xs border border-blue-100 dark:border-blue-800">
+                          <div className="w-10 h-10 rounded-full bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center text-primary dark:text-blue-400 font-bold text-xs border border-blue-100 dark:border-blue-800">
                             {sub.student_name?.charAt(0) || "?"}
                           </div>
                           <span className="text-sm font-bold text-slate-800 dark:text-slate-100">{sub.student_name || "Unknown"}</span>
                         </div>
                       </td>
                       <td className="px-6 py-5">
-                        <p className="text-sm font-bold text-slate-800 dark:text-slate-100">{sub.assignment_title || "N/A"}</p>
+                        <p className="text-sm font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2">
+                          {sub.assignment_title || "N/A"}
+                          {/* Student-initiated work, not something you set */}
+                          {sub.is_practice && (
+                            <span className="px-1.5 py-0.5 rounded text-2xs font-bold uppercase tracking-wide bg-secondary-container text-on-secondary-container">
+                              Practice
+                            </span>
+                          )}
+                        </p>
                         <p className="text-xs text-gray-500 dark:text-slate-400 mt-0.5">{sub.subject_name} • {sub.section_name}</p>
                       </td>
                       <td className="px-6 py-5 text-sm font-medium text-slate-700 dark:text-slate-300">
@@ -176,7 +189,7 @@ export default function PendingSubmissionsPage() {
                         {isGrading ? (
                           <input
                             type="number"
-                            className="w-20 px-2 py-1 border border-[#0058be] dark:border-blue-400 bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-200 rounded text-sm font-bold text-center outline-none"
+                            className="w-20 px-2 py-1 border border-primary dark:border-blue-400 bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-200 rounded text-sm font-bold text-center outline-none"
                             value={gradeValue}
                             onChange={(e) => setGradeValue(e.target.value)}
                             placeholder="0-100"
@@ -199,7 +212,7 @@ export default function PendingSubmissionsPage() {
                             />
                             <button
                               onClick={() => handleGradeSubmit(sub.id)}
-                              className="px-3 py-1 bg-[#0058be] dark:bg-blue-600 text-white text-xs font-bold rounded hover:bg-blue-700 dark:hover:bg-blue-500"
+                              className="px-3 py-1 bg-primary dark:bg-blue-600 text-white text-xs font-bold rounded hover:bg-blue-700 dark:hover:bg-blue-500"
                             >
                               Save
                             </button>
@@ -221,13 +234,26 @@ export default function PendingSubmissionsPage() {
                                 href={sub.view_url || sub.file}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="p-2 text-[#0058be] dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-md transition-colors"
+                                className="p-2 text-primary dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-md transition-colors"
                               >
                                 <span className="material-symbols-outlined text-xl">visibility</span>
                               </a>
                             )}
-                            <button 
-                              className="p-2 text-[#0058be] dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-md transition-colors"
+                            {/* Full on-screen marking: document alongside the
+                                mark scheme, with per-question marks. */}
+                            <button
+                              title="Mark on screen"
+                              className="flex items-center gap-1 px-2.5 py-2 text-xs font-semibold text-on-primary bg-primary hover:opacity-90 rounded-md transition-opacity"
+                              onClick={() => navigate(`/teacher/submissions/${sub.id}/mark`)}
+                            >
+                              <span className="material-symbols-outlined text-lg">rate_review</span>
+                              Mark
+                            </button>
+
+                            {/* Quick grade entry, kept for a single number */}
+                            <button
+                              title="Quick grade"
+                              className="p-2 text-primary dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-md transition-colors"
                               onClick={() => {
                                 setGradingId(sub.id);
                                 setGradeValue("");

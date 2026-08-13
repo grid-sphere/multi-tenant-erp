@@ -1,10 +1,10 @@
 export default function RolesSection() {
   return (
-    <section className="bg-[#f5f7fb] lg:py-24 py-10">
+    <section className="bg-surface-container-low lg:py-24 py-10">
       <div className="max-w-7xl mx-auto px-8 grid md:grid-cols-2 lg:grid-cols-4 gap-8">
         {/* School Admin */}
         <div className="bg-white rounded-2xl p-8 shadow-[0_2px_10px_rgba(0,0,0,0.04)]">
-          <div className="w-12 h-12 bg-[#eaf1ff] rounded-xl flex items-center justify-center mb-6">
+          <div className="w-12 h-12 bg-surface-container-low rounded-xl flex items-center justify-center mb-6">
             <svg
               width="24"
               height="24"
@@ -17,11 +17,11 @@ export default function RolesSection() {
             </svg>
           </div>
 
-          <h3 className="text-[18px] font-semibold text-[#0b1c30] mb-2">
+          <h3 className="text-[18px] font-semibold text-on-surface mb-2">
             School Admin
           </h3>
 
-          <p className="text-[#6b7280] text-[14px] leading-relaxed">
+          <p className="text-on-surface-variant text-[14px] leading-relaxed">
             Oversee institutional growth with high-level data dashboards and
             financial automation.
           </p>
@@ -29,7 +29,7 @@ export default function RolesSection() {
 
         {/* Teacher */}
         <div className="bg-white rounded-2xl p-8 shadow-[0_2px_10px_rgba(0,0,0,0.04)]">
-          <div className="w-12 h-12 bg-[#eaf1ff] rounded-xl flex items-center justify-center mb-6">
+          <div className="w-12 h-12 bg-surface-container-low rounded-xl flex items-center justify-center mb-6">
             <svg
               width="24"
               height="24"
@@ -42,11 +42,11 @@ export default function RolesSection() {
             </svg>
           </div>
 
-          <h3 className="text-[18px] font-semibold text-[#0b1c30] mb-2">
+          <h3 className="text-[18px] font-semibold text-on-surface mb-2">
             Teacher
           </h3>
 
-          <p className="text-[#6b7280] text-[14px] leading-relaxed">
+          <p className="text-on-surface-variant text-[14px] leading-relaxed">
             Focus on teaching, not paperwork. Let AI handle lesson plans and
             grading logistics.
           </p>
@@ -54,7 +54,7 @@ export default function RolesSection() {
 
         {/* Student */}
         <div className="bg-white rounded-2xl p-8 shadow-[0_2px_10px_rgba(0,0,0,0.04)]">
-          <div className="w-12 h-12 bg-[#eaf1ff] rounded-xl flex items-center justify-center mb-6">
+          <div className="w-12 h-12 bg-surface-container-low rounded-xl flex items-center justify-center mb-6">
             <svg
               width="24"
               height="24"
@@ -67,11 +67,11 @@ export default function RolesSection() {
             </svg>
           </div>
 
-          <h3 className="text-[18px] font-semibold text-[#0b1c30] mb-2">
+          <h3 className="text-[18px] font-semibold text-on-surface mb-2">
             Student
           </h3>
 
-          <p className="text-[#6b7280] text-[14px] leading-relaxed">
+          <p className="text-on-surface-variant text-[14px] leading-relaxed">
             Experience a personalized learning path with 24/7 AI tutor support
             and clear goals.
           </p>
@@ -79,7 +79,7 @@ export default function RolesSection() {
 
         {/* Parent */}
         <div className="bg-white rounded-2xl p-8 shadow-[0_2px_10px_rgba(0,0,0,0.04)]">
-          <div className="w-12 h-12 bg-[#eaf1ff] rounded-xl flex items-center justify-center mb-6">
+          <div className="w-12 h-12 bg-surface-container-low rounded-xl flex items-center justify-center mb-6">
             <svg
               width="24"
               height="24"
@@ -94,11 +94,11 @@ export default function RolesSection() {
             </svg>
           </div>
 
-          <h3 className="text-[18px] font-semibold text-[#0b1c30] mb-2">
+          <h3 className="text-[18px] font-semibold text-on-surface mb-2">
             Parent
           </h3>
 
-          <p className="text-[#6b7280] text-[14px] leading-relaxed">
+          <p className="text-on-surface-variant text-[14px] leading-relaxed">
             Stay connected to your child's progress with real-time updates and
             simplified communication.
           </p>

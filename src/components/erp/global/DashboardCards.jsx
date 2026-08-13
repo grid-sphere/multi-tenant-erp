@@ -81,7 +81,7 @@ Elite Plan
 
 {/* revenue */}
 
-<div className="bg-gradient-to-r from-[#0058be] to-[#2170e4] p-6 rounded-lg text-white shadow-lg">
+<div className="bg-gradient-to-r from-primary to-primary-container p-6 rounded-lg text-white shadow-lg">
 
 <p className="text-blue-100 text-sm">
 Monthly Revenue

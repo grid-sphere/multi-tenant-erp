@@ -138,7 +138,7 @@ export default function AssignmentDetailPage() {
     return (
       <MainLayout title="Assignment Details">
         <div className="flex items-center justify-center min-h-[60vh]">
-          <div className="flex flex-col items-center gap-3 text-[#0058be] dark:text-blue-400">
+          <div className="flex flex-col items-center gap-3 text-primary dark:text-blue-400">
             <span className="material-symbols-outlined animate-spin text-4xl">progress_activity</span>
             <p className="font-semibold tracking-wide">Loading Assignment Details...</p>
           </div>
@@ -154,7 +154,7 @@ export default function AssignmentDetailPage() {
           <span className="material-symbols-outlined text-5xl text-red-500 dark:text-red-400 mb-4">error_outline</span>
           <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100 mb-2">Details Unavailable</h2>
           <p className="text-gray-500 dark:text-slate-400 mb-6">{error?.message || "Could not locate this assignment."}</p>
-          <button onClick={() => navigate("/teacher/assignments")} className="px-6 py-2.5 bg-[#0058be] dark:bg-blue-600 text-white font-bold rounded-md shadow-sm hover:bg-blue-700 dark:hover:bg-blue-500">
+          <button onClick={() => navigate("/teacher/assignments")} className="px-6 py-2.5 bg-primary dark:bg-blue-600 text-white font-bold rounded-md shadow-sm hover:bg-blue-700 dark:hover:bg-blue-500">
             Return to Assignments
           </button>
         </div>
@@ -168,27 +168,35 @@ export default function AssignmentDetailPage() {
     <MainLayout title="Assignments">
       {/* Back Navigation & Page Title */}
       {revalidating && (
-        <div className="mb-3 md:mb-4 px-3 md:px-4 py-2 bg-blue-50 dark:bg-blue-900/30 text-[#0058be] dark:text-blue-400 text-xs font-semibold rounded-md border border-blue-100 dark:border-blue-800">
+        <div className="mb-3 md:mb-4 px-3 md:px-4 py-2 bg-blue-50 dark:bg-blue-900/30 text-primary dark:text-blue-400 text-xs font-semibold rounded-md border border-blue-100 dark:border-blue-800">
           Refreshing assignment details...
         </div>
       )}
       <div className="mb-6 md:mb-8 flex flex-col md:flex-row md:items-center justify-between gap-3 md:gap-4">
         <div>
-          <Link className="inline-flex items-center text-[#0058be] dark:text-blue-400 font-medium text-xs md:text-sm hover:-translate-x-1 transition-transform mb-2" to="/teacher/assignments">
+          <Link className="inline-flex items-center text-primary dark:text-blue-400 font-medium text-xs md:text-sm hover:-translate-x-1 transition-transform mb-2" to="/teacher/assignments">
             <span className="material-symbols-outlined text-base md:text-lg mr-1">arrow_back</span>
             Back to Assignments
           </Link>
           <h2 className="font-display text-2xl md:text-3xl font-extrabold tracking-tight text-slate-800 dark:text-slate-100">Assignment Details</h2>
         </div>
         <div className="flex gap-2 md:gap-2.5">
-          <button 
+          {/* A mark scheme has to exist before submissions can be marked on screen. */}
+          <button
+            onClick={() => navigate(`/teacher/assignments/${id}/mark-scheme`)}
+            className="px-3 py-1.5 md:px-4 md:py-2 bg-white dark:bg-slate-700 border border-gray-200 dark:border-slate-600 text-slate-700 dark:text-slate-200 font-semibold rounded-md text-xs md:text-sm hover:bg-gray-50 dark:hover:bg-slate-600 transition-colors shadow-sm flex items-center gap-1.5"
+          >
+            <span className="material-symbols-outlined text-base md:text-lg">rule</span>
+            <span>Mark scheme</span>
+          </button>
+          <button
             onClick={() => navigate(`/teacher/assignments/${id}/edit`)}
             className="px-3 py-1.5 md:px-4 md:py-2 bg-white dark:bg-slate-700 border border-gray-200 dark:border-slate-600 text-slate-700 dark:text-slate-200 font-semibold rounded-md text-xs md:text-sm hover:bg-gray-50 dark:hover:bg-slate-600 transition-colors shadow-sm flex items-center gap-1.5"
           >
             <span className="material-symbols-outlined text-base md:text-lg">edit</span>
             <span>Edit</span>
           </button>
-          <button className="px-3 py-1.5 md:px-4 md:py-2 bg-[#0058be] dark:bg-blue-600 text-white font-semibold rounded-md text-xs md:text-sm hover:bg-blue-700 dark:hover:bg-blue-500 transition-colors shadow-sm flex items-center gap-1.5">
+          <button className="px-3 py-1.5 md:px-4 md:py-2 bg-primary dark:bg-blue-600 text-white font-semibold rounded-md text-xs md:text-sm hover:bg-blue-700 dark:hover:bg-blue-500 transition-colors shadow-sm flex items-center gap-1.5">
             <span className="material-symbols-outlined text-base md:text-lg">download</span>
             <span>Export</span>
           </button>
@@ -199,12 +207,12 @@ export default function AssignmentDetailPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6 mb-6 md:mb-8">
         {/* Assignment Summary Card */}
         <div className="lg:col-span-2 bg-white dark:bg-slate-800 rounded-lg md:rounded-xl p-4 md:p-6 relative overflow-hidden shadow-sm border border-gray-100 dark:border-slate-700">
-          <div className="absolute top-0 right-0 w-24 h-24 md:w-32 md:h-32 bg-[#0058be]/5 dark:bg-blue-400/5 rounded-full -mr-12 md:-mr-16 -mt-12 md:-mt-16"></div>
+          <div className="absolute top-0 right-0 w-24 h-24 md:w-32 md:h-32 bg-primary/5 dark:bg-blue-400/5 rounded-full -mr-12 md:-mr-16 -mt-12 md:-mt-16"></div>
           
           {/* Header Section */}
           <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-3 md:gap-4 mb-4">
             <div className="flex-1">
-              <span className="inline-block px-2 py-0.5 md:px-2.5 md:py-1 bg-purple-100 dark:bg-purple-900/30 text-[#6b38d4] dark:text-purple-300 text-[10px] md:text-xs font-bold uppercase tracking-wider rounded-full mb-2 border border-purple-200 dark:border-purple-800">
+              <span className="inline-block px-2 py-0.5 md:px-2.5 md:py-1 bg-purple-100 dark:bg-purple-900/30 text-primary dark:text-purple-300 text-[10px] md:text-xs font-bold uppercase tracking-wider rounded-full mb-2 border border-purple-200 dark:border-purple-800">
                 {assignment.subject_name || "Subject"}
               </span>
               <h3 className="font-display text-lg md:text-xl font-bold text-slate-800 dark:text-slate-100 mb-2">{assignment.title || "Untitled Assignment"}</h3>
@@ -232,8 +240,8 @@ export default function AssignmentDetailPage() {
           </div>
           
           {/* Description Section */}
-          <div className="bg-[#f8f9ff] dark:bg-slate-700/50 p-3 md:p-4 rounded-lg border border-blue-50 dark:border-slate-600">
-            <h4 className="text-[10px] md:text-2xs font-bold text-[#0058be] dark:text-blue-400 uppercase tracking-widest mb-1.5">Description</h4>
+          <div className="bg-background dark:bg-slate-700/50 p-3 md:p-4 rounded-lg border border-blue-50 dark:border-slate-600">
+            <h4 className="text-[10px] md:text-2xs font-bold text-primary dark:text-blue-400 uppercase tracking-widest mb-1.5">Description</h4>
             <p className="text-slate-700 dark:text-slate-300 text-xs md:text-sm leading-relaxed font-medium">
               {assignment.description || "No description provided."}
             </p>
@@ -243,20 +251,20 @@ export default function AssignmentDetailPage() {
         {/* Submissions Summary Card */}
         <div className="bg-white dark:bg-slate-800 rounded-lg md:rounded-xl p-5 md:p-6 flex flex-col justify-between shadow-sm border border-gray-100 dark:border-slate-700">
           <h4 className="font-display text-base md:text-lg font-bold text-slate-800 dark:text-slate-100 mb-4 md:mb-6 flex items-center gap-2">
-            <span className="material-symbols-outlined text-[#0058be] dark:text-blue-400">analytics</span>
+            <span className="material-symbols-outlined text-primary dark:text-blue-400">analytics</span>
             Grading Status
           </h4>
           <div className="space-y-4 md:space-y-6">
-            <div className="flex items-end justify-between bg-[#f8f9ff] dark:bg-slate-700/50 p-3 md:p-4 rounded-lg">
+            <div className="flex items-end justify-between bg-background dark:bg-slate-700/50 p-3 md:p-4 rounded-lg">
               <div>
-                <p className="text-3xl md:text-4xl font-display font-extrabold text-[#0058be] dark:text-blue-400">{submittedCount}<span className="text-xs md:text-sm font-bold text-gray-400 dark:text-slate-500 ml-1">/ {students.length}</span></p>
+                <p className="text-3xl md:text-4xl font-display font-extrabold text-primary dark:text-blue-400">{submittedCount}<span className="text-xs md:text-sm font-bold text-gray-400 dark:text-slate-500 ml-1">/ {students.length}</span></p>
                 <p className="text-[10px] md:text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-slate-400 mt-1">Submitted</p>
               </div>
               <div className="w-12 h-12 md:w-14 md:h-14 relative">
                 <svg className="w-full h-full transform -rotate-90">
                   <circle className="text-gray-200 dark:text-slate-600 md:hidden" cx="24" cy="24" fill="transparent" r="20" stroke="currentColor" strokeWidth="4"></circle>
                   <circle 
-                    className="text-[#0058be] dark:text-blue-400 md:hidden" 
+                    className="text-primary dark:text-blue-400 md:hidden" 
                     cx="24" 
                     cy="24" 
                     fill="transparent" 
@@ -269,7 +277,7 @@ export default function AssignmentDetailPage() {
                   ></circle>
                   <circle className="text-gray-200 dark:text-slate-600 hidden md:block" cx="28" cy="28" fill="transparent" r="24" stroke="currentColor" strokeWidth="5"></circle>
                   <circle 
-                    className="text-[#0058be] dark:text-blue-400 hidden md:block" 
+                    className="text-primary dark:text-blue-400 hidden md:block" 
                     cx="28" 
                     cy="28" 
                     fill="transparent" 
@@ -301,10 +309,10 @@ export default function AssignmentDetailPage() {
           <div className="mt-6 md:mt-8 pt-4 md:pt-6 border-t border-gray-100 dark:border-slate-700">
             <div className="flex items-center justify-between mb-2 md:mb-3">
               <span className="text-[10px] md:text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-slate-400">Average Grade</span>
-              <span className="text-xs md:text-sm font-bold text-[#0058be] dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30 px-2 py-0.5 rounded">{avgGrade.toFixed(1)}</span>
+              <span className="text-xs md:text-sm font-bold text-primary dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30 px-2 py-0.5 rounded">{avgGrade.toFixed(1)}</span>
             </div>
             <div className="w-full bg-gray-100 dark:bg-slate-700 h-2 rounded-full overflow-hidden">
-              <div className="bg-[#0058be] dark:bg-blue-400 h-full rounded-full" style={{ width: `${(avgGrade / 100) * 100}%` }}></div>
+              <div className="bg-primary dark:bg-blue-400 h-full rounded-full" style={{ width: `${(avgGrade / 100) * 100}%` }}></div>
             </div>
           </div>
         </div>
@@ -312,14 +320,14 @@ export default function AssignmentDetailPage() {
 
       {/* Bottom Section: Submissions Table */}
       <div className="bg-white dark:bg-slate-800 rounded-lg md:rounded-xl overflow-hidden shadow-sm border border-gray-100 dark:border-slate-700">
-        <div className="px-3 md:px-6 py-3 md:py-5 border-b border-gray-100 dark:border-slate-700 bg-[#f8f9ff] dark:bg-slate-800/50">
+        <div className="px-3 md:px-6 py-3 md:py-5 border-b border-gray-100 dark:border-slate-700 bg-background dark:bg-slate-800/50">
           <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 md:gap-4">
             <h4 className="font-display text-base md:text-lg font-bold text-slate-800 dark:text-slate-100">Student Submissions</h4>
             <div className="flex items-center gap-2 md:gap-3">
               <div className="relative flex-1 sm:flex-none">
                 <span className="material-symbols-outlined absolute left-2 md:left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-slate-500 text-sm">search</span>
                 <input 
-                  className="w-full sm:w-auto pl-7 md:pl-10 pr-3 md:pr-4 py-1.5 md:py-2.5 bg-white dark:bg-slate-700 border border-gray-200 dark:border-slate-600 rounded-md text-xs md:text-sm text-slate-700 dark:text-slate-200 placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:border-[#0058be]/40 dark:focus:border-blue-400 focus:ring-2 focus:ring-[#0058be]/10 dark:focus:ring-blue-400/10 sm:w-48 outline-none transition-all shadow-sm" 
+                  className="w-full sm:w-auto pl-7 md:pl-10 pr-3 md:pr-4 py-1.5 md:py-2.5 bg-white dark:bg-slate-700 border border-gray-200 dark:border-slate-600 rounded-md text-xs md:text-sm text-slate-700 dark:text-slate-200 placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:border-primary/40 dark:focus:border-blue-400 focus:ring-2 focus:ring-primary/10 dark:focus:ring-blue-400/10 sm:w-48 outline-none transition-all shadow-sm" 
                   placeholder="Search name or roll no." 
                   type="text"
                   value={searchTerm}
@@ -332,7 +340,7 @@ export default function AssignmentDetailPage() {
                   onClick={() => setShowSubmittedAt(!showSubmittedAt)}
                   className={`px-2.5 py-1.5 text-xs font-semibold rounded-md border transition-all whitespace-nowrap ${
                     showSubmittedAt 
-                      ? 'bg-[#0058be] dark:bg-blue-600 text-white border-[#0058be] dark:border-blue-600' 
+                      ? 'bg-primary dark:bg-blue-600 text-white border-primary dark:border-blue-600' 
                       : 'bg-white dark:bg-slate-700 text-gray-500 dark:text-slate-400 border-gray-200 dark:border-slate-600 hover:border-gray-300 dark:hover:border-slate-500'
                   }`}
                 >
@@ -342,7 +350,7 @@ export default function AssignmentDetailPage() {
                   onClick={() => setShowStatus(!showStatus)}
                   className={`px-2.5 py-1.5 text-xs font-semibold rounded-md border transition-all whitespace-nowrap ${
                     showStatus 
-                      ? 'bg-[#0058be] dark:bg-blue-600 text-white border-[#0058be] dark:border-blue-600' 
+                      ? 'bg-primary dark:bg-blue-600 text-white border-primary dark:border-blue-600' 
                       : 'bg-white dark:bg-slate-700 text-gray-500 dark:text-slate-400 border-gray-200 dark:border-slate-600 hover:border-gray-300 dark:hover:border-slate-500'
                   }`}
                 >
@@ -371,8 +379,8 @@ export default function AssignmentDetailPage() {
               {filteredStudents.length === 0 ? (
                 <tr>
                   <td colSpan={3 + (showSubmittedAt ? 1 : 0) + (showStatus ? 1 : 0)} className="text-center py-16 text-gray-500 dark:text-slate-400">
-                    <div className="w-16 h-16 bg-[#eff4ff] dark:bg-blue-900/30 rounded-full flex items-center justify-center mx-auto mb-3">
-                       <span className="material-symbols-outlined text-[#0058be] dark:text-blue-400 text-3xl">group</span>
+                    <div className="w-16 h-16 bg-surface-container-low dark:bg-blue-900/30 rounded-full flex items-center justify-center mx-auto mb-3">
+                       <span className="material-symbols-outlined text-primary dark:text-blue-400 text-3xl">group</span>
                     </div>
                     <p className="font-semibold text-slate-700 dark:text-slate-200">No students found.</p>
                     <p className="text-sm mt-1">Check if students are enrolled in this section.</p>
@@ -385,10 +393,10 @@ export default function AssignmentDetailPage() {
                   const isGraded = student.status === 'Graded';
                   
                   return (
-                    <tr key={student.id} className="hover:bg-[#f8f9ff] dark:hover:bg-slate-700/50 transition-colors group">
-                      <td className="px-3 py-2 md:px-6 md:py-4 sticky left-0 bg-white dark:bg-slate-800 group-hover:bg-[#f8f9ff] dark:group-hover:bg-slate-700/50 z-10">
+                    <tr key={student.id} className="hover:bg-background dark:hover:bg-slate-700/50 transition-colors group">
+                      <td className="px-3 py-2 md:px-6 md:py-4 sticky left-0 bg-white dark:bg-slate-800 group-hover:bg-background dark:group-hover:bg-slate-700/50 z-10">
                         <div className="flex items-center gap-2 md:gap-3">
-                          <div className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center text-[#0058be] dark:text-blue-400 font-bold text-xs border border-blue-100 dark:border-blue-800">
+                          <div className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center text-primary dark:text-blue-400 font-bold text-xs border border-blue-100 dark:border-blue-800">
                             {student.name?.charAt(0) || "?"}
                           </div>
                           <div>
@@ -419,7 +427,7 @@ export default function AssignmentDetailPage() {
                         {isGrading ? (
                           <input
                             type="number"
-                            className="w-16 md:w-20 px-1 md:px-2 py-1 border border-[#0058be] dark:border-blue-400 bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-200 rounded text-xs md:text-sm font-bold text-center outline-none"
+                            className="w-16 md:w-20 px-1 md:px-2 py-1 border border-primary dark:border-blue-400 bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-200 rounded text-xs md:text-sm font-bold text-center outline-none"
                             value={gradeValue}
                             onChange={(e) => setGradeValue(e.target.value)}
                             placeholder="0-100"
@@ -427,7 +435,7 @@ export default function AssignmentDetailPage() {
                             max="100"
                           />
                         ) : student.grade !== null && student.grade !== undefined ? (
-                          <><span className="text-xs md:text-sm font-black text-[#0058be] dark:text-blue-400">{student.grade}</span><span className="text-[10px] md:text-xs font-bold text-gray-400 dark:text-slate-500">/100</span></>
+                          <><span className="text-xs md:text-sm font-black text-primary dark:text-blue-400">{student.grade}</span><span className="text-[10px] md:text-xs font-bold text-gray-400 dark:text-slate-500">/100</span></>
                         ) : (
                           <span className="text-xs md:text-sm font-bold text-gray-300 dark:text-slate-600">—</span>
                         )}
@@ -446,7 +454,7 @@ export default function AssignmentDetailPage() {
                             />
                             <button
                               onClick={() => handleGradeSubmit(student.submission_id)}
-                              className="px-2 py-1 md:px-3 bg-[#0058be] dark:bg-blue-600 text-white text-[10px] md:text-xs font-bold rounded hover:bg-blue-700 dark:hover:bg-blue-500"
+                              className="px-2 py-1 md:px-3 bg-primary dark:bg-blue-600 text-white text-[10px] md:text-xs font-bold rounded hover:bg-blue-700 dark:hover:bg-blue-500"
                             >
                               Save
                             </button>
@@ -468,14 +476,14 @@ export default function AssignmentDetailPage() {
                                 href={student.file}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="p-1 md:p-2 text-[#0058be] dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-md transition-colors"
+                                className="p-1 md:p-2 text-primary dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-md transition-colors"
                                 title="View submission file"
                               >
                                 <span className="material-symbols-outlined text-lg md:text-xl">visibility</span>
                               </a>
                             )}
                             <button 
-                              className="p-1 md:p-2 text-[#0058be] dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-md transition-colors disabled:opacity-50"
+                              className="p-1 md:p-2 text-primary dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-md transition-colors disabled:opacity-50"
                               onClick={() => {
                                 setGradingId(student.id);
                                 setGradeValue(student.grade || "");
@@ -501,8 +509,8 @@ export default function AssignmentDetailPage() {
         <div className="sm:hidden divide-y divide-gray-50 dark:divide-slate-700">
           {filteredStudents.length === 0 ? (
             <div className="text-center py-12 px-4 text-gray-500 dark:text-slate-400">
-              <div className="w-14 h-14 bg-[#eff4ff] dark:bg-blue-900/30 rounded-full flex items-center justify-center mx-auto mb-3">
-                <span className="material-symbols-outlined text-[#0058be] dark:text-blue-400 text-2xl">group</span>
+              <div className="w-14 h-14 bg-surface-container-low dark:bg-blue-900/30 rounded-full flex items-center justify-center mx-auto mb-3">
+                <span className="material-symbols-outlined text-primary dark:text-blue-400 text-2xl">group</span>
               </div>
               <p className="font-semibold text-slate-700 dark:text-slate-200 text-sm">No students found.</p>
               <p className="text-xs mt-1">Check if students are enrolled in this section.</p>
@@ -517,7 +525,7 @@ export default function AssignmentDetailPage() {
                 <div key={student.id} className="p-3.5">
                   <div className="flex items-center justify-between gap-3">
                     <div className="flex items-center gap-2.5 min-w-0">
-                      <div className="w-8 h-8 shrink-0 rounded-full bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center text-[#0058be] dark:text-blue-400 font-bold text-xs border border-blue-100 dark:border-blue-800">
+                      <div className="w-8 h-8 shrink-0 rounded-full bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center text-primary dark:text-blue-400 font-bold text-xs border border-blue-100 dark:border-blue-800">
                         {student.name?.charAt(0) || "?"}
                       </div>
                       <div className="min-w-0">
@@ -541,7 +549,7 @@ export default function AssignmentDetailPage() {
                     <div className="mt-3 flex items-center gap-2">
                       <input
                         type="number"
-                        className="w-20 px-2 py-1.5 border border-[#0058be] dark:border-blue-400 bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-200 rounded text-sm font-bold text-center outline-none"
+                        className="w-20 px-2 py-1.5 border border-primary dark:border-blue-400 bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-200 rounded text-sm font-bold text-center outline-none"
                         value={gradeValue}
                         onChange={(e) => setGradeValue(e.target.value)}
                         placeholder="0-100"
@@ -557,7 +565,7 @@ export default function AssignmentDetailPage() {
                       />
                       <button
                         onClick={() => handleGradeSubmit(student.submission_id)}
-                        className="px-3 py-1.5 bg-[#0058be] dark:bg-blue-600 text-white text-xs font-bold rounded shrink-0 hover:bg-blue-700 dark:hover:bg-blue-500"
+                        className="px-3 py-1.5 bg-primary dark:bg-blue-600 text-white text-xs font-bold rounded shrink-0 hover:bg-blue-700 dark:hover:bg-blue-500"
                       >
                         Save
                       </button>
@@ -576,7 +584,7 @@ export default function AssignmentDetailPage() {
                     <div className="mt-3 flex items-center justify-between">
                       <div>
                         {student.grade !== null && student.grade !== undefined ? (
-                          <span className="text-sm font-black text-[#0058be] dark:text-blue-400">
+                          <span className="text-sm font-black text-primary dark:text-blue-400">
                             {student.grade}<span className="text-xs font-bold text-gray-400 dark:text-slate-500">/100</span>
                           </span>
                         ) : (
@@ -589,7 +597,7 @@ export default function AssignmentDetailPage() {
                             href={student.file}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="p-1.5 text-[#0058be] dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-md"
+                            className="p-1.5 text-primary dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-md"
                             title="View submission file"
                           >
                             <span className="material-symbols-outlined text-lg">visibility</span>
@@ -597,7 +605,7 @@ export default function AssignmentDetailPage() {
                         )}
                         {hasSubmission && (
                           <button
-                            className="p-1.5 text-[#0058be] dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-md"
+                            className="p-1.5 text-primary dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-md"
                             onClick={() => {
                               setGradingId(student.id);
                               setGradeValue(student.grade || "");

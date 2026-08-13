@@ -12,11 +12,11 @@ return(
 
 <div className="mb-10">
 
-<h1 className="text-4xl font-extrabold tracking-tight text-[#0b1c30]">
+<h1 className="text-4xl font-extrabold tracking-tight text-on-surface">
 Notifications
 </h1>
 
-<p className="text-[#6b7280] mt-2">
+<p className="text-on-surface-variant mt-2">
 Manage recent activities and administrative alerts across the global network.
 </p>
 
@@ -30,7 +30,7 @@ Manage recent activities and administrative alerts across the global network.
 
 <div className="bg-white rounded-xl p-6 flex items-start gap-6 hover:shadow-[0px_12px_32px_rgba(11,28,48,0.04)] transition">
 
-<div className="w-14 h-14 rounded-2xl bg-[#d8e2ff] flex items-center justify-center text-[#0058be]">
+<div className="w-14 h-14 rounded-2xl bg-surface-container-high flex items-center justify-center text-primary">
 
 <span className="material-symbols-outlined text-3xl">
 school
@@ -43,7 +43,7 @@ school
 
 <div className="flex justify-between mb-1">
 
-<h3 className="text-lg font-bold text-[#0b1c30]">
+<h3 className="text-lg font-bold text-on-surface">
 New School Registered: Oakwood International Academy
 </h3>
 
@@ -54,7 +54,7 @@ New School Registered: Oakwood International Academy
 </div>
 
 
-<p className="text-[#6b7280] text-sm mb-6 leading-relaxed">
+<p className="text-on-surface-variant text-sm mb-6 leading-relaxed">
 
 A new institutional profile has been created and is awaiting administrative verification for regional deployment.
 
@@ -63,14 +63,14 @@ A new institutional profile has been created and is awaiting administrative veri
 
 <div className="flex gap-3">
 
-<button className="px-6 py-2.5 bg-gradient-to-br from-[#0058be] to-[#2170e4] text-white text-sm font-bold rounded-md">
+<button className="px-6 py-2.5 bg-gradient-to-br from-primary to-primary-container text-white text-sm font-bold rounded-md">
 
 Approve
 
 </button>
 
 
-<button className="px-6 py-2.5 bg-[#e5eeff] text-[#0058be] text-sm font-bold rounded-md">
+<button className="px-6 py-2.5 bg-surface-container-low text-primary text-sm font-bold rounded-md">
 
 Dismiss
 
@@ -88,7 +88,7 @@ Dismiss
 
 <div className="bg-white rounded-xl p-6 flex items-start gap-6 hover:shadow-[0px_12px_32px_rgba(11,28,48,0.04)] transition">
 
-<div className="w-14 h-14 rounded-2xl bg-[#e9ddff] flex items-center justify-center text-[#6b38d4]">
+<div className="w-14 h-14 rounded-2xl bg-primary-fixed flex items-center justify-center text-primary">
 
 <span className="material-symbols-outlined text-3xl">
 check_circle
@@ -101,7 +101,7 @@ check_circle
 
 <div className="flex justify-between mb-1">
 
-<h3 className="text-lg font-bold text-[#0b1c30]">
+<h3 className="text-lg font-bold text-on-surface">
 Domain Verification Success: edu.riverside.org
 </h3>
 
@@ -112,14 +112,14 @@ Domain Verification Success: edu.riverside.org
 </div>
 
 
-<p className="text-[#6b7280] text-sm mb-4 leading-relaxed">
+<p className="text-on-surface-variant text-sm mb-4 leading-relaxed">
 
 The custom domain has been successfully pointed to the ScholarFlow edge nodes. DNS propagation complete.
 
 </p>
 
 
-<button className="flex items-center gap-1.5 text-[#0058be] text-sm font-bold">
+<button className="flex items-center gap-1.5 text-primary text-sm font-bold">
 
 View Settings
 
@@ -139,7 +139,7 @@ open_in_new
 
 <div className="bg-white rounded-xl p-6 flex items-start gap-6 hover:shadow-[0px_12px_32px_rgba(11,28,48,0.04)] transition">
 
-<div className="w-14 h-14 rounded-2xl bg-[#ffdcc6] flex items-center justify-center text-[#924700]">
+<div className="w-14 h-14 rounded-2xl bg-secondary-container flex items-center justify-center text-secondary">
 
 <span className="material-symbols-outlined text-3xl">
 payments
@@ -152,7 +152,7 @@ payments
 
 <div className="flex justify-between mb-1">
 
-<h3 className="text-lg font-bold text-[#0b1c30]">
+<h3 className="text-lg font-bold text-on-surface">
 Subscription Payment Received: $1,284.00
 </h3>
 
@@ -163,14 +163,14 @@ Subscription Payment Received: $1,284.00
 </div>
 
 
-<p className="text-[#6b7280] text-sm mb-4 leading-relaxed">
+<p className="text-on-surface-variant text-sm mb-4 leading-relaxed">
 
 The monthly enterprise subscription for Northern Districts Consortium has been processed successfully.
 
 </p>
 
 
-<button className="flex items-center gap-2 px-4 py-2 border border-gray-200 rounded-lg text-gray-600 hover:bg-[#eff4ff]">
+<button className="flex items-center gap-2 px-4 py-2 border border-gray-200 rounded-lg text-gray-600 hover:bg-surface-container-low">
 
 <span className="material-symbols-outlined text-lg">
 download
@@ -193,7 +193,7 @@ Download Receipt
 
 {/* health */}
 
-<div className="md:col-span-2 bg-[#0058be] text-white rounded-xl p-8 relative overflow-hidden">
+<div className="md:col-span-2 bg-primary text-white rounded-xl p-8 relative overflow-hidden">
 
 <div className="relative z-10">
 
@@ -247,11 +247,11 @@ Pending
 
 {/* AI card */}
 
-<div className="bg-[#dce9ff] rounded-xl p-8 flex flex-col items-center text-center gap-4">
+<div className="bg-surface-container-high rounded-xl p-8 flex flex-col items-center text-center gap-4">
 
 <div className="w-16 h-16 rounded-full bg-white flex items-center justify-center shadow-sm">
 
-<span className="material-symbols-outlined text-[#0058be] text-3xl">
+<span className="material-symbols-outlined text-primary text-3xl">
 auto_awesome
 </span>
 
@@ -260,18 +260,18 @@ auto_awesome
 
 <div>
 
-<p className="font-bold text-[#0b1c30]">
+<p className="font-bold text-on-surface">
 Auto-Digest
 </p>
 
-<p className="text-xs text-[#6b7280] px-4">
+<p className="text-xs text-on-surface-variant px-4">
 Generate an AI summary of today's events for the board report.
 </p>
 
 </div>
 
 
-<button className="text-[#0058be] text-xs font-bold uppercase tracking-widest">
+<button className="text-primary text-xs font-bold uppercase tracking-widest">
 
 Configure AI
 
