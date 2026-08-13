@@ -150,13 +150,25 @@ export const markingApi = {
 
   // ── Local DeepSeek-OCR service (optional, self-hosted) ─────────────────
 
-  /**
-   * Which service (local CPU or remote GPU) is configured and whether it's
-   * reachable. There is no way to change the URL from here — it comes only
-   * from OCR_SERVICE_URL in the backend .env.
-   */
   getLocalOcrStatus: () =>
     api.get(`/marking/local-ocr/status/`).then((r) => r.data),
+
+  /**
+   * Point the backend at a new GPU service and return the fresh status.
+   *
+   * Colab tunnels expire every few hours. This writes OCR_SERVICE_MODE /
+   * OCR_SERVICE_URL straight into the backend .env (same file
+   * scripts/set-ocr-url.ps1 edits) and takes effect immediately — no Django
+   * restart needed, since the backend re-reads .env on every OCR request
+   * rather than caching it. The server probes the URL before saving it, and
+   * rejects anything that does not answer as the OCR service.
+   */
+  connectLocalOcr: (url) =>
+    api.post(`/marking/local-ocr/connect/`, { url }).then((r) => r.data),
+
+  /** Switch the backend .env back to the local CPU service on this machine. */
+  resetLocalOcr: () =>
+    api.post(`/marking/local-ocr/connect/`, { reset: true }).then((r) => r.data),
 
   /** Queues a job from pre-rendered pages. Used by the local CPU service. */
   createLocalOcrJob: (

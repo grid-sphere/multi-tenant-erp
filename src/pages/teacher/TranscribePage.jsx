@@ -99,10 +99,11 @@ function assessPages(pages) {
  * flagged rather than trusted silently.
  *
  * Which backend actually runs the model — the local ocr-service on this
- * machine, or a remote Colab GPU behind a Cloudflare tunnel — is decided
- * server-side by OCR_SERVICE_MODE / OCR_SERVICE_URL in the backend .env; this
- * page just reads `localOcr.mode` back to word the UI correctly and does not
- * offer any way to change it.
+ * machine, or a remote Colab GPU behind a Cloudflare tunnel — is held in
+ * OCR_SERVICE_MODE / OCR_SERVICE_URL in the backend .env. `localOcr.mode`
+ * words the UI correctly either way, and the Connect box below lets a
+ * teacher update those two keys straight from here (handleConnect /
+ * handleUseLocalService) instead of editing .env by hand.
  *
  * Files are processed one at a time: a single GPU serves one page at a time
  * anyway, and a sequential queue means a failure on file 3 leaves the results
@@ -112,6 +113,14 @@ export default function TranscribePage() {
   const navigate = useNavigate();
 
   const [localOcr, setLocalOcr] = useState(null);
+
+  // Lets a teacher paste a fresh Colab/Cloudflare tunnel URL in here instead
+  // of editing the backend .env and restarting Django every time the tunnel
+  // rotates. Starts open when the service isn't reachable; otherwise it's a
+  // collapsed "change" link next to the status banner.
+  const [connectOpen, setConnectOpen] = useState(false);
+  const [connectUrl, setConnectUrl] = useState("");
+  const [connecting, setConnecting] = useState(false);
 
   const [queue, setQueue] = useState([]); // { id, file, url, isPdf, pageCount }
   const [rejected, setRejected] = useState([]);
@@ -148,6 +157,15 @@ export default function TranscribePage() {
       .then(setLocalOcr)
       .catch(() => setLocalOcr({ available: false }));
   }, []);
+
+  // Open the connect box automatically when the remote GPU can't be reached —
+  // a dead tunnel is the single most common reason this screen breaks, and
+  // the fix is almost always pasting the new one in here.
+  useEffect(() => {
+    if (localOcr && !localOcr.available && localOcr.mode === "remote") {
+      setConnectOpen(true);
+    }
+  }, [localOcr]);
 
   useEffect(
     () => () => {
@@ -439,6 +457,43 @@ export default function TranscribePage() {
     return "Could not convert that file.";
   };
 
+  /**
+   * Point the backend at a fresh Colab/Cloudflare tunnel. Django probes it
+   * before saving, so a bad paste fails right here with a reason instead of
+   * surfacing later as "the OCR service is broken".
+   */
+  const handleConnect = async () => {
+    const url = connectUrl.trim();
+    if (!url || connecting) return;
+    setConnecting(true);
+    try {
+      const status = await markingApi.connectLocalOcr(url);
+      setLocalOcr(status);
+      setConnectUrl("");
+      setConnectOpen(false);
+      toast.success("Connected — pointed at the new tunnel");
+    } catch (e) {
+      toast.error(errorText(e));
+    } finally {
+      setConnecting(false);
+    }
+  };
+
+  /** Switch the backend .env back to the local CPU service on this machine. */
+  const handleUseLocalService = async () => {
+    if (connecting) return;
+    setConnecting(true);
+    try {
+      const status = await markingApi.resetLocalOcr();
+      setLocalOcr(status);
+      toast.success("Switched to the local OCR service");
+    } catch (e) {
+      toast.error(errorText(e));
+    } finally {
+      setConnecting(false);
+    }
+  };
+
   const convertAll = async () => {
     if (!queue.length || busy) return;
 
@@ -615,7 +670,7 @@ export default function TranscribePage() {
           >
             {localOcr?.available ? "check_circle" : "cloud_off"}
           </span>
-          <div className="min-w-0">
+          <div className="min-w-0 flex-1">
             <p className="text-sm font-semibold text-on-surface">
               {localOcr?.available
                 ? `DeepSeek-OCR connected${
@@ -633,9 +688,65 @@ export default function TranscribePage() {
               </p>
             )}
           </div>
+          <button
+            type="button"
+            onClick={() => setConnectOpen((v) => !v)}
+            className="text-xs font-semibold text-primary hover:underline shrink-0"
+          >
+            {connectOpen ? "Cancel" : isRemoteOcr ? "Change" : "Connect"}
+          </button>
         </div>
 
-        {localUnavailable && (
+        {connectOpen && (
+          <div className="rounded-lg border border-outline-variant bg-surface-container-lowest p-4 flex flex-col gap-3">
+            <div>
+              <p className="text-sm font-semibold text-on-surface">
+                Connect a remote GPU
+              </p>
+              <p className="text-xs text-on-surface-variant mt-0.5">
+                Paste the https://….trycloudflare.com address the Colab
+                notebook printed. It's checked before it's saved, so a stale
+                or mistyped link is caught right here. This updates the
+                backend .env for you and takes effect immediately — no manual
+                edit or restart needed.
+              </p>
+            </div>
+            <div className="flex flex-col sm:flex-row gap-2">
+              <input
+                type="text"
+                value={connectUrl}
+                onChange={(e) => setConnectUrl(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") handleConnect();
+                }}
+                placeholder="https://xxxx-xxxx-xxxx.trycloudflare.com"
+                disabled={connecting}
+                autoFocus
+                className="flex-1 min-w-0 rounded-md border border-outline-variant bg-surface-container-lowest px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary/30 disabled:opacity-60"
+              />
+              <button
+                type="button"
+                onClick={handleConnect}
+                disabled={connecting || !connectUrl.trim()}
+                className="px-4 py-2 rounded-md bg-primary text-on-primary text-sm font-semibold disabled:opacity-50 shrink-0"
+              >
+                {connecting ? "Connecting…" : "Connect"}
+              </button>
+            </div>
+            {isRemoteOcr && (
+              <button
+                type="button"
+                onClick={handleUseLocalService}
+                disabled={connecting}
+                className="self-start text-xs text-on-surface-variant hover:underline disabled:opacity-50"
+              >
+                Switch to the local CPU service instead
+              </button>
+            )}
+          </div>
+        )}
+
+        {localUnavailable && !connectOpen && (
           <div className="rounded-lg border border-warning bg-warning/10 p-4">
             <p className="text-sm font-semibold text-on-surface">
               {isRemoteOcr
@@ -648,11 +759,15 @@ export default function TranscribePage() {
                 <p className="mt-1 text-xs text-on-surface-variant">
                   Colab runtimes and Cloudflare tunnels both expire, and
                   re-running the cloudflared cell issues a new URL even in the
-                  same session. An admin can point the backend at the new one:
+                  same session.
                 </p>
-                <pre className="mt-2 text-xs bg-surface-container rounded p-2 overflow-x-auto">
-{`.\\scripts\\set-ocr-url.ps1 "https://<new>.trycloudflare.com"`}
-                </pre>
+                <button
+                  type="button"
+                  onClick={() => setConnectOpen(true)}
+                  className="mt-2 text-xs font-semibold text-primary hover:underline"
+                >
+                  Paste the new tunnel URL
+                </button>
               </>
             ) : (
               <>
@@ -664,6 +779,13 @@ export default function TranscribePage() {
 python download_model.py     # ~250MB, first time only
 python main.py`}
                 </pre>
+                <button
+                  type="button"
+                  onClick={() => setConnectOpen(true)}
+                  className="mt-2 text-xs font-semibold text-primary hover:underline"
+                >
+                  Or connect a remote GPU instead
+                </button>
               </>
             )}
 

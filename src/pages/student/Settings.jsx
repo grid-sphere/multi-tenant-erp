@@ -65,7 +65,7 @@ function Toggle({ value, onChange }) {
 }
 
 export default function Settings() {
-  const { darkMode, toggleDarkMode } = useTheme();
+  const { darkMode, toggleDarkMode, isClassicPalette, toggleClassicPalette } = useTheme();
 
   const [settings, setSettings] = useState({
     language: 'English (United States)',
@@ -234,6 +234,15 @@ export default function Settings() {
                       <span className="text-sm font-semibold text-on-surface truncate">Dark Mode</span>
                     </div>
                     <Toggle value={darkMode} onChange={toggleDarkMode} />
+                  </div>
+                  <div className="flex items-center justify-between gap-3 p-3.5 bg-surface-container-low rounded-xl mt-2">
+                    <div className="flex items-center gap-2.5 min-w-0">
+                      <div className="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center shrink-0">
+                        <span className="material-symbols-outlined text-sm text-on-surface-variant">palette</span>
+                      </div>
+                      <span className="text-sm font-semibold text-on-surface truncate">Classic Palette</span>
+                    </div>
+                    <Toggle value={isClassicPalette} onChange={toggleClassicPalette} />
                   </div>
                 </div>
               </div>

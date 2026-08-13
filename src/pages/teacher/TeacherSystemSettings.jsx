@@ -3,7 +3,7 @@ import MainLayout from "../../components/erp/teacher/MainLayout";
 import { useTheme } from '../../context/ThemeContext';
 
 const TeacherSystemSettings = () => {
-  const { darkMode, toggleDarkMode } = useTheme();
+  const { darkMode, toggleDarkMode, isClassicPalette, toggleClassicPalette } = useTheme();
   const [isSaving, setIsSaving] = useState(false);
 
   const handleSave = async () => {
@@ -70,6 +70,29 @@ const TeacherSystemSettings = () => {
                 <span
                   className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform duration-300 ${
                     darkMode ? 'translate-x-6' : 'translate-x-1'
+                  }`}
+                />
+              </button>
+            </div>
+
+            {/* Color Palette */}
+            <div className="flex items-center justify-between p-4 bg-surface-container-low rounded-md">
+              <div className="flex items-center gap-3">
+                <span className="material-symbols-outlined text-on-surface-variant">palette</span>
+                <div className="flex flex-col">
+                  <span className="font-semibold text-on-surface">Classic Palette</span>
+                  <span className="text-xs text-on-surface-variant">Use the original blue &amp; purple color scheme</span>
+                </div>
+              </div>
+              <button
+                onClick={toggleClassicPalette}
+                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none flex-shrink-0 ${
+                  isClassicPalette ? 'bg-primary' : 'bg-surface-container-highest'
+                }`}
+              >
+                <span
+                  className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform duration-300 ${
+                    isClassicPalette ? 'translate-x-6' : 'translate-x-1'
                   }`}
                 />
               </button>
