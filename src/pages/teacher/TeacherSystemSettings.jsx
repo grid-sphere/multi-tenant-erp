@@ -50,7 +50,7 @@ const TeacherSystemSettings = () => {
           {/* Appearance Settings */}
           <section className="bg-surface-container-lowest p-6 rounded-lg border border-outline-variant/15 flex flex-col gap-4 shadow-sm">
             <div className="flex items-center gap-3 mb-2">
-              <span className="material-symbols-outlined text-[#6b38d4] block">palette</span>
+              <span className="material-symbols-outlined text-primary block">palette</span>
               <h2 className="text-lg font-bold font-display text-on-surface">Appearance Settings</h2>
             </div>
             <div className="flex items-center justify-between p-4 bg-surface-container-low rounded-md">
@@ -81,7 +81,7 @@ const TeacherSystemSettings = () => {
         {/* Notification Settings */}
         <section className="bg-surface-container-lowest p-8 rounded-lg border border-outline-variant/15 shadow-sm">
           <div className="flex items-center gap-3 mb-8">
-            <span className="material-symbols-outlined text-[#924700] block">notifications_active</span>
+            <span className="material-symbols-outlined text-secondary block">notifications_active</span>
             <div>
               <h2 className="text-lg font-bold font-display text-on-surface">Notification Settings</h2>
               <p className="text-sm text-on-surface-variant font-body mt-1">Manage how you receive alerts and updates.</p>

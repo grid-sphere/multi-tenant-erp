@@ -41,7 +41,7 @@ function HomeSkeleton() {
     return (
         <MainLayout title="Grievance">
             <div className="px-8 py-8 space-y-8 max-w-6xl mx-auto">
-                <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#1a237e] to-[#283593] p-8">
+                <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-primary to-primary p-8">
                     <div className="relative z-10 max-w-2xl space-y-4">
                         <Skeleton className="w-48 h-4 bg-white/20" />
                         <Skeleton className="w-64 h-8 bg-white/20" />
@@ -516,7 +516,7 @@ export default function Grievance() {
                 <div className="px-8 py-8 space-y-8 max-w-6xl mx-auto">
 
                     {/* Hero */}
-                    <section className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#1a237e] to-[#283593] p-8 text-white">
+                    <section className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-primary to-primary p-8 text-white">
                         <div className="relative z-10 max-w-2xl">
                             <div className="flex items-center gap-2 mb-3">
                                 <span className="material-symbols-outlined text-white/80 text-base">shield</span>
@@ -529,7 +529,7 @@ export default function Grievance() {
                             <div className="flex flex-wrap gap-3 mt-6">
                                 <button
                                     onClick={() => switchView("new")}
-                                    className="flex items-center gap-2 px-5 py-2.5 bg-white text-[#1a237e] rounded-xl font-bold text-xs hover:bg-white/90 transition-colors shadow-lg"
+                                    className="flex items-center gap-2 px-5 py-2.5 bg-white text-primary rounded-xl font-bold text-xs hover:bg-white/90 transition-colors shadow-lg"
                                 >
                                     <span className="material-symbols-outlined text-sm">add_circle</span>
                                     File New Grievance

@@ -20,11 +20,11 @@ const getTypeVisuals = (type) => {
   switch(type) {
     case 'LessonPlan': return { icon: 'assignment', iconColor: 'text-blue-500 dark:text-blue-400', badgeColor: 'bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300', path: 'lesson-plan' };
     case 'Worksheet': return { icon: 'description', iconColor: 'text-indigo-500 dark:text-indigo-400', badgeColor: 'bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300', path: 'worksheet' };
-    case 'Quiz': return { icon: 'quiz', iconColor: 'text-[#6b38d4] dark:text-[#a27dfc]', badgeColor: 'bg-purple-50 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300', path: 'quiz' };
+    case 'Quiz': return { icon: 'quiz', iconColor: 'text-primary dark:text-primary-container', badgeColor: 'bg-purple-50 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300', path: 'quiz' };
     case 'QuestionPaper': return { icon: 'history_edu', iconColor: 'text-red-500 dark:text-red-400', badgeColor: 'bg-red-50 dark:bg-red-900/30 text-red-700 dark:text-red-300', path: 'question-paper' };
     case 'StudyNotes': return { icon: 'menu_book', iconColor: 'text-green-500 dark:text-green-400', badgeColor: 'bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-300', path: 'study-notes' };
     case 'PresentationOutline': return { icon: 'speaker_notes', iconColor: 'text-teal-500 dark:text-teal-400', badgeColor: 'bg-teal-50 dark:bg-teal-900/30 text-teal-700 dark:text-teal-300', path: 'presentation-outline' };
-    case 'Rubric': return { icon: 'rule', iconColor: 'text-[#b75b00] dark:text-orange-400', badgeColor: 'bg-orange-50 dark:bg-orange-950/30 text-orange-700 dark:text-orange-300', path: 'rubric' };
+    case 'Rubric': return { icon: 'rule', iconColor: 'text-secondary dark:text-orange-400', badgeColor: 'bg-orange-50 dark:bg-orange-950/30 text-orange-700 dark:text-orange-300', path: 'rubric' };
     default: return { icon: 'article', iconColor: 'text-gray-500 dark:text-gray-400', badgeColor: 'bg-gray-50 dark:bg-slate-800 text-gray-700 dark:text-slate-300', path: 'lesson-plan' };
   }
 };
@@ -108,14 +108,14 @@ const ContentAIToolsDashboard = () => {
         <section className="relative overflow-hidden rounded-lg md:rounded-3xl bg-primary px-3 py-4 md:px-8 md:py-10 text-white shadow-lg">
           <div className="relative z-10 max-w-2xl">
             <div className="flex items-center gap-2 mb-2 md:mb-4">
-              <span className="bg-[#924700] text-white px-2 py-0.5 md:px-3 md:py-1 rounded-full text-3xs md:text-xs font-bold uppercase tracking-wider">AI Powered</span>
+              <span className="bg-secondary text-white px-2 py-0.5 md:px-3 md:py-1 rounded-full text-3xs md:text-xs font-bold uppercase tracking-wider">AI Powered</span>
             </div>
             <h2 className="text-base md:text-3xl font-display font-extrabold mb-1.5 md:mb-3 leading-tight text-white">Elevate Your Teaching with The Intelligent Architect</h2>
             <p className="text-blue-100 font-body text-2xs md:text-lg opacity-90">Generate structured educational content in seconds. Choose a tool below to begin your creative process.</p>
           </div>
           {/* Decorative background elements */}
           <div className="absolute -right-20 -top-20 w-80 h-80 bg-white/10 rounded-full blur-3xl"></div>
-          <div className="absolute -right-10 bottom-0 w-64 h-64 bg-[#8455ef]/20 rounded-full blur-2xl"></div>
+          <div className="absolute -right-10 bottom-0 w-64 h-64 bg-primary/20 rounded-full blur-2xl"></div>
         </section>
 
         {/* AI Tools Grid */}
@@ -322,7 +322,7 @@ const ContentAIToolsDashboard = () => {
       </div>
 
       {/* AI Chatbot Floating Trigger */}
-      <button className="fixed bottom-3 right-3 md:bottom-8 md:right-8 w-10 h-10 md:w-16 md:h-16 bg-[#924700] text-white rounded-full shadow-2xl flex items-center justify-center hover:scale-110 transition-transform active:scale-95 z-50 outline-none border-none cursor-pointer">
+      <button className="fixed bottom-3 right-3 md:bottom-8 md:right-8 w-10 h-10 md:w-16 md:h-16 bg-secondary text-white rounded-full shadow-2xl flex items-center justify-center hover:scale-110 transition-transform active:scale-95 z-50 outline-none border-none cursor-pointer">
         <span className="material-symbols-outlined text-lg md:text-3xl block" style={{fontVariationSettings: "'FILL' 1"}}>psychology</span>
       </button>
 

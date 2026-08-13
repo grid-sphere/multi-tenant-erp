@@ -43,6 +43,37 @@ function writeToStorage(key, data) {
  *   - error:        fetch error (doesn't clear existing data)
  *   - mutate:       fn(newData) to update local cache immediately (optimistic)
  */
+/**
+ * Coerce anything thrown into an Error carrying a human-readable message.
+ *
+ * Axios rejections, DRF validation payloads and bare strings all end up here,
+ * and consumers reasonably expect `error.message` to exist.
+ */
+function normaliseError(err) {
+  if (err instanceof Error) {
+    const data = err.response?.data;
+    if (data) {
+      const detail =
+        typeof data === "string"
+          ? data
+          : data.detail || Object.values(data)[0];
+      const text = Array.isArray(detail) ? detail[0] : detail;
+      if (text && typeof text === "string") {
+        const wrapped = new Error(text);
+        wrapped.response = err.response;
+        return wrapped;
+      }
+    }
+    return err;
+  }
+  if (typeof err === "string") return new Error(err);
+  try {
+    return new Error(JSON.stringify(err));
+  } catch {
+    return new Error("Something went wrong.");
+  }
+}
+
 export function useStaleData(
   cacheKey,
   fetcher,
@@ -111,7 +142,11 @@ export function useStaleData(
       }
       setError(null);
     } catch (err) {
-      setError(err);
+      // Always store a real Error, so `error.message` is safe to render.
+      // A component that renders `{error}` directly would otherwise crash the
+      // whole tree with "Objects are not valid as a React child" — and the
+      // thing thrown is not always an Error (DRF payloads, strings, nulls).
+      setError(normaliseError(err));
     } finally {
       inFlight.delete(cacheKey);
       setLoading(false);

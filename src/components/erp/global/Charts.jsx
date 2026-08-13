@@ -12,7 +12,7 @@ return(
 
 <div>
 
-<h3 className="text-lg font-semibold text-[#0b1c30]">
+<h3 className="text-lg font-semibold text-on-surface">
 Institution Growth
 </h3>
 
@@ -25,7 +25,7 @@ School onboarding velocity over the last 12 months
 
 <div className="flex gap-2">
 
-<button className="px-4 py-1.5 bg-[#e9effc] text-[#2563eb] text-xs font-semibold rounded-md">
+<button className="px-4 py-1.5 bg-surface-container text-primary text-xs font-semibold rounded-md">
 YEAR
 </button>
 
@@ -86,7 +86,7 @@ strokeLinecap="round"
 
 <div className="bg-white p-8 rounded-xl">
 
-<h3 className="text-lg font-semibold text-[#0b1c30]">
+<h3 className="text-lg font-semibold text-on-surface">
 Revenue Split
 </h3>
 
@@ -97,10 +97,10 @@ Breakdown by subscription tier
 
 <div className="relative w-[160px] h-[160px] mx-auto mb-6">
 
-<div className="absolute inset-0 rounded-full border-[12px] border-[#2563eb]"></div>
+<div className="absolute inset-0 rounded-full border-[12px] border-primary"></div>
 
 <div
-className="absolute inset-0 rounded-full border-[12px] border-[#7c3aed]"
+className="absolute inset-0 rounded-full border-[12px] border-primary"
 style={{
 clipPath:"polygon(50% 50%,0% 55%,0% 0%,50% 0%)"
 }}
@@ -132,7 +132,7 @@ ACTIVE
 
 <div className="flex items-center gap-2">
 
-<div className="w-3 h-3 bg-[#2563eb] rounded-full"></div>
+<div className="w-3 h-3 bg-primary rounded-full"></div>
 
 Premium Enterprise
 
@@ -147,7 +147,7 @@ Premium Enterprise
 
 <div className="flex items-center gap-2">
 
-<div className="w-3 h-3 bg-[#7c3aed] rounded-full"></div>
+<div className="w-3 h-3 bg-primary rounded-full"></div>
 
 Advanced Academic
 

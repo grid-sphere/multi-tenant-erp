@@ -27,3 +27,14 @@ yarn-error.log*
 
 .env
 env
+
+# Stray Python venv, unrelated to this Node project
+venv/
+.venv/
+
+# IDE
+.vscode/
+.idea/
+
+# Scratch files pulled out during a repo cleanup pass
+_to_delete/

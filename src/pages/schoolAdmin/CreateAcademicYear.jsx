@@ -120,7 +120,7 @@ function PageSkeleton({editMode}) {
 const labelClass =
   "text-[10px] font-bold uppercase tracking-wider text-gray-400 mb-1.5 block";
 const editFieldClass =
-  "w-full text-sm font-bold text-slate-800 bg-white border border-[#0058be]/30 focus:ring-2 focus:ring-[#0058be]/10 outline-none px-4 py-2 rounded-md";
+  "w-full text-sm font-bold text-slate-800 bg-white border border-primary/30 focus:ring-2 focus:ring-primary/10 outline-none px-4 py-2 rounded-md";
 
 // ─────────────────────────────────────────────
 // SectionCard
@@ -332,7 +332,7 @@ export default function CreateAcademicYear() {
             <button
               type="button"
               onClick={() => navigate("/school-admin/academic-years")}
-              className="flex items-center gap-1.5 text-[#0058be] text-sm font-semibold hover:underline"
+              className="flex items-center gap-1.5 text-primary text-sm font-semibold hover:underline"
             >
               <span className="material-symbols-outlined text-[18px]">arrow_back</span>
               Back
@@ -359,7 +359,7 @@ export default function CreateAcademicYear() {
               <button
                 type="submit"
                 disabled={loading}
-                className="flex items-center gap-2 md:px-4 px-2 py-2 bg-[#0058be] text-white text-sm font-bold rounded-md shadow-sm disabled:opacity-70"
+                className="flex items-center gap-2 md:px-4 px-2 py-2 bg-primary text-white text-sm font-bold rounded-md shadow-sm disabled:opacity-70"
               >
                 {loading && (
                   <span className="material-symbols-outlined animate-spin text-[16px]">

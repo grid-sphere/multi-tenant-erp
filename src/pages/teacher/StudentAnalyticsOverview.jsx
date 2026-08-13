@@ -84,7 +84,7 @@ View Detail
             <p className="text-xs text-slate-400 mt-1">vs Last Month</p>
           </div>
           <div className="bg-surface-container-lowest p-6 rounded-lg relative overflow-hidden group shadow-sm">
-            <div className="absolute top-0 right-0 w-24 h-24 bg-[#6b38d4]/5 rounded-full -mr-8 -mt-8 transition-transform group-hover:scale-110"></div>
+            <div className="absolute top-0 right-0 w-24 h-24 bg-primary/5 rounded-full -mr-8 -mt-8 transition-transform group-hover:scale-110"></div>
             <p className="text-sm font-semibold text-on-surface-variant">Avg Attendance</p>
             <div className="flex items-baseline gap-2 mt-2">
               <h2 className="text-3xl font-extrabold font-display">92.1<span className="text-lg font-bold text-slate-400">%</span></h2>
@@ -93,13 +93,13 @@ View Detail
             <p className="text-xs text-slate-400 mt-1">vs School Average</p>
           </div>
           <div className="bg-surface-container-lowest p-6 rounded-lg relative overflow-hidden group shadow-sm">
-            <div className="absolute top-0 right-0 w-24 h-24 bg-[#924700]/5 rounded-full -mr-8 -mt-8 transition-transform group-hover:scale-110"></div>
+            <div className="absolute top-0 right-0 w-24 h-24 bg-secondary/5 rounded-full -mr-8 -mt-8 transition-transform group-hover:scale-110"></div>
             <p className="text-sm font-semibold text-on-surface-variant">Assignment Rate</p>
             <div className="flex items-baseline gap-2 mt-2">
               <h2 className="text-3xl font-extrabold font-display">85.0<span className="text-lg font-bold text-slate-400">%</span></h2>
             </div>
             <div className="w-full bg-surface-container-low h-1.5 rounded-full mt-3 overflow-hidden">
-              <div className="bg-[#924700] h-full w-[85%] rounded-full"></div>
+              <div className="bg-secondary h-full w-[85%] rounded-full"></div>
             </div>
           </div>
           <div className="bg-surface-container-lowest p-6 rounded-lg border-l-4 border-red-500 shadow-sm relative overflow-hidden group">
@@ -115,11 +115,11 @@ View Detail
         {/* AI Insight & Weak Topics Grid */}
         <section className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* AI Insight Panel */}
-          <div className="lg:col-span-2 bg-gradient-to-br from-[#23005c] to-[#8455ef] p-[1px] rounded-xl shadow-xl">
+          <div className="lg:col-span-2 bg-gradient-to-br from-on-primary-fixed to-primary p-[1px] rounded-xl shadow-xl">
             <div className="bg-slate-900/90 rounded-xl p-6 h-full flex flex-col justify-between">
               <div>
                 <div className="flex items-center gap-2 mb-4">
-                  <span className="material-symbols-outlined text-[#ffb786]" style={{fontVariationSettings: "'FILL' 1"}}>auto_awesome</span>
+                  <span className="material-symbols-outlined text-secondary-container" style={{fontVariationSettings: "'FILL' 1"}}>auto_awesome</span>
                   <h3 className="text-white font-display font-bold text-lg">AI Performance Insight</h3>
                 </div>
                 <p className="text-blue-100/80 leading-relaxed text-sm">
@@ -164,7 +164,7 @@ View Detail
                 </div>
                 <div class="flex items-center gap-2">
                   <div class="w-20 bg-surface-container-low h-2 rounded-full overflow-hidden">
-                    <div class="bg-[#924700] h-full w-[58%]"></div>
+                    <div class="bg-secondary h-full w-[58%]"></div>
                   </div>
                 </div>
               </div>
@@ -181,9 +181,9 @@ View Detail
               </div>
             </div>
             
-            <div className="mt-8 p-4 bg-[#ffdcc6]/30 rounded-lg border border-[#924700]/10">
-              <p className="text-xs font-bold text-[#723600] uppercase tracking-tighter mb-1">Teacher Recommendation</p>
-              <p className="text-xs font-medium text-[#b75b00] italic">"Focus on visual simulations for Wave Optics to improve conceptual retention."</p>
+            <div className="mt-8 p-4 bg-secondary-container/30 rounded-lg border border-secondary/10">
+              <p className="text-xs font-bold text-on-secondary-container uppercase tracking-tighter mb-1">Teacher Recommendation</p>
+              <p className="text-xs font-medium text-secondary italic">"Focus on visual simulations for Wave Optics to improve conceptual retention."</p>
             </div>
           </div>
         </section>

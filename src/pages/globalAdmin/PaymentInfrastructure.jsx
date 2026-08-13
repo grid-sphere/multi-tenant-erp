@@ -9,7 +9,7 @@ return (
 
 <Layout>
 
-<div className="min-h-screen bg-[#f8f9ff]">
+<div className="min-h-screen bg-background">
 
 <div className="max-w-6xl mx-auto px-8 py-10">
 
@@ -19,11 +19,11 @@ return (
 
 <div>
 
-<h1 className="text-4xl font-extrabold text-[#0b1c30] leading-tight">
+<h1 className="text-4xl font-extrabold text-on-surface leading-tight">
 Payment Infrastructure
 </h1>
 
-<p className="text-[#424754] mt-2 max-w-2xl">
+<p className="text-on-surface-variant mt-2 max-w-2xl">
 Manage global payment gateways, webhooks, and transactional behavior for ScholarFlow Pro.
 </p>
 
@@ -32,7 +32,7 @@ Manage global payment gateways, webhooks, and transactional behavior for Scholar
 
 <button
 onClick={()=>navigate("/global-admin/settings")}
-className="flex items-center gap-2 px-4 py-2 rounded-md bg-[#dce9ff] text-[#0058be] font-semibold text-sm hover:bg-[#d3e4fe] transition-all active:scale-[0.98]"
+className="flex items-center gap-2 px-4 py-2 rounded-md bg-surface-container-high text-primary font-semibold text-sm hover:bg-surface-container-highest transition-all active:scale-[0.98]"
 >
 
 <span className="material-symbols-outlined text-sm">
@@ -60,7 +60,7 @@ Go Back
 
 <h3 className="text-lg font-bold mb-6 flex items-center gap-2">
 
-<span className="material-symbols-outlined text-[#0058be]">
+<span className="material-symbols-outlined text-primary">
 hub
 </span>
 
@@ -71,7 +71,7 @@ Connected Gateways
 
 {/* Stripe */}
 
-<div className="flex justify-between items-center p-4 bg-[#eff4ff] rounded-md mb-4">
+<div className="flex justify-between items-center p-4 bg-surface-container-low rounded-md mb-4">
 
 <div className="flex items-center gap-4">
 
@@ -103,7 +103,7 @@ CONNECTED
 
 </div>
 
-<button className="text-[#0058be] font-semibold text-sm hover:underline">
+<button className="text-primary font-semibold text-sm hover:underline">
 Manage Settings
 </button>
 
@@ -112,7 +112,7 @@ Manage Settings
 
 {/* Razorpay */}
 
-<div className="flex justify-between items-center p-4 bg-[#eff4ff] rounded-md">
+<div className="flex justify-between items-center p-4 bg-surface-container-low rounded-md">
 
 <div className="flex items-center gap-4">
 
@@ -130,7 +130,7 @@ account_balance_wallet
 Razorpay
 </p>
 
-<p className="text-xs text-[#424754]">
+<p className="text-xs text-on-surface-variant">
 Not configured
 </p>
 
@@ -138,7 +138,7 @@ Not configured
 
 </div>
 
-<button className="px-5 py-2 bg-gradient-to-br from-[#0058be] to-[#2170e4] text-white rounded-md text-sm font-semibold hover:opacity-90">
+<button className="px-5 py-2 bg-gradient-to-br from-primary to-primary-container text-white rounded-md text-sm font-semibold hover:opacity-90">
 Connect
 </button>
 
@@ -158,7 +158,7 @@ Connect
 Transaction Summary
 </h3>
 
-<button className="text-[#0058be] font-semibold text-sm">
+<button className="text-primary font-semibold text-sm">
 View Ledger
 </button>
 
@@ -262,7 +262,7 @@ PENDING
 
 <h3 className="text-lg font-bold mb-6 flex items-center gap-2">
 
-<span className="material-symbols-outlined text-[#6b38d4]">
+<span className="material-symbols-outlined text-primary">
 settings_input_component
 </span>
 
@@ -281,10 +281,10 @@ Webhook URL
 <input
 readOnly
 value="https://api.scholarflow.pro/webhooks/v1/payments"
-className="flex-1 bg-[#eff4ff] rounded-md px-3 py-2 text-sm font-mono"
+className="flex-1 bg-surface-container-low rounded-md px-3 py-2 text-sm font-mono"
 />
 
-<button className="p-2 bg-[#dce9ff] rounded-md text-[#0058be]">
+<button className="p-2 bg-surface-container-high rounded-md text-primary">
 
 <span className="material-symbols-outlined text-sm">
 content_copy
@@ -305,7 +305,7 @@ Currency
 </label>
 
 
-<select className="w-full bg-[#eff4ff] rounded-md px-3 py-2 mt-2 font-semibold">
+<select className="w-full bg-surface-container-low rounded-md px-3 py-2 mt-2 font-semibold">
 
 <option>USD - United States Dollar</option>
 <option>EUR - Euro</option>
@@ -319,13 +319,13 @@ Currency
 
 <button
 onClick={()=>navigate("/global-admin/settings")}
-className="w-full py-3 bg-gradient-to-br from-[#0058be] to-[#2170e4] text-white font-bold rounded-md shadow"
+className="w-full py-3 bg-gradient-to-br from-primary to-primary-container text-white font-bold rounded-md shadow"
 >
 Save Configuration
 </button>
 
 
-<button className="w-full py-3 bg-[#dce9ff] text-[#0058be] font-bold rounded-md flex items-center justify-center gap-2">
+<button className="w-full py-3 bg-surface-container-high text-primary font-bold rounded-md flex items-center justify-center gap-2">
 
 <span className="material-symbols-outlined text-sm">
 vibration

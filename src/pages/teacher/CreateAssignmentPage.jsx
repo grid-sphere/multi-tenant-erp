@@ -77,9 +77,24 @@ export default function CreateAssignmentPage() {
     }
   };
 
+  // A teacher with no TeacherAssignment records has nothing to choose from.
+  // Both dropdowns render empty, and the old validation then blamed them for
+  // not picking something that was never on offer.
+  const hasTeachingAssignments = sections.length > 0 && subjects.length > 0;
+
   const handleSave = async (e) => {
     e.preventDefault();
-    
+
+    if (!hasTeachingAssignments) {
+      setError(
+        "You're not assigned to any class or subject yet, so there's nothing to " +
+        "create an assignment against. Ask the school office to add your teaching " +
+        "assignments."
+      );
+      window.scrollTo(0, 0);
+      return;
+    }
+
     if (!selectedSection || !selectedSubject) {
       setError("Please select both a section and a subject.");
       window.scrollTo(0, 0);
@@ -123,7 +138,7 @@ export default function CreateAssignmentPage() {
         <div>
           <Link
             to="/teacher/assignments"
-            className="flex items-center gap-2 text-[#0058be] font-semibold text-sm mb-4 hover:-translate-x-1 transition-transform w-max"
+            className="flex items-center gap-2 text-primary font-semibold text-sm mb-4 hover:-translate-x-1 transition-transform w-max"
           >
             <span className="material-symbols-outlined text-lg">arrow_back</span>
             Back to Assignments
@@ -139,10 +154,15 @@ export default function CreateAssignmentPage() {
           >
             Cancel
           </button>
-          <button 
+          <button
             onClick={handleSave}
-            disabled={submitting}
-            className="px-6 py-2.5 bg-gradient-to-r from-[#0058be] to-[#2170e4] text-white font-bold rounded-md text-sm shadow-md hover:shadow-lg transition-all flex items-center gap-2 disabled:opacity-50"
+            disabled={submitting || loadingContext || !hasTeachingAssignments}
+            title={
+              !loadingContext && !hasTeachingAssignments
+                ? "You have no class or subject assignments yet"
+                : undefined
+            }
+            className="px-6 py-2.5 bg-gradient-to-r from-primary to-primary-container text-white font-bold rounded-md text-sm shadow-md hover:shadow-lg transition-all flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {submitting ? (
               <span className="material-symbols-outlined animate-spin text-lg">progress_activity</span>
@@ -153,6 +173,26 @@ export default function CreateAssignmentPage() {
           </button>
         </div>
       </div>
+
+      {/* Explain the empty dropdowns up front rather than after a failed save. */}
+      {!loadingContext && !hasTeachingAssignments && (
+        <div className="mb-8 p-4 bg-warning/10 text-on-surface rounded-md border border-warning flex gap-3 shadow-sm">
+          <span className="material-symbols-outlined text-warning">report</span>
+          <div>
+            <p className="font-bold text-sm">
+              You're not assigned to a class or subject yet
+            </p>
+            <p className="text-sm mt-1 text-on-surface-variant">
+              Assignments are created against a section and a subject you teach,
+              and you currently have {sections.length === 0 ? "no sections" : "sections"}
+              {sections.length === 0 && subjects.length === 0 ? " and " : ""}
+              {subjects.length === 0 ? "no subjects" : ""} assigned. Ask the school
+              office to set up your teaching assignments — the dropdowns below will
+              fill in once they do.
+            </p>
+          </div>
+        </div>
+      )}
 
       {error && (
         <div className="mb-8 p-4 bg-red-50 text-red-700 rounded-md border border-red-200 flex gap-3 shadow-sm">
@@ -168,7 +208,7 @@ export default function CreateAssignmentPage() {
         <div className="col-span-12 lg:col-span-8 space-y-8">
           <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-100">
             <h3 className="text-xl font-display font-bold mb-6 flex items-center text-slate-800">
-              <span className="material-symbols-outlined mr-2 text-[#0058be]">assignment</span>
+              <span className="material-symbols-outlined mr-2 text-primary">assignment</span>
               Assignment Details
             </h3>
             
@@ -179,7 +219,7 @@ export default function CreateAssignmentPage() {
                   required
                   value={title}
                   onChange={e => setTitle(e.target.value)}
-                  className="w-full bg-[#f8f9ff] border border-transparent rounded-md p-3.5 text-sm focus:border-[#0058be]/40 focus:ring-2 focus:ring-[#0058be]/10 transition-all outline-none" 
+                  className="w-full bg-background border border-transparent rounded-md p-3.5 text-sm focus:border-primary/40 focus:ring-2 focus:ring-primary/10 transition-all outline-none" 
                   placeholder="e.g., Chapter 5 Homework - Algebra" 
                 />
               </div>
@@ -191,7 +231,7 @@ export default function CreateAssignmentPage() {
                   rows="4"
                   value={description}
                   onChange={e => setDescription(e.target.value)}
-                  className="w-full bg-[#f8f9ff] border border-transparent rounded-md p-3.5 text-sm focus:border-[#0058be]/40 focus:ring-2 focus:ring-[#0058be]/10 transition-all outline-none resize-none" 
+                  className="w-full bg-background border border-transparent rounded-md p-3.5 text-sm focus:border-primary/40 focus:ring-2 focus:ring-primary/10 transition-all outline-none resize-none" 
                   placeholder="Describe the assignment, requirements, and any special instructions..." 
                 />
               </div>
@@ -205,11 +245,13 @@ export default function CreateAssignmentPage() {
                       required
                       value={selectedSection}
                       onChange={e => setSelectedSection(e.target.value)}
-                      className="w-full bg-[#f8f9ff] border border-transparent rounded-md py-3.5 pl-10 pr-4 text-sm font-medium focus:border-[#0058be]/40 focus:ring-2 focus:ring-[#0058be]/10 outline-none transition-all appearance-none text-slate-700"
+                      className="w-full bg-background border border-transparent rounded-md py-3.5 pl-10 pr-4 text-sm font-medium focus:border-primary/40 focus:ring-2 focus:ring-primary/10 outline-none transition-all appearance-none text-slate-700"
                     >
                       <option value="">Select Section...</option>
                       {loadingContext ? (
                         <option disabled>Loading...</option>
+                      ) : sections.length === 0 ? (
+                        <option disabled>No sections assigned to you</option>
                       ) : (
                         sections.map(section => (
                           <option key={section.id} value={section.id}>
@@ -230,11 +272,13 @@ export default function CreateAssignmentPage() {
                       required
                       value={selectedSubject}
                       onChange={e => setSelectedSubject(e.target.value)}
-                      className="w-full bg-[#f8f9ff] border border-transparent rounded-md py-3.5 pl-10 pr-4 text-sm font-medium focus:border-[#0058be]/40 focus:ring-2 focus:ring-[#0058be]/10 outline-none transition-all appearance-none text-slate-700"
+                      className="w-full bg-background border border-transparent rounded-md py-3.5 pl-10 pr-4 text-sm font-medium focus:border-primary/40 focus:ring-2 focus:ring-primary/10 outline-none transition-all appearance-none text-slate-700"
                     >
                       <option value="">Select Subject...</option>
                       {loadingContext ? (
                         <option disabled>Loading...</option>
+                      ) : subjects.length === 0 ? (
+                        <option disabled>No subjects assigned to you</option>
                       ) : (
                         subjects.map(subject => (
                           <option key={subject.id} value={subject.id}>
@@ -255,7 +299,7 @@ export default function CreateAssignmentPage() {
                   required
                   value={dueDate}
                   onChange={e => setDueDate(e.target.value)}
-                  className="w-full bg-[#f8f9ff] border border-transparent rounded-md p-3.5 text-sm font-medium focus:border-[#0058be]/40 focus:ring-2 focus:ring-[#0058be]/10 transition-all outline-none text-slate-700" 
+                  className="w-full bg-background border border-transparent rounded-md p-3.5 text-sm font-medium focus:border-primary/40 focus:ring-2 focus:ring-primary/10 transition-all outline-none text-slate-700" 
                 />
               </div>
             </div>
@@ -263,7 +307,7 @@ export default function CreateAssignmentPage() {
         </div>
 
         <div className="col-span-12 lg:col-span-4 space-y-8">
-          <div className="bg-gradient-to-br from-[#0b1c30] to-[#1e3450] p-8 rounded-xl text-white shadow-lg relative overflow-hidden">
+          <div className="bg-gradient-to-br from-on-surface to-on-surface p-8 rounded-xl text-white shadow-lg relative overflow-hidden">
              <span className="material-symbols-outlined absolute -right-4 -bottom-4 text-9xl text-white/5">assignment</span>
              <h4 className="text-xl font-bold mb-4 relative z-10 flex items-center gap-2 text-blue-200">
                <span className="material-symbols-outlined">info</span>

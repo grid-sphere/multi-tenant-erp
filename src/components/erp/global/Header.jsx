@@ -1,54 +1,49 @@
 import { useNavigate } from "react-router-dom";
-export default function Header(){
-    const navigate = useNavigate();
 
-return(
+export default function Header({ onToggleSidebar }) {
+  const navigate = useNavigate();
 
-<header className="flex justify-between items-center h-16 px-8 bg-white/80 backdrop-blur-md shadow-[0_12px_32px_rgba(11,28,48,0.06)] sticky top-0">
+  return (
+    <header className="sticky top-0 z-30 flex items-center justify-between h-16 px-4 sm:px-6 lg:px-8 glass-effect border-b border-outline-variant">
+      <div className="flex items-center gap-2 sm:gap-4 min-w-0">
+        {/* Drawer toggle — only meaningful below lg, where the sidebar overlays */}
+        <button
+          type="button"
+          onClick={onToggleSidebar}
+          aria-label="Toggle navigation"
+          className="lg:hidden p-2 rounded-full hover:bg-surface-container-low text-on-surface-variant"
+        >
+          <span className="material-symbols-outlined">menu</span>
+        </button>
 
-<div className="flex items-center gap-4">
+        <button
+          type="button"
+          aria-label="Search"
+          className="p-2 rounded-full hover:bg-surface-container-low"
+        >
+          <span className="material-symbols-outlined text-primary">search</span>
+        </button>
 
-<div className="p-2 rounded-full hover:bg-gray-100">
+        <h1 className="text-lg sm:text-xl font-semibold truncate">
+          Global Overview
+        </h1>
+      </div>
 
-<span className="material-symbols-outlined text-blue-600">
-search
-</span>
+      <div className="flex items-center gap-2 sm:gap-4 shrink-0">
+        <button
+          onClick={() => navigate("/global-admin/notifications")}
+          aria-label="Notifications"
+          className="p-2 rounded-full hover:bg-surface-container-low"
+        >
+          <span className="material-symbols-outlined text-primary">
+            notifications
+          </span>
+        </button>
 
-</div>
-
-<h1 className="text-xl font-semibold">
-Global Overview
-</h1>
-
-</div>
-
-
-<div className="flex items-center gap-6">
-
-<button
-onClick={()=>navigate("/global-admin/notifications")}
-className="p-2 rounded-full hover:bg-[#eff4ff]"
->
-
-<span className="material-symbols-outlined text-[#0058be]">
-notifications
-</span>
-
-</button>
-
-
-<div className="w-10 h-10 rounded-full bg-[#e8eefc] flex items-center justify-center">
-
-<span className="material-symbols-outlined text-[#2563eb]">
-person
-</span>
-
-</div>
-
-</div>
-
-</header>
-
-)
-
+        <div className="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center">
+          <span className="material-symbols-outlined text-primary">person</span>
+        </div>
+      </div>
+    </header>
+  );
 }

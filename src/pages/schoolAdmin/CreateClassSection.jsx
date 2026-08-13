@@ -102,7 +102,7 @@ export default function CreateClassSection() {
         {/* Header */}
         <div className="mb-10">
           <h2 className="text-3xl font-black tracking-tight text-slate-800">Academic Structure Deployment</h2>
-          <p className="text-[#6b7280] mt-1 font-medium">
+          <p className="text-on-surface-variant mt-1 font-medium">
             Select a Grade and Section. The system will automatically provision missing layers in the database.
           </p>
         </div>
@@ -129,7 +129,7 @@ export default function CreateClassSection() {
               
               <div className="mb-8 border-b border-slate-100 pb-4">
                 <h3 className="text-xl font-bold flex items-center gap-2 text-slate-800">
-                  <span className="material-symbols-outlined text-[#0058be]">account_tree</span>
+                  <span className="material-symbols-outlined text-primary">account_tree</span>
                   Smart Provisioning Matrix
                 </h3>
               </div>
@@ -139,14 +139,14 @@ export default function CreateClassSection() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {/* Grade Dropdown */}
                   <div className="space-y-2">
-                    <label className="text-xs font-bold uppercase tracking-wider text-[#6b7280] ml-1">Target Grade Level</label>
+                    <label className="text-xs font-bold uppercase tracking-wider text-on-surface-variant ml-1">Target Grade Level</label>
                     <div className="relative">
                       <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">school</span>
                       <select
                         required
                         value={targetGrade}
                         onChange={e => setTargetGrade(e.target.value)}
-                        className="w-full bg-[#f4f7fc] pl-12 pr-4 py-3.5 rounded-md outline-none focus:ring-2 focus:ring-[#0058be]/20 border border-transparent focus:border-[#0058be]/40 transition-all appearance-none font-bold text-slate-700 cursor-pointer shadow-sm"
+                        className="w-full bg-surface-container-low pl-12 pr-4 py-3.5 rounded-md outline-none focus:ring-2 focus:ring-primary/20 border border-transparent focus:border-primary/40 transition-all appearance-none font-bold text-slate-700 cursor-pointer shadow-sm"
                       >
                         {gradeLevels.map((g) => (
                           <option key={g} value={g}>Grade {g}</option>
@@ -158,14 +158,14 @@ export default function CreateClassSection() {
 
                   {/* Section Dropdown */}
                   <div className="space-y-2">
-                    <label className="text-xs font-bold uppercase tracking-wider text-[#6b7280] ml-1">Target Section</label>
+                    <label className="text-xs font-bold uppercase tracking-wider text-on-surface-variant ml-1">Target Section</label>
                     <div className="relative">
                       <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">tag</span>
                       <select
                         required
                         value={targetSection}
                         onChange={e => setTargetSection(e.target.value)}
-                        className="w-full bg-[#f4f7fc] pl-12 pr-4 py-3.5 rounded-md outline-none focus:ring-2 focus:ring-[#0058be]/20 border border-transparent focus:border-[#0058be]/40 transition-all appearance-none font-bold text-slate-700 cursor-pointer shadow-sm"
+                        className="w-full bg-surface-container-low pl-12 pr-4 py-3.5 rounded-md outline-none focus:ring-2 focus:ring-primary/20 border border-transparent focus:border-primary/40 transition-all appearance-none font-bold text-slate-700 cursor-pointer shadow-sm"
                       >
                         {sectionAlphabet.map((letter) => (
                           <option key={letter} value={letter}>Section {letter}</option>
@@ -183,7 +183,7 @@ export default function CreateClassSection() {
                   <button 
                     type="submit" 
                     disabled={loading} 
-                    className="px-8 py-3.5 bg-gradient-to-r from-[#0058be] to-[#2170e4] text-white text-sm rounded-lg font-bold shadow-[0_4px_14px_rgba(0,88,190,0.3)] hover:shadow-[0_6px_20px_rgba(0,88,190,0.4)] hover:-translate-y-0.5 transition-all flex items-center gap-2 disabled:opacity-70 outline-none"
+                    className="px-8 py-3.5 bg-gradient-to-r from-primary to-primary-container text-white text-sm rounded-lg font-bold shadow-[0_4px_14px_rgba(0,88,190,0.3)] hover:shadow-[0_6px_20px_rgba(0,88,190,0.4)] hover:-translate-y-0.5 transition-all flex items-center gap-2 disabled:opacity-70 outline-none"
                   >
                     {loading ? <span className="material-symbols-outlined animate-spin text-lg">progress_activity</span> : <span className="material-symbols-outlined text-lg">rocket_launch</span>}
                     Deploy Academic Structure
@@ -197,24 +197,24 @@ export default function CreateClassSection() {
           {/* RIGHT SIDE PANEL */}
           <div className="w-full lg:w-[350px] space-y-6">
             
-            <div className="bg-[#eef2fa] rounded-xl p-6 relative overflow-hidden border border-[#d3e4fe] shadow-sm animate-fadeIn">
-              <h4 className="font-bold text-[#0058be] mb-4 flex items-center gap-2">
+            <div className="bg-surface-container-low rounded-xl p-6 relative overflow-hidden border border-surface-container-highest shadow-sm animate-fadeIn">
+              <h4 className="font-bold text-primary mb-4 flex items-center gap-2">
                 <span className="material-symbols-outlined">auto_awesome</span>
                 Smart Auto-Provisioning
               </h4>
               <ul className="space-y-4 text-sm text-slate-600 font-medium">
                 <li className="flex gap-3">
-                  <span className="w-1.5 h-1.5 bg-[#0058be] rounded-full mt-2 shrink-0"></span>
+                  <span className="w-1.5 h-1.5 bg-primary rounded-full mt-2 shrink-0"></span>
                   <p>You no longer need to create classes manually. The system analyzes your target configuration on submission.</p>
                 </li>
                 <li className="flex gap-3">
-                  <span className="w-1.5 h-1.5 bg-[#0058be] rounded-full mt-2 shrink-0"></span>
+                  <span className="w-1.5 h-1.5 bg-primary rounded-full mt-2 shrink-0"></span>
                   <p>If the <strong>Grade</strong> does not exist yet, the backend constructs it instantly before deploying the Section.</p>
                 </li>
               </ul>
             </div>
 
-            <div className="bg-gradient-to-br from-[#0b1c30] to-[#1e3450] text-white rounded-xl p-6 shadow-lg">
+            <div className="bg-gradient-to-br from-on-surface to-on-surface text-white rounded-xl p-6 shadow-lg">
                <h4 className="font-bold mb-3 flex items-center gap-2 text-blue-300">
                  <span className="material-symbols-outlined">bolt</span>
                  Rapid Entry Tip

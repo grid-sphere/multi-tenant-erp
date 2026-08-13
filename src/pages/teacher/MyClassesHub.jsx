@@ -260,12 +260,12 @@ const MyClassesHub = () => {
 
   const getSubjectAesthetics = (subjectName) => {
     const name = (subjectName || "").toLowerCase();
-    if (name.includes("math") || name.includes("calc")) return { icon: "functions", colorClass: "text-[#0058be]", bgClass: "bg-[#0058be]/10", borderClass: "border-[#0058be]/20" };
-    if (name.includes("phys") || name.includes("bio") || name.includes("chem") || name.includes("sci")) return { icon: "biotech", colorClass: "text-[#6b38d4]", bgClass: "bg-[#6b38d4]/10", borderClass: "border-[#6b38d4]/20" };
-    if (name.includes("hist") || name.includes("geo")) return { icon: "history_edu", colorClass: "text-[#924700]", bgClass: "bg-[#924700]/10", borderClass: "border-[#924700]/20" };
-    if (name.includes("lit") || name.includes("eng")) return { icon: "menu_book", colorClass: "text-[#0f9d58]", bgClass: "bg-[#0f9d58]/10", borderClass: "border-[#0f9d58]/20" };
-    if (name.includes("comp") || name.includes("tech")) return { icon: "computer", colorClass: "text-[#ba1a1a]", bgClass: "bg-[#ba1a1a]/10", borderClass: "border-[#ba1a1a]/20" };
-    return { icon: "school", colorClass: "text-[#0058be]", bgClass: "bg-[#0058be]/10", borderClass: "border-[#0058be]/20" };
+    if (name.includes("math") || name.includes("calc")) return { icon: "functions", colorClass: "text-primary", bgClass: "bg-primary/10", borderClass: "border-primary/20" };
+    if (name.includes("phys") || name.includes("bio") || name.includes("chem") || name.includes("sci")) return { icon: "biotech", colorClass: "text-primary", bgClass: "bg-primary/10", borderClass: "border-primary/20" };
+    if (name.includes("hist") || name.includes("geo")) return { icon: "history_edu", colorClass: "text-secondary", bgClass: "bg-secondary/10", borderClass: "border-secondary/20" };
+    if (name.includes("lit") || name.includes("eng")) return { icon: "menu_book", colorClass: "text-success", bgClass: "bg-success/10", borderClass: "border-success/20" };
+    if (name.includes("comp") || name.includes("tech")) return { icon: "computer", colorClass: "text-error", bgClass: "bg-error/10", borderClass: "border-error/20" };
+    return { icon: "school", colorClass: "text-primary", bgClass: "bg-primary/10", borderClass: "border-primary/20" };
   };
 
   if (error && !classesPayload) {
@@ -404,7 +404,7 @@ const MyClassesHub = () => {
           })
         ) : (
           <div className="col-span-full flex flex-col items-center justify-center py-12 px-6 bg-white rounded-xl border border-dashed border-gray-300 text-center shadow-sm">
-            <div className="w-12 h-12 bg-[#eff4ff] rounded-full flex items-center justify-center text-[#0058be] mb-3 shadow-sm">
+            <div className="w-12 h-12 bg-surface-container-low rounded-full flex items-center justify-center text-primary mb-3 shadow-sm">
               <span className="material-symbols-outlined text-2xl">event_busy</span>
             </div>
             <h3 className="text-base md:text-lg font-bold text-slate-800 mb-2">
@@ -435,7 +435,7 @@ const MyClassesHub = () => {
 
       {/* {!loading && classes.length > 0 && (
         <div className="mt-6">
-          <Card className="bg-gradient-to-br from-[#0b1c30] to-[#1e3450] text-white border-transparent" hoverable>
+          <Card className="bg-gradient-to-br from-on-surface to-on-surface text-white border-transparent" hoverable>
             <div className="flex justify-between items-start mb-4">
               <div className="bg-white/10 p-2 rounded-lg border border-white/20">
                 <span className="material-symbols-outlined text-blue-300 text-xl md:text-2xl">psychology</span>
@@ -463,7 +463,7 @@ const MyClassesHub = () => {
 
             <button
               onClick={() => navigate("/teacher/analytics")}
-              className="mt-auto flex items-center justify-center gap-2 w-full py-2 bg-white text-[#0b1c30] text-xs font-bold rounded-md hover:bg-gray-100 transition-all duration-200 shadow-sm"
+              className="mt-auto flex items-center justify-center gap-2 w-full py-2 bg-white text-on-surface text-xs font-bold rounded-md hover:bg-gray-100 transition-all duration-200 shadow-sm"
             >
               Review AI Recommendations
               <span className="material-symbols-outlined text-sm">arrow_forward</span>

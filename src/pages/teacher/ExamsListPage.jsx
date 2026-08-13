@@ -82,7 +82,7 @@ const ExamsListPage = () => {
               {examsData.map((exam) => {
                 let statusBg, statusText, dotColor;
                 if (exam.statusColor === 'secondary') {
-                  statusBg = 'bg-[#e9ddff]'; statusText = 'text-[#23005c]'; dotColor = 'bg-[#6b38d4]';
+                  statusBg = 'bg-primary-fixed'; statusText = 'text-on-primary-fixed'; dotColor = 'bg-primary';
                 } else if (exam.statusColor === 'slate') {
                   statusBg = 'bg-slate-100'; statusText = 'text-slate-600'; dotColor = 'bg-slate-500';
                 } else if (exam.statusColor === 'red') {
@@ -160,9 +160,9 @@ const ExamsListPage = () => {
             <span className="material-symbols-outlined text-[240px]" style={{ fontVariationSettings: "'FILL' 1" }}>auto_awesome</span>
           </div>
         </div>
-        <div className="bg-surface-container-high p-6 rounded-lg flex flex-col justify-between border-l-4 border-[#924700] shadow-sm">
+        <div className="bg-surface-container-high p-6 rounded-lg flex flex-col justify-between border-l-4 border-secondary shadow-sm">
           <div>
-            <span className="text-xs font-bold text-[#924700] tracking-widest uppercase">Exam Efficiency</span>
+            <span className="text-xs font-bold text-secondary tracking-widest uppercase">Exam Efficiency</span>
             <h4 className="text-3xl font-extrabold font-display text-on-surface mt-2">84%</h4>
             <p className="text-sm text-on-surface-variant mt-1 leading-tight">Average completion rate for digital unit tests in Class 10-A.</p>
           </div>

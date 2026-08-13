@@ -10,11 +10,16 @@ const [isMenuOpen, setIsMenuOpen] = useState(false);
 
 /* Safe quick links (no undefined index) */
 
+/* "Analytics" used to be listed here but is commented out in navigation.js,
+   so it resolved to undefined and .filter(Boolean) silently dropped it —
+   leaving the bottom bar with three items instead of four. Marking takes the
+   slot, which is where a teacher on a phone actually needs to get to. */
+
 const quickLinks = [
 navItems.find(item => item.label === "Dashboard"),
 navItems.find(item => item.label === "My Classes"),
 navItems.find(item => item.label === "Assignments"),
-navItems.find(item => item.label === "Analytics")
+navItems.find(item => item.label === "Marking")
 ].filter(Boolean);
 
 

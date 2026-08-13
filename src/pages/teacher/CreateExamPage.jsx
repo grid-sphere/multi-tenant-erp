@@ -1,256 +1,256 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+
 import MainLayout from "../../components/erp/teacher/MainLayout";
 import Card from "../../components/erp/teacher/Card";
+import api from "../../services/axiosClient";
 
+/**
+ * Create an exam.
+ *
+ * This page used to be a static mockup — no state, no handlers, and a
+ * "Publish Exam" button wired to nothing — so creating an exam silently did
+ * nothing at all.
+ *
+ * It also carried Class and Section dropdowns, which the schema does not
+ * support: an Exam is a school-wide testing event (name, academic year,
+ * dates, published flag). Per-subject results hang off StudentGrade
+ * afterwards, scoped to the student. Those dropdowns are gone rather than
+ * left in place collecting values nothing could store.
+ */
+export default function CreateExamPage() {
+  const navigate = useNavigate();
 
-const CreateExamPage = () => {
+  const [years, setYears] = useState([]);
+  const [loadingYears, setLoadingYears] = useState(true);
+  const [yearsError, setYearsError] = useState(null);
+
+  const [form, setForm] = useState({
+    name: "",
+    academic_year: "",
+    start_date: "",
+    end_date: "",
+    is_published: false,
+  });
+  const [saving, setSaving] = useState(false);
+  const [fieldErrors, setFieldErrors] = useState({});
+
+  useEffect(() => {
+    let cancelled = false;
+    api
+      .get("/academics/academic-years/")
+      .then(({ data }) => {
+        if (cancelled) return;
+        const list = data?.results || data || [];
+        setYears(list);
+        // Default to the active year so the common case needs no thought.
+        const active = list.find((y) => y.is_active) || list[0];
+        if (active) {
+          setForm((f) => ({ ...f, academic_year: String(active.id) }));
+        }
+      })
+      .catch((e) => {
+        if (!cancelled) {
+          setYearsError(
+            e?.response?.data?.detail ||
+              "Could not load academic years. An exam has to belong to one."
+          );
+        }
+      })
+      .finally(() => {
+        if (!cancelled) setLoadingYears(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const set = (field, value) => {
+    setForm((f) => ({ ...f, [field]: value }));
+    setFieldErrors((e) => ({ ...e, [field]: undefined }));
+  };
+
+  const validate = () => {
+    const errors = {};
+    if (!form.name.trim()) errors.name = "Give the exam a name.";
+    if (!form.academic_year) errors.academic_year = "Choose an academic year.";
+    if (!form.start_date) errors.start_date = "Pick a start date.";
+    if (!form.end_date) errors.end_date = "Pick an end date.";
+    if (
+      form.start_date &&
+      form.end_date &&
+      form.start_date > form.end_date
+    ) {
+      // The model raises this too, but catching it here avoids a round trip.
+      errors.end_date = "The end date can't be before the start date.";
+    }
+    setFieldErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
+  const submit = async (publish) => {
+    if (!validate()) return;
+    setSaving(true);
+    try {
+      const { data } = await api.post("/operations/exams/", {
+        ...form,
+        is_published: publish,
+      });
+      toast.success(publish ? "Exam published" : "Exam saved as draft");
+      navigate(`/teacher/exams`, { state: { createdExamId: data.id } });
+    } catch (e) {
+      const payload = e?.response?.data;
+      if (payload && typeof payload === "object" && !Array.isArray(payload)) {
+        // Surface DRF field errors next to the fields they belong to.
+        const mapped = {};
+        Object.entries(payload).forEach(([key, value]) => {
+          mapped[key] = Array.isArray(value) ? value[0] : String(value);
+        });
+        setFieldErrors(mapped);
+      }
+      toast.error(
+        payload?.detail ||
+          (payload && Object.values(payload)[0]) ||
+          e?.message ||
+          "Could not create the exam."
+      );
+    } finally {
+      setSaving(false);
+    }
+  };
+
   return (
     <MainLayout title="Create Exam">
-      <div className="max-w-7xl mx-auto space-y-8">
-        
-        {/* Section 1: Basic Information Bento Grid */}
-        <section className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {/* Left: Core Form */}
-          <Card className="md:col-span-2 p-8 shadow-sm">
-            <h2 className="text-xl font-bold font-display mb-6 text-on-surface flex items-center gap-2">
-              <span className="material-symbols-outlined text-primary">edit_note</span>
-              Exam Details
-            </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              <div className="sm:col-span-2">
-                <label className="block text-sm font-medium text-on-surface-variant mb-1.5">Exam Title</label>
-                <input className="w-full bg-surface-container-low border-none rounded-md px-4 py-3 focus:ring-2 focus:ring-primary/40 focus:bg-surface-container-lowest transition-all outline-none" placeholder="e.g. Mid-Term Semester Examination 2024" type="text" />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-on-surface-variant mb-1.5">Class</label>
-                <select className="w-full bg-surface-container-low border-none rounded-md px-4 py-3 focus:ring-2 focus:ring-primary/40 outline-none">
-                  <option>Grade 10</option>
-                  <option>Grade 11</option>
-                  <option>Grade 12</option>
-                </select>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-on-surface-variant mb-1.5">Section</label>
-                <select className="w-full bg-surface-container-low border-none rounded-md px-4 py-3 focus:ring-2 focus:ring-primary/40 outline-none">
-                  <option>Section A</option>
-                  <option>Section B</option>
-                  <option>Section C</option>
-                </select>
-              </div>
-              <div className="sm:col-span-2">
-                <label className="block text-sm font-medium text-on-surface-variant mb-1.5">Subject</label>
-                <select className="w-full bg-surface-container-low border-none rounded-md px-4 py-3 focus:ring-2 focus:ring-primary/40 outline-none">
-                  <option>Advanced Mathematics</option>
-                  <option>Quantum Physics</option>
-                  <option>Organic Chemistry</option>
-                </select>
-              </div>
-              <div className="sm:col-span-2">
-                <label className="block text-sm font-medium text-on-surface-variant mb-1.5">Exam Instructions</label>
-                <textarea className="w-full bg-surface-container-low border-none rounded-md px-4 py-3 focus:ring-2 focus:ring-primary/40 focus:bg-surface-container-lowest transition-all outline-none resize-none" placeholder="Mention rules regarding calculators, rough sheets, etc." rows="4"></textarea>
-              </div>
-            </div>
-          </Card>
+      <div className="max-w-3xl mx-auto space-y-6">
+        <div>
+          <button
+            onClick={() => navigate("/teacher/exams")}
+            className="flex items-center gap-1 text-xs font-semibold text-on-surface-variant hover:text-primary"
+          >
+            <span className="material-symbols-outlined text-[16px]">
+              arrow_back
+            </span>
+            Back to exams
+          </button>
+          <h2 className="mt-1 text-2xl font-bold text-on-surface">
+            Create an exam
+          </h2>
+          <p className="text-xs text-on-surface-variant mt-0.5">
+            An exam is a school-wide testing period. Marks are recorded per
+            student and subject once it has run.
+          </p>
+        </div>
 
-          {/* Right: Schedule Card */}
-          <div className="bg-gradient-to-br from-primary to-primary-container text-white rounded-lg p-8 flex flex-col justify-between relative overflow-hidden shadow-sm">
-            <div className="relative z-10">
-              <h2 className="text-xl font-bold font-display mb-6 flex items-center gap-2">
-                <span className="material-symbols-outlined">schedule</span>
-                Schedule
-              </h2>
-              <div className="space-y-5">
-                <div>
-                  <label className="block text-sm font-medium opacity-80 mb-1.5">Exam Date</label>
-                  <input className="w-full bg-white/20 border-none rounded-md px-4 py-3 text-white placeholder-white/60 focus:ring-2 ring-white/40 outline-none" type="date" />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium opacity-80 mb-1.5">Start Time</label>
-                  <input className="w-full bg-white/20 border-none rounded-md px-4 py-3 text-white focus:ring-2 ring-white/40 outline-none" type="time" />
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium opacity-80 mb-1.5">Duration (min)</label>
-                    <input className="w-full bg-white/20 border-none rounded-md px-4 py-3 text-white focus:ring-2 ring-white/40 outline-none" type="number" defaultValue="120" />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium opacity-80 mb-1.5">Total Marks</label>
-                    <input className="w-full bg-white/20 border-none rounded-md px-4 py-3 text-white focus:ring-2 ring-white/40 outline-none" type="number" defaultValue="100" />
-                  </div>
-                </div>
-              </div>
-            </div>
-            {/* Aesthetic Generator Graphic */}
-            <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-white/10 rounded-full blur-3xl"></div>
+        {yearsError && (
+          <div className="rounded-lg border border-error bg-error/10 p-3 text-xs text-on-surface">
+            {yearsError}
           </div>
-        </section>
+        )}
 
-        {/* Section 2: Question Paper Strategy */}
-        <section className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {/* Question Paper Upload/Entry */}
-          <Card className="p-8 shadow-sm">
-            <h2 className="text-xl font-bold font-display mb-6 text-on-surface flex items-center gap-2">
-              <span className="material-symbols-outlined text-primary">description</span>
-              Question Paper
-            </h2>
-            <div className="flex gap-4 p-1 bg-surface-container-low rounded-md mb-8">
-              <button className="flex-1 py-2 px-4 rounded-md bg-white text-primary font-semibold shadow-sm text-sm outline-none">Upload File</button>
-              <button className="flex-1 py-2 px-4 rounded-md text-on-surface-variant font-medium text-sm hover:bg-surface-container-high transition-colors outline-none block w-full border-none bg-transparent">Manual Entry</button>
-            </div>
-            <div className="border-2 border-dashed border-outline-variant/30 rounded-lg p-12 flex flex-col items-center justify-center text-center space-y-4">
-              <div className="w-16 h-16 bg-surface-container-high rounded-full flex items-center justify-center">
-                <span className="material-symbols-outlined text-primary text-3xl">upload_file</span>
-              </div>
-              <div>
-                <p className="font-semibold text-on-surface">Click to upload or drag and drop</p>
-                <p className="text-sm text-on-surface-variant">PDF, DOCX, or RTF (max. 10MB)</p>
-              </div>
-              <button className="bg-surface-container-high text-primary px-6 py-2 rounded-md font-semibold text-sm hover:bg-surface-variant transition-colors outline-none cursor-pointer border-none">Select File</button>
-            </div>
-          </Card>
+        <Card className="p-6 space-y-5">
+          <Field label="Exam name" error={fieldErrors.name} required>
+            <input
+              type="text"
+              value={form.name}
+              maxLength={100}
+              onChange={(e) => set("name", e.target.value)}
+              placeholder="e.g. Mid-Term Examination"
+              className="w-full bg-surface-container-low rounded-md px-4 py-3 text-sm text-on-surface border border-outline-variant focus:outline-none focus:ring-2 focus:ring-primary/40"
+            />
+          </Field>
 
-          {/* Marks Distribution */}
-          <Card className="p-8 shadow-sm">
-            <h2 className="text-xl font-bold font-display mb-6 text-on-surface flex items-center gap-2">
-              <span className="material-symbols-outlined text-primary">analytics</span>
-              Structure & Marks
-            </h2>
-            <div className="space-y-4">
-              <div className="flex items-center justify-between p-4 bg-surface-container-low rounded-md">
-                <div className="flex items-center gap-3">
-                  <span className="material-symbols-outlined text-[#6b38d4]">check_circle</span>
-                  <div>
-                    <p className="font-semibold text-sm text-on-surface">Section A: MCQ</p>
-                    <p className="text-xs text-on-surface-variant">20 Questions</p>
-                  </div>
-                </div>
-                <div className="text-right">
-                  <span className="text-primary font-bold">20m</span>
-                </div>
-              </div>
-              <div className="flex items-center justify-between p-4 bg-surface-container-low rounded-md">
-                <div className="flex items-center gap-3">
-                  <span className="material-symbols-outlined text-[#6b38d4]">subject</span>
-                  <div>
-                    <p className="font-semibold text-sm text-on-surface">Section B: Short Answer</p>
-                    <p className="text-xs text-on-surface-variant">6 Questions</p>
-                  </div>
-                </div>
-                <div className="text-right">
-                  <span className="text-primary font-bold">30m</span>
-                </div>
-              </div>
-              <div className="flex items-center justify-between p-4 bg-surface-container-low rounded-md">
-                <div className="flex items-center gap-3">
-                  <span className="material-symbols-outlined text-[#6b38d4]">article</span>
-                  <div>
-                    <p className="font-semibold text-sm text-on-surface">Section C: Long Answer</p>
-                    <p className="text-xs text-on-surface-variant">2 Questions</p>
-                  </div>
-                </div>
-                <div className="text-right">
-                  <span className="text-primary font-bold">50m</span>
-                </div>
-              </div>
-              <button className="w-full py-3 border-2 border-primary/20 bg-transparent text-primary font-semibold rounded-md flex items-center justify-center gap-2 hover:bg-primary/5 transition-colors mt-4 outline-none cursor-pointer">
-                <span className="material-symbols-outlined">add_circle</span>
-                Adjust Distribution
-              </button>
-            </div>
-          </Card>
-        </section>
+          <Field
+            label="Academic year"
+            error={fieldErrors.academic_year}
+            required
+          >
+            <select
+              value={form.academic_year}
+              disabled={loadingYears || !years.length}
+              onChange={(e) => set("academic_year", e.target.value)}
+              className="w-full bg-surface-container-low rounded-md px-4 py-3 text-sm text-on-surface border border-outline-variant disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-primary/40"
+            >
+              {loadingYears && <option>Loading…</option>}
+              {!loadingYears && !years.length && (
+                <option value="">No academic years exist yet</option>
+              )}
+              {years.map((y) => (
+                <option key={y.id} value={y.id}>
+                  {y.name}
+                  {y.is_active ? " (current)" : ""}
+                </option>
+              ))}
+            </select>
+          </Field>
 
-        {/* Section 3: AI Question Generator */}
-        <section className="bg-surface-container-lowest rounded-lg overflow-hidden shadow-sm relative border border-outline-variant/10">
-          <div className="absolute top-0 right-0 p-8 opacity-10 pointer-events-none hidden md:block">
-            <span className="material-symbols-outlined text-[120px]">auto_awesome</span>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <Field label="Starts" error={fieldErrors.start_date} required>
+              <input
+                type="date"
+                value={form.start_date}
+                onChange={(e) => set("start_date", e.target.value)}
+                className="w-full bg-surface-container-low rounded-md px-4 py-3 text-sm text-on-surface border border-outline-variant focus:outline-none focus:ring-2 focus:ring-primary/40"
+              />
+            </Field>
+            <Field label="Ends" error={fieldErrors.end_date} required>
+              <input
+                type="date"
+                value={form.end_date}
+                min={form.start_date || undefined}
+                onChange={(e) => set("end_date", e.target.value)}
+                className="w-full bg-surface-container-low rounded-md px-4 py-3 text-sm text-on-surface border border-outline-variant focus:outline-none focus:ring-2 focus:ring-primary/40"
+              />
+            </Field>
           </div>
-          <div className="p-8 border-b border-surface-container-low relative z-10">
-            <div className="flex items-center gap-3 mb-2">
-              <span className="material-symbols-outlined text-[#924700]">psychology</span>
-              <h2 className="text-xl font-bold font-display text-on-surface">AI Question Paper Generator</h2>
-              <span className="px-2 py-0.5 bg-[#b75b00]/10 text-[#924700] text-2xs font-bold rounded uppercase tracking-wider">Beta</span>
-            </div>
-            <p className="text-sm text-on-surface-variant max-w-2xl">Use our intelligent engine to generate high-quality questions based on your curriculum and past paper trends.</p>
-          </div>
-          <div className="p-8 grid grid-cols-1 lg:grid-cols-12 gap-8 relative z-10">
-            
-            {/* Generator Controls */}
-            <div className="lg:col-span-4 space-y-6">
-              <div>
-                <label className="block text-sm font-medium text-on-surface-variant mb-1.5">Focus Topic/Chapter</label>
-                <input className="w-full bg-surface-container-low border-none rounded-md px-4 py-3 focus:ring-2 focus:ring-[#924700]/40 outline-none" placeholder="e.g. Thermodynamics & Heat Transfer" type="text" />
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-on-surface-variant mb-1.5">Difficulty</label>
-                  <select className="w-full bg-surface-container-low border-none rounded-md px-4 py-3 focus:ring-2 focus:ring-[#924700]/40 outline-none">
-                    <option>Standard</option>
-                    <option>Advanced</option>
-                    <option>Expert</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-on-surface-variant mb-1.5">No. of Questions</label>
-                  <input className="w-full bg-surface-container-low border-none rounded-md px-4 py-3 focus:ring-2 focus:ring-[#924700]/40 outline-none" type="number" defaultValue="15" />
-                </div>
-              </div>
-              <button className="w-full bg-gradient-to-br from-[#924700] to-[#b75b00] text-white py-4 rounded-md font-bold shadow-lg shadow-[#924700]/20 flex items-center justify-center gap-2 hover:scale-[0.98] transition-transform duration-150 outline-none border-none cursor-pointer">
-                <span className="material-symbols-outlined">magic_button</span>
-                Generate Question Paper
-              </button>
-            </div>
 
-            {/* Preview Pane */}
-            <div className="lg:col-span-8 bg-surface-container-low rounded-lg p-6 min-h-[300px] border border-surface-container">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-2">
-                <span className="text-xs font-bold uppercase tracking-widest text-on-surface-variant opacity-60">Generated Preview</span>
-                <div className="flex gap-2">
-                  <button className="p-2 hover:bg-white rounded-md transition-colors outline-none cursor-pointer border-none bg-transparent">
-                    <span className="material-symbols-outlined text-sm block">refresh</span>
-                  </button>
-                  <button className="p-2 hover:bg-white rounded-md transition-colors outline-none cursor-pointer border-none bg-transparent">
-                    <span className="material-symbols-outlined text-sm block">download</span>
-                  </button>
-                </div>
-              </div>
-              <div className="space-y-6">
-                <div className="p-4 bg-white rounded-md shadow-sm border border-outline-variant/5">
-                  <p className="text-xs font-bold text-[#924700] mb-1">Q1. MULTIPLE CHOICE [2m]</p>
-                  <p className="text-sm font-medium text-on-surface mb-4">A Carnot engine operates between two reservoirs at temperatures of 500 K and 300 K. What is its efficiency?</p>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                    <div className="p-2 bg-surface-container-low rounded text-xs text-on-surface">A) 20%</div>
-                    <div className="p-2 bg-surface-container-low rounded text-xs text-on-surface">B) 40%</div>
-                    <div className="p-2 bg-surface-container-low rounded text-xs text-on-surface">C) 60%</div>
-                    <div className="p-2 bg-surface-container-low rounded text-xs text-on-surface">D) 80%</div>
-                  </div>
-                </div>
-                <div className="p-4 bg-white rounded-md shadow-sm opacity-50 select-none blur-[1px] border border-outline-variant/5">
-                  <p className="text-xs font-bold text-[#924700] mb-1">Q2. SHORT ANSWER [5m]</p>
-                  <p className="text-sm font-medium text-on-surface">Explain the Zeroth Law of Thermodynamics and its significance in temperature measurement...</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
+          {fieldErrors.non_field_errors && (
+            <p className="text-xs text-error">{fieldErrors.non_field_errors}</p>
+          )}
+        </Card>
 
-        {/* Final Actions */}
-        <footer className="flex flex-col sm:flex-row items-center justify-end gap-4 py-8">
-          <button className="w-full sm:w-auto px-8 py-3 bg-transparent text-on-surface-variant font-semibold hover:bg-surface-container-high rounded-md transition-colors outline-none border-none cursor-pointer">
+        <div className="flex flex-col sm:flex-row gap-3 sm:justify-end">
+          <button
+            onClick={() => navigate("/teacher/exams")}
+            disabled={saving}
+            className="px-6 py-3 text-sm font-semibold rounded-md text-on-surface-variant hover:bg-surface-container-high disabled:opacity-50"
+          >
             Cancel
           </button>
-          <button className="w-full sm:w-auto px-8 py-3 bg-surface-container-high text-primary font-bold rounded-md hover:bg-surface-container-highest transition-colors outline-none border-none cursor-pointer">
-            Save Draft
+          <button
+            onClick={() => submit(false)}
+            disabled={saving || !years.length}
+            className="px-6 py-3 text-sm font-bold rounded-md bg-surface-container-high text-primary hover:bg-surface-container-highest disabled:opacity-50"
+          >
+            {saving ? "Saving…" : "Save as draft"}
           </button>
-          <button className="w-full sm:w-auto px-10 py-3 bg-gradient-to-r from-primary to-primary-container text-white font-bold rounded-md shadow-xl shadow-primary/20 hover:scale-[1.02] transition-transform outline-none border-none cursor-pointer">
-            Publish Exam
+          <button
+            onClick={() => submit(true)}
+            disabled={saving || !years.length}
+            title="Published exams are visible to students and parents"
+            className="px-8 py-3 text-sm font-bold rounded-md bg-primary text-on-primary hover:opacity-90 disabled:opacity-50"
+          >
+            {saving ? "Saving…" : "Publish exam"}
           </button>
-        </footer>
+        </div>
 
+        <p className="text-xs text-on-surface-variant text-center">
+          A draft stays hidden from students and parents until you publish it.
+        </p>
       </div>
     </MainLayout>
   );
-};
+}
 
-export default CreateExamPage;
+function Field({ label, error, required, children }) {
+  return (
+    <label className="block">
+      <span className="block text-sm font-medium text-on-surface-variant mb-1.5">
+        {label}
+        {required && <span className="text-error"> *</span>}
+      </span>
+      {children}
+      {error && <span className="block mt-1 text-xs text-error">{error}</span>}
+    </label>
+  );
+}

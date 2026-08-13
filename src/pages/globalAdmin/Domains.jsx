@@ -17,7 +17,7 @@ return(
 
 <div>
 
-<p className="text-xs tracking-widest text-[#2563eb] font-semibold mb-2">
+<p className="text-xs tracking-widest text-primary font-semibold mb-2">
 ARCHITECTURE
 </p>
 
@@ -30,7 +30,7 @@ Domain Management
 
 <button
 onClick={()=>navigate("/global-admin/add-domain")}
-className="bg-[#1d5fd0] text-white px-5 py-3 rounded-lg text-sm font-semibold flex items-center gap-2 shadow-md"
+className="bg-primary text-white px-5 py-3 rounded-lg text-sm font-semibold flex items-center gap-2 shadow-md"
 >
 
 <span className="material-symbols-outlined text-[18px]">
@@ -59,7 +59,7 @@ Add Custom Domain
 
 <thead>
 
-<tr className="bg-[#f1f4fb] text-sm text-gray-500">
+<tr className="bg-surface-container-low text-sm text-gray-500">
 
 <th className="px-6 py-4">
 School Name

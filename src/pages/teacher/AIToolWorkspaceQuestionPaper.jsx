@@ -217,7 +217,7 @@ const AIToolWorkspaceQuestionPaper = () => {
             <span className="material-symbols-outlined text-xs md:text-sm">arrow_back</span>
             Back to AI Tools
           </button>
-          <span className="bg-[#ffdcc6] text-[#311400] px-1.5 md:px-3 py-0.5 md:py-1 rounded-full text-3xs md:text-xs font-bold flex items-center gap-0.5 md:gap-1 font-display">
+          <span className="bg-secondary-container text-on-secondary-container px-1.5 md:px-3 py-0.5 md:py-1 rounded-full text-3xs md:text-xs font-bold flex items-center gap-0.5 md:gap-1 font-display">
             <span className="material-symbols-outlined text-2xs md:text-sm">psychology</span>
             AI POWERED
           </span>
@@ -364,12 +364,12 @@ const AIToolWorkspaceQuestionPaper = () => {
             </div>
 
             {/* AI Suggestion Panel */}
-            <div className="bg-[#ffdcc6]/30 p-3 md:p-5 rounded-lg md:rounded-2xl border-l-4 border-[#924700]">
-              <h4 className="text-3xs md:text-sm font-bold text-[#924700] flex items-center gap-1 md:gap-2 mb-1 md:mb-2 font-display">
+            <div className="bg-secondary-container/30 p-3 md:p-5 rounded-lg md:rounded-2xl border-l-4 border-secondary">
+              <h4 className="text-3xs md:text-sm font-bold text-secondary flex items-center gap-1 md:gap-2 mb-1 md:mb-2 font-display">
                 <span className="material-symbols-outlined text-2xs md:text-sm">lightbulb</span>
                 Intelligent Tip
               </h4>
-              <p className="text-3xs md:text-sm text-[#723600] leading-relaxed font-body">
+              <p className="text-3xs md:text-sm text-on-secondary-container leading-relaxed font-body">
                 Official papers split questions into Sections by cognitive complexity (Recall, Application, Synthesis) to map standard national syllabus grading protocols.
               </p>
             </div>
@@ -399,7 +399,7 @@ const AIToolWorkspaceQuestionPaper = () => {
               </div>
               
               <div className="p-4 md:p-8 flex-1 overflow-y-auto bg-neutral-50/50" ref={previewRef}>
-                <div className="max-w-2xl mx-auto space-y-8 bg-white p-8 rounded-xl shadow-sm border border-outline-variant/30 font-serif text-[#1e293b]">
+                <div className="max-w-2xl mx-auto space-y-8 bg-white p-8 rounded-xl shadow-sm border border-outline-variant/30 font-serif text-on-surface">
                   {loading ? (
                     <AIWorkspacePreviewSkeleton />
                   ) : isEditing && result ? (

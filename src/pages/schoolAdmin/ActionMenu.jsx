@@ -23,7 +23,7 @@ export default function ActionMenu({ studentId }) {
           e.stopPropagation();
           setIsOpen(!isOpen);
         }}
-        className="text-[#0058be] hover:bg-[#e5eeff] p-2 rounded-full transition-colors"
+        className="text-primary hover:bg-surface-container-low p-2 rounded-full transition-colors"
       >
         <span className="material-symbols-outlined text-xl">more_vert</span>
       </button>

@@ -9,11 +9,11 @@ const getTypeVisuals = (type) => {
   switch(type) {
     case 'LessonPlan': return { icon: 'assignment', iconColor: 'text-blue-500', badgeColor: 'bg-blue-50 text-blue-700', path: 'lesson-plan' };
     case 'Worksheet': return { icon: 'description', iconColor: 'text-indigo-500', badgeColor: 'bg-indigo-50 text-indigo-700', path: 'worksheet' };
-    case 'Quiz': return { icon: 'quiz', iconColor: 'text-[#6b38d4]', badgeColor: 'bg-purple-50 text-purple-700', path: 'quiz' };
+    case 'Quiz': return { icon: 'quiz', iconColor: 'text-primary', badgeColor: 'bg-purple-50 text-purple-700', path: 'quiz' };
     case 'QuestionPaper': return { icon: 'history_edu', iconColor: 'text-red-500', badgeColor: 'bg-red-50 text-red-700', path: 'question-paper' };
     case 'StudyNotes': return { icon: 'menu_book', iconColor: 'text-green-500', badgeColor: 'bg-green-50 text-green-700', path: 'study-notes' };
     case 'PresentationOutline': return { icon: 'speaker_notes', iconColor: 'text-teal-500', badgeColor: 'bg-teal-50 text-teal-700', path: 'presentation-outline' };
-    case 'Rubric': return { icon: 'rule', iconColor: 'text-[#b75b00]', badgeColor: 'bg-orange-50 text-orange-700', path: 'rubric' };
+    case 'Rubric': return { icon: 'rule', iconColor: 'text-secondary', badgeColor: 'bg-orange-50 text-orange-700', path: 'rubric' };
     default: return { icon: 'article', iconColor: 'text-gray-500', badgeColor: 'bg-gray-50 text-gray-700', path: 'lesson-plan' };
   }
 };

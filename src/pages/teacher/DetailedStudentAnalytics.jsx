@@ -51,7 +51,7 @@ Back to Student Analytics
               </div>
               <div className="bg-surface-container-low p-3 rounded-md">
                 <p className="text-2xs uppercase font-bold text-slate-500 tracking-wider">Rank</p>
-                <p className="text-xl font-extrabold font-display text-[#6b38d4]">04/45</p>
+                <p className="text-xl font-extrabold font-display text-primary">04/45</p>
               </div>
               <div className="bg-surface-container-low p-3 rounded-md">
                 <p className="text-2xs uppercase font-bold text-slate-500 tracking-wider">Assessments</p>
@@ -137,10 +137,10 @@ Back to Student Analytics
                       <td className="py-4 text-right font-extrabold text-primary">95%</td>
                     </tr>
                     <tr className="hover:bg-blue-50/20 transition-colors">
-                      <td className="py-4 font-semibold text-on-surface text-[#924700]">Organic Chemistry</td>
+                      <td className="py-4 font-semibold text-on-surface text-secondary">Organic Chemistry</td>
                       <td className="py-4 text-on-surface-variant">68%</td>
                       <td className="py-4 text-on-surface-variant">72%</td>
-                      <td className="py-4 text-right font-extrabold text-[#924700]">70%</td>
+                      <td className="py-4 text-right font-extrabold text-secondary">70%</td>
                     </tr>
                     <tr className="hover:bg-blue-50/20 transition-colors">
                       <td className="py-4 font-semibold text-on-surface">Computer Science</td>
@@ -158,8 +158,8 @@ Back to Student Analytics
           <div className="space-y-6">
             
             {/* Weak Areas Panel */}
-            <div className="bg-surface-container-high rounded-lg p-6 border-l-4 border-[#924700]">
-              <div className="flex items-center gap-2 mb-4 text-[#924700]">
+            <div className="bg-surface-container-high rounded-lg p-6 border-l-4 border-secondary">
+              <div className="flex items-center gap-2 mb-4 text-secondary">
                 <span className="material-symbols-outlined block" style={{fontVariationSettings: "'FILL' 1"}}>psychology</span>
                 <h3 className="font-display font-bold">Weak Areas</h3>
               </div>
@@ -168,19 +168,19 @@ Back to Student Analytics
                 <div className="bg-white/60 p-3 rounded-md">
                   <p className="text-sm font-bold text-on-surface">Chemical Bonding</p>
                   <div className="mt-2 h-1 w-full bg-slate-200 rounded-full overflow-hidden">
-                    <div className="bg-[#924700] h-full w-[45%]"></div>
+                    <div className="bg-secondary h-full w-[45%]"></div>
                   </div>
                   <p className="text-2xs mt-1 text-slate-500">Mastery: 45%</p>
                 </div>
                 <div className="bg-white/60 p-3 rounded-md">
                   <p className="text-sm font-bold text-on-surface">Fluid Dynamics</p>
                   <div className="mt-2 h-1 w-full bg-slate-200 rounded-full overflow-hidden">
-                    <div className="bg-[#924700] h-full w-[58%]"></div>
+                    <div className="bg-secondary h-full w-[58%]"></div>
                   </div>
                   <p className="text-2xs mt-1 text-slate-500">Mastery: 58%</p>
                 </div>
               </div>
-              <button className="w-full mt-6 bg-[#924700] text-white py-3 rounded-md text-sm font-bold shadow-sm hover:opacity-90 transition-opacity flex items-center justify-center gap-2 outline-none border-none cursor-pointer">
+              <button className="w-full mt-6 bg-secondary text-white py-3 rounded-md text-sm font-bold shadow-sm hover:opacity-90 transition-opacity flex items-center justify-center gap-2 outline-none border-none cursor-pointer">
                 <span className="material-symbols-outlined text-sm block">auto_awesome</span>
                 Recommend Practice
               </button>

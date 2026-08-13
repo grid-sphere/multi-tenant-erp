@@ -253,7 +253,7 @@ const TeacherProfileManagement = () => {
         
         {/* Page Title */}
         <div className="mb-6 pl-4 md:pl-0">
-          <p className="text-[#0058be] dark:text-blue-400 font-bold text-sm tracking-widest uppercase mb-1">Account Management</p>
+          <p className="text-primary dark:text-blue-400 font-bold text-sm tracking-widest uppercase mb-1">Account Management</p>
           <h2 className="text-4xl font-extrabold font-display tracking-tight text-slate-800 dark:text-white">My Profile</h2>
         </div>
 
@@ -280,17 +280,17 @@ const TeacherProfileManagement = () => {
         {/* Profile Identity Card */}
         <section className="bg-surface-container-lowest dark:bg-slate-900/80 rounded-xl p-8 flex flex-col md:flex-row gap-8 items-start relative overflow-hidden shadow-sm border border-gray-100 dark:border-slate-800">
           {/* Subtle Background Texture */}
-          <div className="absolute top-0 right-0 w-64 h-64 bg-[#0058be]/5 rounded-full -mr-20 -mt-20 blur-3xl"></div>
+          <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full -mr-20 -mt-20 blur-3xl"></div>
           
           <div className="relative group mx-auto md:mx-0">
-            <div className="w-32 h-32 md:w-40 md:h-40 rounded-xl overflow-hidden shadow-lg border-4 border-white dark:border-slate-900 bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center text-[#0058be] dark:text-blue-400">
+            <div className="w-32 h-32 md:w-40 md:h-40 rounded-xl overflow-hidden shadow-lg border-4 border-white dark:border-slate-900 bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center text-primary dark:text-blue-400">
               {profileImage && profileImage !== "https://via.placeholder.com/400x400.png?text=Teacher+Profile" ? (
                 <img alt={fullName} className="w-full h-full object-cover" src={profileImage} />
               ) : (
                 <span className="text-5xl font-bold">{getInitials(teacherProfile?.first_name, teacherProfile?.last_name)}</span>
               )}
             </div>
-            <button className="absolute -bottom-2 -right-2 p-3 bg-[#0058be] text-white rounded-xl shadow-xl hover:scale-105 active:scale-95 transition-transform outline-none border-none cursor-pointer">
+            <button className="absolute -bottom-2 -right-2 p-3 bg-primary text-white rounded-xl shadow-xl hover:scale-105 active:scale-95 transition-transform outline-none border-none cursor-pointer">
               <span className="material-symbols-outlined text-lg block">photo_camera</span>
             </button>
           </div>
@@ -299,17 +299,17 @@ const TeacherProfileManagement = () => {
             <div className="flex flex-col sm:flex-row justify-between items-start gap-4 mb-4">
               <div>
                 <h3 className="text-3xl font-bold font-display text-slate-800 dark:text-white mb-1">{fullName}</h3>
-                <p className="text-[#0058be] dark:text-blue-400 font-semibold flex items-center gap-2">
+                <p className="text-primary dark:text-blue-400 font-semibold flex items-center gap-2">
                   <span className="material-symbols-outlined text-sm block">verified</span>
                   {qualification}
                 </p>
               </div>
-              <span className="bg-[#eff4ff] dark:bg-blue-950/30 border border-blue-100 dark:border-blue-800/40 px-4 py-1.5 rounded-full text-xs font-bold text-[#0058be] dark:text-blue-300 uppercase tracking-wider shadow-sm">Active Status</span>
+              <span className="bg-surface-container-low dark:bg-blue-950/30 border border-blue-100 dark:border-blue-800/40 px-4 py-1.5 rounded-full text-xs font-bold text-primary dark:text-blue-300 uppercase tracking-wider shadow-sm">Active Status</span>
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-y-4 gap-x-12 mt-6">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-lg bg-gray-50 dark:bg-slate-800 flex items-center justify-center text-[#0058be] dark:text-blue-400 shrink-0 border border-gray-100 dark:border-slate-700">
+                <div className="w-10 h-10 rounded-lg bg-gray-50 dark:bg-slate-800 flex items-center justify-center text-primary dark:text-blue-400 shrink-0 border border-gray-100 dark:border-slate-700">
                   <span className="material-symbols-outlined block">mail</span>
                 </div>
                 <div className="overflow-hidden">
@@ -318,7 +318,7 @@ const TeacherProfileManagement = () => {
                 </div>
               </div>
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-lg bg-gray-50 dark:bg-slate-800 flex items-center justify-center text-[#0058be] dark:text-blue-400 shrink-0 border border-gray-100 dark:border-slate-700">
+                <div className="w-10 h-10 rounded-lg bg-gray-50 dark:bg-slate-800 flex items-center justify-center text-primary dark:text-blue-400 shrink-0 border border-gray-100 dark:border-slate-700">
                   <span className="material-symbols-outlined block">call</span>
                 </div>
                 <div>
@@ -327,7 +327,7 @@ const TeacherProfileManagement = () => {
                 </div>
               </div>
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-lg bg-gray-50 dark:bg-slate-800 flex items-center justify-center text-[#0058be] dark:text-blue-400 shrink-0 border border-gray-100 dark:border-slate-700">
+                <div className="w-10 h-10 rounded-lg bg-gray-50 dark:bg-slate-800 flex items-center justify-center text-primary dark:text-blue-400 shrink-0 border border-gray-100 dark:border-slate-700">
                   <span className="material-symbols-outlined block">badge</span>
                 </div>
                 <div>
@@ -336,7 +336,7 @@ const TeacherProfileManagement = () => {
                 </div>
               </div>
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-lg bg-gray-50 dark:bg-slate-800 flex items-center justify-center text-[#0058be] dark:text-blue-400 shrink-0 border border-gray-100 dark:border-slate-700">
+                <div className="w-10 h-10 rounded-lg bg-gray-50 dark:bg-slate-800 flex items-center justify-center text-primary dark:text-blue-400 shrink-0 border border-gray-100 dark:border-slate-700">
                   <span className="material-symbols-outlined block">school</span>
                 </div>
                 <div>
@@ -351,7 +351,7 @@ const TeacherProfileManagement = () => {
               <div className="flex flex-wrap gap-2">
                 {specializations.length > 0 ? (
                   specializations.map((item) => (
-                    <span key={item} className="px-3 py-1 bg-gray-50 dark:bg-slate-800 rounded-md text-xs font-semibold text-[#0058be] dark:text-blue-400 border border-gray-100 dark:border-slate-700">
+                    <span key={item} className="px-3 py-1 bg-gray-50 dark:bg-slate-800 rounded-md text-xs font-semibold text-primary dark:text-blue-400 border border-gray-100 dark:border-slate-700">
                       {item}
                     </span>
                   ))
@@ -368,7 +368,7 @@ const TeacherProfileManagement = () => {
         {/* Edit Profile Section */}
         <section className="bg-surface-container-lowest dark:bg-slate-900/80 rounded-xl p-8 shadow-sm border border-gray-100 dark:border-slate-800">
           <div className="flex items-center gap-3 mb-8">
-            <span className="material-symbols-outlined text-[#0058be] dark:text-blue-400 block">edit_note</span>
+            <span className="material-symbols-outlined text-primary dark:text-blue-400 block">edit_note</span>
             <h4 className="text-xl font-bold font-display text-slate-800 dark:text-white">Update Profile Information</h4>
           </div>
           
@@ -379,7 +379,7 @@ const TeacherProfileManagement = () => {
                 <label className="text-sm font-bold text-gray-600 dark:text-slate-300 ml-1">First Name</label>
                 <div className="relative group">
                   <input 
-                    className="w-full bg-[#f8f9ff] dark:bg-slate-800 border border-transparent dark:border-slate-700 rounded-md px-4 py-3.5 text-slate-700 dark:text-white font-medium focus:ring-2 focus:ring-[#0058be]/20 focus:border-[#0058be]/40 focus:bg-white dark:focus:bg-slate-900 transition-all outline-none" 
+                    className="w-full bg-background dark:bg-slate-800 border border-transparent dark:border-slate-700 rounded-md px-4 py-3.5 text-slate-700 dark:text-white font-medium focus:ring-2 focus:ring-primary/20 focus:border-primary/40 focus:bg-white dark:focus:bg-slate-900 transition-all outline-none" 
                     placeholder="Enter first name" 
                     type="text" 
                     value={firstName}
@@ -389,7 +389,7 @@ const TeacherProfileManagement = () => {
                     }}
                     required
                   />
-                  <span className="absolute right-4 top-3.5 text-gray-400 group-focus-within:text-[#0058be] material-symbols-outlined text-sm block">person</span>
+                  <span className="absolute right-4 top-3.5 text-gray-400 group-focus-within:text-primary material-symbols-outlined text-sm block">person</span>
                 </div>
               </div>
 
@@ -397,7 +397,7 @@ const TeacherProfileManagement = () => {
                 <label className="text-sm font-bold text-gray-600 dark:text-slate-300 ml-1">Last Name</label>
                 <div className="relative group">
                   <input 
-                    className="w-full bg-[#f8f9ff] dark:bg-slate-800 border border-transparent dark:border-slate-700 rounded-md px-4 py-3.5 text-slate-700 dark:text-white font-medium focus:ring-2 focus:ring-[#0058be]/20 focus:border-[#0058be]/40 focus:bg-white dark:focus:bg-slate-900 transition-all outline-none" 
+                    className="w-full bg-background dark:bg-slate-800 border border-transparent dark:border-slate-700 rounded-md px-4 py-3.5 text-slate-700 dark:text-white font-medium focus:ring-2 focus:ring-primary/20 focus:border-primary/40 focus:bg-white dark:focus:bg-slate-900 transition-all outline-none" 
                     placeholder="Enter last name" 
                     type="text" 
                     value={lastName}
@@ -407,7 +407,7 @@ const TeacherProfileManagement = () => {
                     }}
                     required
                   />
-                  <span className="absolute right-4 top-3.5 text-gray-400 group-focus-within:text-[#0058be] material-symbols-outlined text-sm block">person</span>
+                  <span className="absolute right-4 top-3.5 text-gray-400 group-focus-within:text-primary material-symbols-outlined text-sm block">person</span>
                 </div>
               </div>
               
@@ -415,7 +415,7 @@ const TeacherProfileManagement = () => {
                 <label className="text-sm font-bold text-gray-600 dark:text-slate-300 ml-1">Verified Contact Phone</label>
                 <div className="relative group">
                   <input 
-                    className="w-full bg-[#f8f9ff] dark:bg-slate-800 border border-transparent dark:border-slate-700 rounded-md px-4 py-3.5 text-slate-700 dark:text-white font-medium focus:ring-2 focus:ring-[#0058be]/20 focus:border-[#0058be]/40 focus:bg-white dark:focus:bg-slate-900 transition-all outline-none" 
+                    className="w-full bg-background dark:bg-slate-800 border border-transparent dark:border-slate-700 rounded-md px-4 py-3.5 text-slate-700 dark:text-white font-medium focus:ring-2 focus:ring-primary/20 focus:border-primary/40 focus:bg-white dark:focus:bg-slate-900 transition-all outline-none" 
                     placeholder="Enter phone number" 
                     type="tel" 
                     value={phone}
@@ -424,7 +424,7 @@ const TeacherProfileManagement = () => {
                       sessionStorage.setItem("edit_profile_phone", e.target.value);
                     }}
                   />
-                  <span className="absolute right-4 top-3.5 text-gray-400 group-focus-within:text-[#0058be] material-symbols-outlined text-sm block">call</span>
+                  <span className="absolute right-4 top-3.5 text-gray-400 group-focus-within:text-primary material-symbols-outlined text-sm block">call</span>
                 </div>
               </div>
               
@@ -432,21 +432,21 @@ const TeacherProfileManagement = () => {
                 <label className="text-sm font-bold text-gray-600 dark:text-slate-300 ml-1">Update Password</label>
                 <div className="relative group">
                   <input 
-                    className="w-full bg-[#f8f9ff] dark:bg-slate-800 border border-transparent dark:border-slate-700 rounded-md px-4 py-3.5 text-slate-700 dark:text-white font-medium focus:ring-2 focus:ring-[#0058be]/20 focus:border-[#0058be]/40 focus:bg-white dark:focus:bg-slate-900 transition-all outline-none" 
+                    className="w-full bg-background dark:bg-slate-800 border border-transparent dark:border-slate-700 rounded-md px-4 py-3.5 text-slate-700 dark:text-white font-medium focus:ring-2 focus:ring-primary/20 focus:border-primary/40 focus:bg-white dark:focus:bg-slate-900 transition-all outline-none" 
                     placeholder="Enter new password (optional)" 
                     type="password" 
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                   />
-                  <span className="absolute right-4 top-3.5 text-gray-400 group-focus-within:text-[#0058be] material-symbols-outlined text-sm block">lock</span>
+                  <span className="absolute right-4 top-3.5 text-gray-400 group-focus-within:text-primary material-symbols-outlined text-sm block">lock</span>
                 </div>
                 <p className="text-2xs text-gray-500 dark:text-slate-400 ml-1 font-medium">Leave blank if you do not wish to change your password.</p>
               </div>
               
               <div className="bg-amber-50 dark:bg-amber-950/20 p-4 rounded-xl flex items-start gap-3 border border-amber-100 dark:border-amber-900/30 md:col-span-2">
-                <span className="material-symbols-outlined text-[#924700] text-xl block">auto_awesome</span>
+                <span className="material-symbols-outlined text-secondary text-xl block">auto_awesome</span>
                 <div>
-                  <p className="text-xs font-bold text-[#924700] uppercase">AI Security Insight</p>
+                  <p className="text-xs font-bold text-secondary uppercase">AI Security Insight</p>
                   <p className="text-xs text-amber-900 dark:text-amber-200 mt-1">Profile data is loaded from your current teacher account. Update password details only after confirming with your admin policy.</p>
                 </div>
               </div>
@@ -473,7 +473,7 @@ const TeacherProfileManagement = () => {
                 Reset Changes
               </button>
               <button 
-                className="w-full sm:w-auto flex items-center justify-center gap-2 px-10 py-3.5 rounded-md text-sm font-bold text-white bg-gradient-to-r from-[#0058be] to-[#2170e4] shadow-lg shadow-[#0058be]/20 hover:scale-[1.02] active:scale-95 transition-all outline-none border-none cursor-pointer disabled:opacity-70 disabled:scale-100" 
+                className="w-full sm:w-auto flex items-center justify-center gap-2 px-10 py-3.5 rounded-md text-sm font-bold text-white bg-gradient-to-r from-primary to-primary-container shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all outline-none border-none cursor-pointer disabled:opacity-70 disabled:scale-100" 
                 type="submit"
                 disabled={saving}
               >

@@ -240,11 +240,11 @@ const GradesAssessmentOverview = () => {
                     iconBg = 'bg-primary/10'; 
                     iconColor = 'text-primary'; 
                   } else if (assessment.color === 'purple') { 
-                    iconBg = 'bg-[#6b38d4]/10'; 
-                    iconColor = 'text-[#6b38d4]'; 
+                    iconBg = 'bg-primary/10'; 
+                    iconColor = 'text-primary'; 
                   } else { 
-                    iconBg = 'bg-[#b75b00]/10'; 
-                    iconColor = 'text-[#b75b00]'; 
+                    iconBg = 'bg-secondary/10'; 
+                    iconColor = 'text-secondary'; 
                   }
 
                   return (

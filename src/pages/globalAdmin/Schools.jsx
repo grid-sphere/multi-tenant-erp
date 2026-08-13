@@ -29,7 +29,7 @@ and oversee administrative access across the global network.
 
 <div className="flex gap-4">
 
-<button className="px-6 py-3 bg-[#e5eeff] text-[#0058be] font-semibold rounded-md flex items-center gap-2">
+<button className="px-6 py-3 bg-surface-container-low text-primary font-semibold rounded-md flex items-center gap-2">
 
 <span className="material-symbols-outlined">
 ios_share
@@ -43,7 +43,7 @@ Export List
 
 <button
 onClick={()=>navigate("/global-admin/add-school")}
-className="px-6 py-3 bg-gradient-to-r from-[#0058be] to-[#2170e4] text-white font-semibold rounded-md shadow-lg flex items-center gap-2"
+className="px-6 py-3 bg-gradient-to-r from-primary to-primary-container text-white font-semibold rounded-md shadow-lg flex items-center gap-2"
 >
 <span className="material-symbols-outlined">
 add_business
@@ -72,7 +72,7 @@ Total Institutions
 1,284
 </p>
 
-<span className="absolute top-4 right-4 text-xs font-bold text-[#0058be] bg-white px-3 py-1 rounded-full border">
+<span className="absolute top-4 right-4 text-xs font-bold text-primary bg-white px-3 py-1 rounded-full border">
 
 +12% vs last month
 
@@ -94,7 +94,7 @@ Enterprise Partners
 
 <div className="mt-2 h-1 bg-gray-200 rounded-full overflow-hidden">
 
-<div className="h-full bg-gradient-to-r from-[#0058be] to-[#2170e4] w-3/4"></div>
+<div className="h-full bg-gradient-to-r from-primary to-primary-container w-3/4"></div>
 
 </div>
 
@@ -124,7 +124,7 @@ Active Subscriptions
 
 {/* filters */}
 
-<div className="bg-[#eff4ff] p-4 rounded-xl flex flex-wrap gap-4 items-center">
+<div className="bg-surface-container-low p-4 rounded-xl flex flex-wrap gap-4 items-center">
 
 <div className="relative flex-grow max-w-md">
 
@@ -164,7 +164,7 @@ className="w-full pl-10 pr-4 py-2 bg-white rounded-md text-sm outline-none"
 
 
 
-<button className="text-[#0058be] font-semibold text-sm">
+<button className="text-primary font-semibold text-sm">
 
 Clear Filters
 
@@ -182,7 +182,7 @@ Clear Filters
 
 <thead>
 
-<tr className="bg-[#f5f7ff] text-xs uppercase text-gray-400">
+<tr className="bg-background text-xs uppercase text-gray-400">
 
 <th className="px-6 py-4">
 School Details

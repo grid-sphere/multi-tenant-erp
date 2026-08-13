@@ -91,6 +91,12 @@ import AssignmentDetailPage from "../pages/teacher/AssignmentDetailPage";
 import CreateAssignmentPage from "../pages/teacher/CreateAssignmentPage";
 import EditAssignmentPage from "../pages/teacher/EditAssignmentPage";
 import PendingSubmissionsPage from "../pages/teacher/PendingSubmissionsPage";
+import MarkSubmissionPage from "../pages/teacher/MarkSubmissionPage";
+import MarkSchemeEditorPage from "../pages/teacher/MarkSchemeEditorPage";
+import MarkingProgressPage from "../pages/teacher/MarkingProgressPage";
+import TranscribePage from "../pages/teacher/TranscribePage";
+import MarkedWork from "../pages/student/MarkedWork";
+import ChildMarkedWork from "../pages/parent/ChildMarkedWork";
 import AttendanceOverview from "../pages/teacher/AttendanceOverview";
 import MarkAttendance from "../pages/teacher/MarkAttendance";
 import ClassPerformanceManagement from "../pages/teacher/ClassPerformanceManagement";
@@ -266,6 +272,22 @@ function AppRoutes() {
           }
         />
         <Route
+          path="/student/submit"
+          element={
+            <StudentProvider>
+              <Assignments mode="submit" />
+            </StudentProvider>
+          }
+        />
+        <Route
+          path="/student/submissions/:submissionId/marked"
+          element={
+            <StudentProvider>
+              <MarkedWork />
+            </StudentProvider>
+          }
+        />
+        <Route
           path="/student/attendance"
           element={
             <StudentProvider>
@@ -419,7 +441,11 @@ function AppRoutes() {
         <Route path="/teacher/assignments/create" element={<CreateAssignmentPage />} />
         <Route path="/teacher/assignments/:id" element={<AssignmentDetailPage />} />
         <Route path="/teacher/assignments/:id/edit" element={<EditAssignmentPage />} />
+        <Route path="/teacher/assignments/:id/mark-scheme" element={<MarkSchemeEditorPage />} />
         <Route path="/teacher/submissions/pending" element={<PendingSubmissionsPage />} />
+        <Route path="/teacher/marking/progress" element={<MarkingProgressPage />} />
+        <Route path="/teacher/tools/transcribe" element={<TranscribePage />} />
+        <Route path="/teacher/submissions/:submissionId/mark" element={<MarkSubmissionPage />} />
         <Route path="/teacher/attendance" element={<AttendanceOverview />} />
         <Route path="/teacher/attendance/mark/:id?" element={<MarkAttendance />} />
         <Route path="/teacher/exams" element={<ExamsListPage />} />
@@ -449,6 +475,7 @@ function AppRoutes() {
         <Route path="/parent/child-overview" element={<ParentProvider><ChildOverview /></ParentProvider>} />
         <Route path="/parent/attendance" element={<ParentProvider><AttendanceTracker /></ParentProvider>} />
         <Route path="/parent/assignments" element={<ParentProvider><AssignmentsOverview /></ParentProvider>} />
+        <Route path="/parent/submissions/:submissionId/marked" element={<ParentProvider><ChildMarkedWork /></ParentProvider>} />
         <Route path="/parent/grades" element={<ParentProvider><GradesAssessmentHub /></ParentProvider>} />
         <Route path="/parent/ai-insights" element={<ParentProvider><AllInsightsRecommendations /></ParentProvider>} />
         <Route path="/parent/notifications" element={<ParentProvider><NotificationsHub /></ParentProvider>} />

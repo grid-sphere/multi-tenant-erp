@@ -105,9 +105,14 @@ export const StudentProvider = ({ children }) => {
         ? dashboardResult.value
         : { stats: { total_assignments: 5, total_exams: 3 } };
 
+      // Previously this fell back to a hardcoded { "Grade 10", "A", ... }.
+      // The sidebar then displayed a class for students who have no enrollment
+      // record at all, so the app looked correct while every feature that
+      // depends on a real enrollment quietly failed. Null is honest: consumers
+      // already guard with `enroll || {}`.
       const enrollment = enrollmentResult.status === "fulfilled" && enrollmentResult.value
         ? enrollmentResult.value
-        : { class_level_name: "Grade 10", section_name: "A", roll_number: "10A-01", academic_year_name: "2026-2027" };
+        : null;
 
       const parents = parentsResult.status === "fulfilled" && parentsResult.value
         ? parentsResult.value

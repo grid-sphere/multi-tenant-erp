@@ -320,7 +320,7 @@ export default function EditTeacherAssignment() {
                   <span className="material-symbols-outlined text-base">delete</span>Delete
                 </button>
                 <button onClick={() => setIsEditing(true)}
-                  className="flex items-center gap-2 px-4 py-2 bg-[#f4ebff] text-[#6b38d4] text-sm font-bold rounded-md hover:bg-[#ead9ff] transition-colors">
+                  className="flex items-center gap-2 px-4 py-2 bg-primary-fixed text-primary text-sm font-bold rounded-md hover:bg-primary-fixed transition-colors">
                   <span className="material-symbols-outlined text-base">edit</span>Edit Profile
                 </button>
               </>
@@ -331,7 +331,7 @@ export default function EditTeacherAssignment() {
                   Cancel
                 </button>
                 <button onClick={handleSave} disabled={saving}
-                  className="flex items-center gap-2 px-4 py-2 bg-[#6b38d4] text-white text-sm font-bold rounded-md shadow-sm disabled:opacity-70">
+                  className="flex items-center gap-2 px-4 py-2 bg-primary text-white text-sm font-bold rounded-md shadow-sm disabled:opacity-70">
                   {saving && <span className="material-symbols-outlined animate-spin text-[16px]">progress_activity</span>}
                   {saving ? "Saving..." : "Save Changes"}
                 </button>

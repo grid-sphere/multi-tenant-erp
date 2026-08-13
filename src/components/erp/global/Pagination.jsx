@@ -6,7 +6,7 @@ export default function Pagination({ currentPage, totalPages, onPageChange }) {
       <button 
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
-        className="px-4 py-2 text-sm font-semibold text-gray-600 hover:text-[#0058be] disabled:opacity-30 disabled:cursor-not-allowed flex items-center gap-1"
+        className="px-4 py-2 text-sm font-semibold text-gray-600 hover:text-primary disabled:opacity-30 disabled:cursor-not-allowed flex items-center gap-1"
       >
         <span className="material-symbols-outlined text-sm">arrow_back</span> Previous
       </button>
@@ -18,7 +18,7 @@ export default function Pagination({ currentPage, totalPages, onPageChange }) {
       <button 
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage >= totalPages}
-        className="px-4 py-2 text-sm font-semibold text-gray-600 hover:text-[#0058be] disabled:opacity-30 disabled:cursor-not-allowed flex items-center gap-1"
+        className="px-4 py-2 text-sm font-semibold text-gray-600 hover:text-primary disabled:opacity-30 disabled:cursor-not-allowed flex items-center gap-1"
       >
         Next <span className="material-symbols-outlined text-sm">arrow_forward</span>
       </button>

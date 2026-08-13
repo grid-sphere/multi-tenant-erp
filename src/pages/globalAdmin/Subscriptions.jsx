@@ -15,7 +15,7 @@ return(
 
 <div>
 
-<p className="text-[11px] font-bold tracking-widest text-[#924700] uppercase">
+<p className="text-[11px] font-bold tracking-widest text-secondary uppercase">
 PLATFORM MANAGEMENT
 </p>
 
@@ -32,7 +32,7 @@ Configure institutional tiers, resource limits, and AI credit allocation for the
 
 <button
 onClick={()=>navigate("/global-admin/create-plan")}
-className="bg-gradient-to-r from-[#0058be] to-[#2170e4] text-white px-6 py-3 rounded-xl font-semibold flex items-center gap-2 shadow-lg hover:opacity-90 transition"
+className="bg-gradient-to-r from-primary to-primary-container text-white px-6 py-3 rounded-xl font-semibold flex items-center gap-2 shadow-lg hover:opacity-90 transition"
 >
 
 <span className="material-symbols-outlined">
@@ -85,7 +85,7 @@ Active Institutions
 
 {/* revenue */}
 
-<div className="col-span-8 bg-[#2170e4] text-white p-6 rounded-xl relative overflow-hidden">
+<div className="col-span-8 bg-primary-container text-white p-6 rounded-xl relative overflow-hidden">
 
 <h3 className="text-xl font-bold mb-2">
 Annual Revenue Projection
@@ -121,7 +121,7 @@ Estimated ARR
 
 <thead>
 
-<tr className="bg-[#eef2ff] text-sm text-gray-500">
+<tr className="bg-surface-container-low text-sm text-gray-500">
 
 <th className="px-8 py-5">
 PLAN NAME

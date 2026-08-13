@@ -1,6 +1,6 @@
 export default function Footer() {
   return (
-    <footer className="bg-[#eef3ff] lg:py-14 py-6">
+    <footer className="bg-surface-container-low lg:py-14 py-6">
       <div className="lg:max-w-7xl mx-auto px-8 flex lg:flex-row flex-col lg:justify-between items-center">
         <div className="flex flex-col items-center">
           <h3 className="font-bold">Academic Architect</h3>

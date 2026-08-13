@@ -1,14 +1,14 @@
 export default function IntelligenceSection() {
   return (
-    <section className="bg-[#eef2f7] lg:py-28 py-10">
+    <section className="bg-surface-container-low lg:py-28 py-10">
       <div className="max-w-7xl mx-auto px-8">
         {/* heading */}
         <div className="text-center mb-20">
-          <h2 className="text-[34px] font-semibold text-[#0b1c30]">
+          <h2 className="text-[34px] font-semibold text-on-surface">
             Intelligence at Every Level
           </h2>
 
-          <p className="text-[#6b7280] mt-4 max-w-2xl mx-auto">
+          <p className="text-on-surface-variant mt-4 max-w-2xl mx-auto">
             Our AI-first approach doesn't just store data; it understands it,
             helping your institution reach peak efficiency.
           </p>
@@ -19,7 +19,7 @@ export default function IntelligenceSection() {
 
           {/* AI Teacher */}
           <div className="lg:col-span-2 col-span-3 bg-white rounded-2xl p-10 shadow-[0_2px_12px_rgba(0,0,0,0.04)]">
-            <div className="w-12 h-12 bg-[#e8f0ff] rounded-xl flex items-center justify-center mb-6">
+            <div className="w-12 h-12 bg-surface-container-low rounded-xl flex items-center justify-center mb-6">
               <svg
                 width="22"
                 height="22"
@@ -36,18 +36,18 @@ export default function IntelligenceSection() {
               AI Teacher Assistant
             </h3>
 
-            <p className="text-[#6b7280] mb-6 max-w-lg">
+            <p className="text-on-surface-variant mb-6 max-w-lg">
               Generate high-quality lesson plans, interactive quizzes, and
               specialized worksheets automatically. Save hours of prep time
               every week.
             </p>
 
             <div className="flex gap-3">
-              <span className="px-4 py-1 bg-[#e8f0ff] text-[#2563eb] rounded-full text-sm">
+              <span className="px-4 py-1 bg-surface-container-low text-primary rounded-full text-sm">
                 Lesson Gen
               </span>
 
-              <span className="px-4 py-1 bg-[#e8f0ff] text-[#2563eb] rounded-full text-sm">
+              <span className="px-4 py-1 bg-surface-container-low text-primary rounded-full text-sm">
                 Quiz Master
               </span>
             </div>
@@ -55,7 +55,7 @@ export default function IntelligenceSection() {
 
           {/* Student analytics */}
           <div className="lg:col-span-1 col-span-3 bg-white rounded-2xl p-10 shadow-[0_2px_12px_rgba(0,0,0,0.04)]">
-            <div className="w-12 h-12 bg-[#f0e8ff] rounded-xl flex items-center justify-center mb-6">
+            <div className="w-12 h-12 bg-primary-fixed rounded-xl flex items-center justify-center mb-6">
               <svg
                 width="22"
                 height="22"
@@ -71,7 +71,7 @@ export default function IntelligenceSection() {
               Student Analytics
             </h3>
 
-            <p className="text-[#6b7280]">
+            <p className="text-on-surface-variant">
               Deep-dive into performance trends and identify hidden weak areas
               before they become obstacles.
             </p>
@@ -81,7 +81,7 @@ export default function IntelligenceSection() {
 
           {/* Automated assessment */}
           <div className="lg:col-span-1 col-span-3 bg-white rounded-2xl p-10 shadow-[0_2px_12px_rgba(0,0,0,0.04)]">
-            <div className="w-12 h-12 bg-[#fff1e6] rounded-xl flex items-center justify-center mb-6">
+            <div className="w-12 h-12 bg-secondary-fixed rounded-xl flex items-center justify-center mb-6">
               <svg
                 width="22"
                 height="22"
@@ -97,7 +97,7 @@ export default function IntelligenceSection() {
               Automated Assessment
             </h3>
 
-            <p className="text-[#6b7280]">
+            <p className="text-on-surface-variant">
               AI evaluates open-ended answers and provides instant, constructive
               feedback to students.
             </p>
@@ -105,7 +105,7 @@ export default function IntelligenceSection() {
 
           {/* center faded text */}
           <div className="lg:col-span-1 col-span-3 bg-white rounded-2xl p-10 shadow-[0_2px_12px_rgba(0,0,0,0.04)]">
-            <div className="w-12 h-12 bg-[#eaffe6] rounded-xl flex items-center justify-center mb-6">
+            <div className="w-12 h-12 bg-success rounded-xl flex items-center justify-center mb-6">
               <svg
                 width="22"
                 height="22"
@@ -118,7 +118,7 @@ export default function IntelligenceSection() {
 
             <h3 className="font-semibold text-lg">Unified ERP Platform</h3>
 
-            <p className="text-[#6b7280] text-sm mt-2 lg:max-w-xs">
+            <p className="text-on-surface-variant text-sm mt-2 lg:max-w-xs">
               One source of truth for your entire school. Manage students,
               teachers, classes, attendance, and grades within a single, sleek
               interface built for the 21st century.
@@ -131,7 +131,7 @@ export default function IntelligenceSection() {
 
           {/* speech */}
           <div className="lg:col-span-1 col-span-3 bg-white rounded-2xl p-10 shadow-[0_2px_12px_rgba(0,0,0,0.04)]">
-            <div className="w-12 h-12 bg-[#e8f0ff] rounded-xl flex items-center justify-center mb-6">
+            <div className="w-12 h-12 bg-surface-container-low rounded-xl flex items-center justify-center mb-6">
               <svg
                 width="22"
                 height="22"
@@ -147,7 +147,7 @@ export default function IntelligenceSection() {
               Speech & Multilingual AI
             </h3>
 
-            <p className="text-[#6b7280]">
+            <p className="text-on-surface-variant">
               Voice-enabled interaction and seamless multilingual content
               support for diverse learning environments.
             </p>
@@ -155,7 +155,7 @@ export default function IntelligenceSection() {
 
           {/* recommendation */}
           <div className="lg:col-span-2 col-span-3 bg-white rounded-2xl p-10 shadow-[0_2px_12px_rgba(0,0,0,0.04)] relative overflow-hidden">
-            <div className="w-12 h-12 bg-[#f0e8ff] rounded-xl flex items-center justify-center mb-6">
+            <div className="w-12 h-12 bg-primary-fixed rounded-xl flex items-center justify-center mb-6">
               <svg
                 width="20"
                 height="20"
@@ -170,7 +170,7 @@ export default function IntelligenceSection() {
               Recommendation Engine
             </h3>
 
-            <p className="text-[#6b7280] max-w-lg">
+            <p className="text-on-surface-variant max-w-lg">
               Personalized learning suggestions based on individual student
               performance, ensuring no one is left behind.
             </p>

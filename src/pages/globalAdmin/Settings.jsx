@@ -17,11 +17,11 @@ return(
 
 <div>
 
-<h1 className="text-4xl font-extrabold text-[#0b1c30]">
+<h1 className="text-4xl font-extrabold text-on-surface">
 Platform Settings
 </h1>
 
-<p className="text-[#424754] text-lg mt-2 max-w-2xl">
+<p className="text-on-surface-variant text-lg mt-2 max-w-2xl">
 Manage global configurations for the entire multi-tenant ecosystem.
 Changes here affect all institutional instances.
 </p>
@@ -31,7 +31,7 @@ Changes here affect all institutional instances.
 
 <button
 onClick={()=>navigate("/global-admin")}
-className="flex items-center gap-2 px-4 py-2 rounded-md bg-[#dce9ff] text-[#0058be] font-semibold text-sm hover:bg-[#d3e4fe] transition"
+className="flex items-center gap-2 px-4 py-2 rounded-md bg-surface-container-high text-primary font-semibold text-sm hover:bg-surface-container-highest transition"
 >
 
 <span className="material-symbols-outlined text-sm">
@@ -52,13 +52,13 @@ Go Back to Dashboard
 
 {/* AI */}
 
-<div className="group relative overflow-hidden bg-white rounded-xl p-8 shadow-[0_12px_32px_rgba(11,28,48,0.04)] hover:bg-[#eff4ff] transition">
+<div className="group relative overflow-hidden bg-white rounded-xl p-8 shadow-[0_12px_32px_rgba(11,28,48,0.04)] hover:bg-surface-container-low transition">
 
 <div>
 
-<div className="w-12 h-12 rounded-xl bg-[#e9ddff] flex items-center justify-center mb-6 group-hover:scale-110 transition">
+<div className="w-12 h-12 rounded-xl bg-primary-fixed flex items-center justify-center mb-6 group-hover:scale-110 transition">
 
-<span className="material-symbols-outlined text-[#6b38d4] text-2xl">
+<span className="material-symbols-outlined text-primary text-2xl">
 neurology
 </span>
 
@@ -70,7 +70,7 @@ AI Settings
 </h3>
 
 
-<p className="text-[#424754] text-sm mb-6">
+<p className="text-on-surface-variant text-sm mb-6">
 Configure AI models, token limits, and intelligence parameters.
 </p>
 
@@ -79,7 +79,7 @@ Configure AI models, token limits, and intelligence parameters.
 
 <button
 onClick={()=>navigate("/global-admin/ai-config")}
-className="flex items-center gap-2 text-[#0058be] font-bold text-sm"
+className="flex items-center gap-2 text-primary font-bold text-sm"
 >
 
 Manage Settings
@@ -96,13 +96,13 @@ arrow_forward
 
 {/* PAYMENT */}
 
-<div className="group relative overflow-hidden bg-white rounded-xl p-8 shadow-[0_12px_32px_rgba(11,28,48,0.04)] hover:bg-[#eff4ff] transition">
+<div className="group relative overflow-hidden bg-white rounded-xl p-8 shadow-[0_12px_32px_rgba(11,28,48,0.04)] hover:bg-surface-container-low transition">
 
 <div>
 
-<div className="w-12 h-12 rounded-xl bg-[#d8e2ff] flex items-center justify-center mb-6 group-hover:scale-110 transition">
+<div className="w-12 h-12 rounded-xl bg-surface-container-high flex items-center justify-center mb-6 group-hover:scale-110 transition">
 
-<span className="material-symbols-outlined text-[#0058be] text-2xl">
+<span className="material-symbols-outlined text-primary text-2xl">
 account_balance_wallet
 </span>
 
@@ -114,7 +114,7 @@ Payment Infrastructure
 </h3>
 
 
-<p className="text-[#424754] text-sm mb-6">
+<p className="text-on-surface-variant text-sm mb-6">
 Connect Stripe or Razorpay and manage global billing workflows.
 </p>
 
@@ -123,7 +123,7 @@ Connect Stripe or Razorpay and manage global billing workflows.
 
 <button
 onClick={()=>navigate("/global-admin/payment")}
-className="flex items-center gap-2 text-[#0058be] font-bold text-sm"
+className="flex items-center gap-2 text-primary font-bold text-sm"
 >
 
 Manage Infrastructure
@@ -140,13 +140,13 @@ arrow_forward
 
 {/* EMAIL */}
 
-<div className="group relative overflow-hidden bg-white rounded-xl p-8 shadow-[0_12px_32px_rgba(11,28,48,0.04)] hover:bg-[#eff4ff] transition">
+<div className="group relative overflow-hidden bg-white rounded-xl p-8 shadow-[0_12px_32px_rgba(11,28,48,0.04)] hover:bg-surface-container-low transition">
 
 <div>
 
-<div className="w-12 h-12 rounded-xl bg-[#ffdcc6] flex items-center justify-center mb-6 group-hover:scale-110 transition">
+<div className="w-12 h-12 rounded-xl bg-secondary-container flex items-center justify-center mb-6 group-hover:scale-110 transition">
 
-<span className="material-symbols-outlined text-[#924700] text-2xl">
+<span className="material-symbols-outlined text-secondary text-2xl">
 mail
 </span>
 
@@ -158,7 +158,7 @@ Email Configuration
 </h3>
 
 
-<p className="text-[#424754] text-sm mb-6">
+<p className="text-on-surface-variant text-sm mb-6">
 Set up SMTP and transactional email templates.
 </p>
 
@@ -167,7 +167,7 @@ Set up SMTP and transactional email templates.
 
 <button
 onClick={()=>navigate("/global-admin/email")}
-className="flex items-center gap-2 text-[#0058be] font-bold text-sm"
+className="flex items-center gap-2 text-primary font-bold text-sm"
 >
 
 Set up SMTP
@@ -184,13 +184,13 @@ arrow_forward
 
 {/* SECURITY */}
 
-<div className="group relative overflow-hidden bg-white rounded-xl p-8 shadow-[0_12px_32px_rgba(11,28,48,0.04)] hover:bg-[#eff4ff] transition">
+<div className="group relative overflow-hidden bg-white rounded-xl p-8 shadow-[0_12px_32px_rgba(11,28,48,0.04)] hover:bg-surface-container-low transition">
 
 <div>
 
-<div className="w-12 h-12 rounded-xl bg-[#ffdad6] flex items-center justify-center mb-6 group-hover:scale-110 transition">
+<div className="w-12 h-12 rounded-xl bg-error flex items-center justify-center mb-6 group-hover:scale-110 transition">
 
-<span className="material-symbols-outlined text-[#ba1a1a] text-2xl">
+<span className="material-symbols-outlined text-error text-2xl">
 admin_panel_settings
 </span>
 
@@ -202,7 +202,7 @@ Security & Access
 </h3>
 
 
-<p className="text-[#424754] text-sm mb-6">
+<p className="text-on-surface-variant text-sm mb-6">
 Configure 2FA, IP whitelisting and encryption rules.
 </p>
 
@@ -211,7 +211,7 @@ Configure 2FA, IP whitelisting and encryption rules.
 
 <button
 onClick={()=>navigate("/global-admin/security")}
-className="flex items-center gap-2 text-[#0058be] font-bold text-sm"
+className="flex items-center gap-2 text-primary font-bold text-sm"
 >
 
 Review Security
@@ -234,7 +234,7 @@ arrow_forward
 
 <div className="lg:col-span-2">
 
-<div className="bg-gradient-to-br from-[#0058be] to-[#2170e4] rounded-2xl p-10 text-white relative overflow-hidden">
+<div className="bg-gradient-to-br from-primary to-primary-container rounded-2xl p-10 text-white relative overflow-hidden">
 
 <span className="bg-white/20 px-3 py-1 rounded-full text-xs font-bold uppercase mb-4 inline-block">
 
@@ -257,7 +257,7 @@ Push branding and security updates to all school domains simultaneously.
 </p>
 
 
-<button className="bg-white text-[#0058be] px-6 py-3 rounded-lg font-bold">
+<button className="bg-white text-primary px-6 py-3 rounded-lg font-bold">
 
 Learn More
 
@@ -271,7 +271,7 @@ Learn More
 
 {/* system health */}
 
-<div className="bg-[#e5eeff] rounded-2xl p-8">
+<div className="bg-surface-container-low rounded-2xl p-8">
 
 <h3 className="text-xl font-bold mb-6">
 
@@ -348,7 +348,7 @@ Track administrative changes
 </div>
 
 
-<button className="text-[#0058be] font-bold">
+<button className="text-primary font-bold">
 
 View Audit Logs
 
@@ -362,7 +362,7 @@ View Audit Logs
 
 <table className="w-full">
 
-<thead className="bg-[#eff4ff] text-xs uppercase text-gray-500">
+<thead className="bg-surface-container-low text-xs uppercase text-gray-500">
 
 <tr>
 
