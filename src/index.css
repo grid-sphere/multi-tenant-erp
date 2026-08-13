@@ -237,6 +237,195 @@
   --shadow-color: 0, 0, 0;
 }
 
+/* ==================================================================== */
+/*  CLASSIC PALETTE — the original blue / purple / teal scheme          */
+/*                                                                      */
+/*  Selected from Settings → Appearance → Color Palette. Applied by     */
+/*  adding a `classic` class on <html> (ThemeContext.jsx), same         */
+/*  mechanism as the `dark` class. Every token above is redeclared      */
+/*  here (light) and in `.dark.classic` (dark) so nothing falls back    */
+/*  to the Slate & Teal values when this palette is active.             */
+/* ==================================================================== */
+.classic {
+  --color-primary: #0058be;
+  --color-primary-rgb: 0 88 190;
+  --color-primary-container: #2170e4;
+  --color-primary-container-rgb: 33 112 228;
+  --color-primary-fixed: #d6e4ff;
+  --color-primary-fixed-rgb: 214 228 255;
+  --color-on-primary-fixed: #001c3d;
+  --color-on-primary-fixed-rgb: 0 28 61;
+  --color-on-primary-container: #ffffff;
+  --color-on-primary-container-rgb: 255 255 255;
+  --color-on-primary: #ffffff;
+  --color-on-primary-rgb: 255 255 255;
+
+  --color-secondary: #7c4dff;
+  --color-secondary-rgb: 124 77 255;
+  --color-secondary-container: #efe7ff;
+  --color-secondary-container-rgb: 239 231 255;
+  --color-on-secondary-container: #3a1f8a;
+  --color-on-secondary-container-rgb: 58 31 138;
+  --color-secondary-fixed: #f2ecff;
+  --color-secondary-fixed-rgb: 242 236 255;
+
+  --color-tertiary: #00897b;
+  --color-tertiary-rgb: 0 137 123;
+  --color-tertiary-container: #d3efe9;
+  --color-tertiary-container-rgb: 211 239 233;
+  --color-on-tertiary-container: #003b34;
+  --color-on-tertiary-container-rgb: 0 59 52;
+  --color-tertiary-fixed: #e3f6f2;
+  --color-tertiary-fixed-rgb: 227 246 242;
+  --color-on-tertiary-fixed-variant: #0a4f46;
+  --color-on-tertiary-fixed-variant-rgb: 10 79 70;
+
+  --color-background: #f8f9ff;
+  --color-background-rgb: 248 249 255;
+  --color-surface: #f8f9ff;
+  --color-surface-rgb: 248 249 255;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-lowest-rgb: 255 255 255;
+  --color-surface-container-low: #f1f3fb;
+  --color-surface-container-low-rgb: 241 243 251;
+  --color-surface-container: #e9ecf6;
+  --color-surface-container-rgb: 233 236 246;
+  --color-surface-container-high: #dfe3f0;
+  --color-surface-container-high-rgb: 223 227 240;
+  --color-surface-container-highest: #d3d9ea;
+  --color-surface-container-highest-rgb: 211 217 234;
+  --color-surface-variant: #e3e7f4;
+  --color-surface-variant-rgb: 227 231 244;
+  --color-surface-tint: #0058be;
+  --color-surface-tint-rgb: 0 88 190;
+
+  --color-on-surface: #0b1c30;
+  --color-on-surface-rgb: 11 28 48;
+  --color-on-surface-variant: #47536b;
+  --color-on-surface-variant-rgb: 71 83 107;
+  --color-on-background: #0b1c30;
+  --color-on-background-rgb: 11 28 48;
+
+  --color-outline: #74809b;
+  --color-outline-rgb: 116 128 155;
+  --color-outline-variant: #dfe3f0;
+  --color-outline-variant-rgb: 223 227 240;
+  --color-scrim: #0b1c30;
+  --color-scrim-rgb: 11 28 48;
+
+  --color-error: #ba1a1a;
+  --color-error-rgb: 186 26 26;
+  --color-success: #16a34a;
+  --color-success-rgb: 22 163 74;
+  --color-warning: #b45309;
+  --color-warning-rgb: 180 83 9;
+  --color-info: #0058be;
+  --color-info-rgb: 0 88 190;
+
+  --color-role-admin: #475569;
+  --color-role-admin-rgb: 71 85 105;
+  --color-role-school: #a16207;
+  --color-role-school-rgb: 161 98 7;
+  --color-role-teacher: #00897b;
+  --color-role-teacher-rgb: 0 137 123;
+  --color-role-parent: #0058be;
+  --color-role-parent-rgb: 0 88 190;
+  --color-role-student: #7c4dff;
+  --color-role-student-rgb: 124 77 255;
+
+  --shadow-color: 11, 28, 48;
+}
+
+.dark.classic {
+  --color-primary: #91c0ff;
+  --color-primary-rgb: 145 192 255;
+  --color-primary-container: #2170e4;
+  --color-primary-container-rgb: 33 112 228;
+  --color-primary-fixed: #0a2e57;
+  --color-primary-fixed-rgb: 10 46 87;
+  --color-on-primary-fixed: #d6e4ff;
+  --color-on-primary-fixed-rgb: 214 228 255;
+  --color-on-primary-container: #ffffff;
+  --color-on-primary-container-rgb: 255 255 255;
+  --color-on-primary: #00224a;
+  --color-on-primary-rgb: 0 34 74;
+
+  --color-secondary: #c9b8ff;
+  --color-secondary-rgb: 201 184 255;
+  --color-secondary-container: #4a2ea3;
+  --color-secondary-container-rgb: 74 46 163;
+  --color-on-secondary-container: #ede6ff;
+  --color-on-secondary-container-rgb: 237 230 255;
+  --color-secondary-fixed: #2c1a63;
+  --color-secondary-fixed-rgb: 44 26 99;
+
+  --color-tertiary: #6cdfd0;
+  --color-tertiary-rgb: 108 223 208;
+  --color-tertiary-container: #0a4f46;
+  --color-tertiary-container-rgb: 10 79 70;
+  --color-on-tertiary-container: #d3efe9;
+  --color-on-tertiary-container-rgb: 211 239 233;
+  --color-tertiary-fixed: #063b34;
+  --color-tertiary-fixed-rgb: 6 59 52;
+  --color-on-tertiary-fixed-variant: #a8e0d6;
+  --color-on-tertiary-fixed-variant-rgb: 168 224 214;
+
+  --color-background: #0e1520;
+  --color-background-rgb: 14 21 32;
+  --color-surface: #0e1520;
+  --color-surface-rgb: 14 21 32;
+  --color-surface-container-lowest: #141c29;
+  --color-surface-container-lowest-rgb: 20 28 41;
+  --color-surface-container-low: #1a2431;
+  --color-surface-container-low-rgb: 26 36 49;
+  --color-surface-container: #212c3a;
+  --color-surface-container-rgb: 33 44 58;
+  --color-surface-container-high: #2c3746;
+  --color-surface-container-high-rgb: 44 55 70;
+  --color-surface-container-highest: #384453;
+  --color-surface-container-highest-rgb: 56 68 83;
+  --color-surface-variant: #232e3d;
+  --color-surface-variant-rgb: 35 46 61;
+  --color-surface-tint: #91c0ff;
+  --color-surface-tint-rgb: 145 192 255;
+
+  --color-on-surface: #e6ecf7;
+  --color-on-surface-rgb: 230 236 247;
+  --color-on-surface-variant: #a4b0c4;
+  --color-on-surface-variant-rgb: 164 176 196;
+  --color-on-background: #e6ecf7;
+  --color-on-background-rgb: 230 236 247;
+
+  --color-outline: #7d8ba3;
+  --color-outline-rgb: 125 139 163;
+  --color-outline-variant: #384453;
+  --color-outline-variant-rgb: 56 68 83;
+  --color-scrim: #000000;
+  --color-scrim-rgb: 0 0 0;
+
+  --color-error: #ff8a80;
+  --color-error-rgb: 255 138 128;
+  --color-success: #6fcf87;
+  --color-success-rgb: 111 207 135;
+  --color-warning: #e8a33f;
+  --color-warning-rgb: 232 163 63;
+  --color-info: #91c0ff;
+  --color-info-rgb: 145 192 255;
+
+  --color-role-admin: #94a3b8;
+  --color-role-admin-rgb: 148 163 184;
+  --color-role-school: #e8a33f;
+  --color-role-school-rgb: 232 163 63;
+  --color-role-teacher: #6cdfd0;
+  --color-role-teacher-rgb: 108 223 208;
+  --color-role-parent: #91c0ff;
+  --color-role-parent-rgb: 145 192 255;
+  --color-role-student: #c9b8ff;
+  --color-role-student-rgb: 201 184 255;
+
+  --shadow-color: 0, 0, 0;
+}
+
 /* ================================================ */
 /*   Global Base Styles                             */
 /* ================================================ */

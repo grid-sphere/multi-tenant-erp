@@ -90,7 +90,7 @@ function ToggleSwitch({ enabled, onChange, label, description, icon }) {
 // Main Component
 // ─────────────────────────────────────────────
 export default function Settings() {
-  const { darkMode, toggleDarkMode } = useTheme();
+  const { darkMode, toggleDarkMode, isClassicPalette, toggleClassicPalette } = useTheme();
   const {
     settings: contextSettings,
     loading: contextLoading,
@@ -422,6 +422,13 @@ export default function Settings() {
                 label="Dark Mode"
                 description="Switch between light and dark interface."
                 icon="dark_mode"
+              />
+              <ToggleSwitch
+                enabled={isClassicPalette}
+                onChange={toggleClassicPalette}
+                label="Classic Palette"
+                description="Use the original blue & purple color scheme."
+                icon="palette"
               />
             </div>
           </div>

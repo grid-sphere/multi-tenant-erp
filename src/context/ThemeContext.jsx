@@ -13,6 +13,12 @@ export const ThemeProvider = ({ children }) => {
     catch { return "English"; }
   });
 
+  // "modern" (Slate & Teal, default) or "classic" (the older blue/purple/teal palette)
+  const [palette, setPalette] = useState(() => {
+    try { return localStorage.getItem("schoolPalette") || "modern"; }
+    catch { return "modern"; }
+  });
+
   // Apply or remove the 'dark' class on <html>
   const applyDarkMode = useCallback((isDark) => {
     const html = document.documentElement;
@@ -25,21 +31,39 @@ export const ThemeProvider = ({ children }) => {
     void document.body.offsetHeight;
   }, []);
 
+  // Apply or remove the 'classic' class on <html>
+  const applyPalette = useCallback((p) => {
+    const html = document.documentElement;
+    if (p === "classic") {
+      html.classList.add('classic');
+    } else {
+      html.classList.remove('classic');
+    }
+  }, []);
+
   // Run whenever darkMode changes
   useEffect(() => {
     applyDarkMode(darkMode);
     try { localStorage.setItem("schoolDarkMode", String(darkMode)); } catch {}
   }, [darkMode, applyDarkMode]);
 
+  // Run whenever palette changes
+  useEffect(() => {
+    applyPalette(palette);
+    try { localStorage.setItem("schoolPalette", palette); } catch {}
+  }, [palette, applyPalette]);
+
   // Sync language to localStorage
   useEffect(() => {
     try { localStorage.setItem("schoolLanguage", language); } catch {}
   }, [language]);
 
-  // On mount, ensure class matches stored preference
+  // On mount, ensure classes match stored preferences
   useEffect(() => {
     applyDarkMode(darkMode);
-  }, [applyDarkMode, darkMode]);
+    applyPalette(palette);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const toggleDarkMode = () => {
     setDarkMode(prev => !prev);
@@ -47,8 +71,17 @@ export const ThemeProvider = ({ children }) => {
 
   const toggleLanguage = (lang) => setLanguage(lang);
 
+  const toggleClassicPalette = () => {
+    setPalette(prev => (prev === "classic" ? "modern" : "classic"));
+  };
+
   return (
-    <ThemeContext.Provider value={{ darkMode, setDarkMode, toggleDarkMode, language, setLanguage, toggleLanguage }}>
+    <ThemeContext.Provider value={{
+      darkMode, setDarkMode, toggleDarkMode,
+      language, setLanguage, toggleLanguage,
+      palette, setPalette, toggleClassicPalette,
+      isClassicPalette: palette === "classic",
+    }}>
       {children}
     </ThemeContext.Provider>
   );
