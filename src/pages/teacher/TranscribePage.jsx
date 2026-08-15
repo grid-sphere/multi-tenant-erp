@@ -384,7 +384,11 @@ export default function TranscribePage() {
     // megabytes of PNG per page through the tunnel instead of a compact PDF.
     if (isRemoteOcr) {
       setProgressNote("Uploading to the GPU service…");
-      const created = await markingApi.createLocalOcrUploadJob(file);
+      // --- CHANGE 1: pass the stored tunnel URL ---
+      const ocrUrl = connectUrl.trim();
+      if (!ocrUrl) throw new Error("OCR service URL is required.");
+      const created = await markingApi.createLocalOcrUploadJob(file, ocrUrl);
+      // -------------------------------------------
       setJob({ ...created, status: "queued" });
       setProgressNote(created.estimate || "");
       const pages = await pollUntilFinished(created);
@@ -469,7 +473,9 @@ export default function TranscribePage() {
     try {
       const status = await markingApi.connectLocalOcr(url);
       setLocalOcr(status);
-      setConnectUrl("");
+      // --- CHANGE 2: keep the validated URL ---
+      setConnectUrl(url);
+      // ----------------------------------------
       setConnectOpen(false);
       toast.success("Connected — pointed at the new tunnel");
     } catch (e) {

@@ -186,13 +186,17 @@ export const markingApi = {
    * sending one per request. Rasterising in the browser would cost megabytes
    * of PNG per page; sending the PDF whole would exceed Cloudflare's ~100s
    * limit on how long the origin may take to answer.
+   *
+   * @param {File} file - The PDF or image file.
+   * @param {string} ocrUrl - The tunnel URL (e.g. https://xxx.trycloudflare.com)
    */
-  createLocalOcrUploadJob: (file) => {
+  createLocalOcrUploadJob: (file, ocrUrl) => {
     const form = new FormData();
     form.append("file", file);
+    form.append("ocr_url", ocrUrl);
+
     return api
       .post(`/marking/local-ocr/jobs/upload/`, form, {
-        // Let the browser set the multipart boundary; axios cannot.
         headers: { "Content-Type": undefined },
       })
       .then((r) => r.data);
